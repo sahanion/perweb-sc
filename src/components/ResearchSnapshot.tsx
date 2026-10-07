@@ -10,7 +10,7 @@ export function ResearchSnapshot() {
       <div className="container">
         <div className="section-heading">
           <p className="eyebrow">01 / Research focus</p>
-          <h2 id="research-heading">Frameworks with purpose.</h2>
+          <h2 id="research-heading">Tiny Pores. Big Possibilities.</h2>
         </div>
         <div className="theme-grid" role="tablist" aria-label="Research focus areas">
           {researchThemes.map((theme, index) => (
