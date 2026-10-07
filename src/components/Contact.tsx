@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { contactData } from '../data/researcher'
+import profilePhoto from '../assets/profile.jpg'
 
 export function Contact() {
   const [copiedEmail, setCopiedEmail] = useState<string | null>(null)
@@ -27,11 +28,31 @@ export function Contact() {
         <div className="contact-grid">
           {/* Left Column: Identity, Place & Office Address */}
           <div className="contact-card contact-card-main">
-            <div className="contact-identity-block">
-              <span className="contact-badge">Researcher Profile</span>
-              <h3 className="contact-name">{contactData.name}</h3>
-              <p className="contact-role">{contactData.role}</p>
-              <p className="contact-affiliation">{contactData.affiliation}</p>
+            <div className="contact-profile-header">
+              <div className="contact-photo-wrapper">
+                <img
+                  src={profilePhoto}
+                  alt={contactData.name}
+                  className="contact-profile-photo"
+                  onError={(e) => {
+                    // Fallback to web URL if local image cannot be found
+                    const target = e.currentTarget
+                    if (target.src !== 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80') {
+                      target.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80'
+                    }
+                  }}
+                />
+                <span className="contact-photo-status" title="Active Researcher">
+                  <span className="contact-photo-status-dot" />
+                </span>
+              </div>
+
+              <div className="contact-identity-block">
+                <span className="contact-badge">Researcher Profile</span>
+                <h3 className="contact-name">{contactData.name}</h3>
+                <p className="contact-role">{contactData.role}</p>
+                <p className="contact-affiliation">{contactData.affiliation}</p>
+              </div>
             </div>
 
             <div className="contact-divider" />
