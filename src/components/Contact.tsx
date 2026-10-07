@@ -1,18 +1,7 @@
-import { useState } from 'react'
 import { contactData } from '../data/researcher'
 import profilePhoto from '../assets/profile.jpg'
 
 export function Contact() {
-  const [copiedEmail, setCopiedEmail] = useState<string | null>(null)
-
-  const handleCopy = (email: string) => {
-    navigator.clipboard.writeText(email)
-    setCopiedEmail(email)
-    setTimeout(() => {
-      setCopiedEmail(null)
-    }, 2000)
-  }
-
   return (
     <section className="contact-section section" id="contact" aria-labelledby="contact-heading">
       <div className="container">
@@ -99,43 +88,21 @@ export function Contact() {
 
           {/* Right Column: Direct Emails & Hyperlinked Academic Links */}
           <div className="contact-right-column">
-            {/* Direct Emails (2 Nos) */}
+            {/* Email */}
             <div className="contact-card contact-emails-card">
               <h4 className="contact-card-title">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                   <polyline points="22,6 12,13 2,6" />
                 </svg>
-                Direct Emails
+                Email
               </h4>
 
-              <div className="emails-list">
+              <div className="emails-simple-block">
                 {contactData.emails.map((item) => (
-                  <div key={item.email} className={`email-row ${item.primary ? 'is-primary-email' : ''}`}>
-                    <div className="email-meta">
-                      <span className="email-type">{item.type}</span>
-                      <small className="email-note">{item.note}</small>
-                    </div>
-
-                    <div className="email-actions">
-                      <a href={`mailto:${item.email}`} className="email-link">
-                        {item.email}
-                      </a>
-                      <button
-                        type="button"
-                        className="copy-btn"
-                        onClick={() => handleCopy(item.email)}
-                        aria-label={`Copy ${item.email}`}
-                        title="Copy to clipboard"
-                      >
-                        {copiedEmail === item.email ? (
-                          <span className="copy-success">✓ Copied</span>
-                        ) : (
-                          <span>Copy</span>
-                        )}
-                      </button>
-                    </div>
-                  </div>
+                  <a key={item.email} href={`mailto:${item.email}`} className="email-simple-link">
+                    {item.email}
+                  </a>
                 ))}
               </div>
             </div>
