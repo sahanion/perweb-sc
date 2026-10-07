@@ -43,18 +43,12 @@ export function Hero() {
           </div>
 
           <div className="topic-sentence-box" aria-live="polite">
-            <p className={`topic-sentence ${activePillar ? 'is-expanded' : 'is-default'}`}>
-              {activePillar ? (
-                <span>
-                  <strong className="topic-sentence-label">{activePillar.title}:</strong>{' '}
-                  {activePillar.overview}
-                </span>
-              ) : (
-                <span className="topic-hint">
-                  <span className="hint-bullet" aria-hidden="true">✦</span> Hover over any topic above to explore key research directions.
-                </span>
-              )}
-            </p>
+            {activePillar && (
+              <p className="topic-sentence">
+                <strong className="topic-sentence-label">{activePillar.title}:</strong>{' '}
+                {activePillar.overview}
+              </p>
+            )}
           </div>
         </div>
 
