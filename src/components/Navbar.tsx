@@ -54,7 +54,6 @@ export function Navbar({ compact, currentPage = 'home', onNavigate }: NavbarProp
     <header className={`nav-wrap ${compact ? 'is-compact' : ''}`}>
       <nav className="navbar container" aria-label="Main navigation">
         <a className="brand" href="#top" onClick={handleBrandClick} aria-label={`${researcher.shortName} home`}>
-          <span className="brand-mark">SC</span>
           <span className="brand-name">{researcher.shortName}</span>
         </a>
         <button

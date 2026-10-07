@@ -107,28 +107,14 @@ button {
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: .02em;
+  transition: color .2s ease;
 }
 
-.brand-mark {
-  display: inline-grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  border: 1px solid var(--ink);
-  border-radius: 50%;
-  font: 700 11px var(--font-mono);
-  color: var(--ink);
-  background: transparent;
-  transition: background .2s, color .2s, border-color .2s;
-}
-
-.brand:hover .brand-mark {
-  background: var(--ink);
-  color: var(--paper);
+.brand:hover {
+  color: var(--accent);
 }
 
 .brand-name {
@@ -1529,7 +1515,7 @@ button {
 }
 
 .footer p {
-  margin: 12px 0 4px;
+  margin: 0 0 4px;
   font-size: 14px;
   font-weight: 500;
 }
