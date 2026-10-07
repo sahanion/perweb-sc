@@ -284,30 +284,92 @@ button {
 }
 
 .topic-sentence-box {
-  margin: 10px 0 0;
-  min-height: 34px;
+  margin: 12px 0 0;
+  position: relative;
+  height: 48px;
+  min-height: 48px;
+  max-width: 580px;
   display: flex;
   align-items: center;
-  max-width: 580px;
+}
+
+.topic-placeholder-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0 14px;
+  border-left: 2.5px solid rgba(186, 156, 102, 0.30);
+  background: rgba(186, 156, 102, 0.035);
+  border-radius: 0 5px 5px 0;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.topic-placeholder-layer.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.topic-placeholder-layer.is-hidden {
+  opacity: 0;
+  transform: translateY(-5px);
+}
+
+.reticular-lattice-graphic {
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.lattice-svg {
+  width: 100%;
+  height: 22px;
+  display: block;
+}
+
+.topic-sentence-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.topic-sentence-layer.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.topic-sentence-layer.is-hidden {
+  opacity: 0;
+  transform: translateY(5px);
+  pointer-events: none;
 }
 
 .topic-sentence {
   width: 100%;
   margin: 0;
-  font-size: 13px;
+  font-size: clamp(14px, 1.15vw, 14.8px);
   line-height: 1.5;
-  color: #27344d;
+  color: var(--ink);
   border-left: 2.5px solid var(--accent);
   background: rgba(186, 156, 102, 0.08);
-  padding: 6px 12px;
+  padding: 7px 14px;
   border-radius: 0 5px 5px 0;
-  animation: topicSentenceFadeIn .2s ease-out;
+  animation: topicSentenceSlide .25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes topicSentenceFadeIn {
+@keyframes topicSentenceSlide {
   from {
     opacity: 0;
-    transform: translateY(-2px);
+    transform: translateX(4px);
   }
   to {
     opacity: 1;
@@ -318,9 +380,9 @@ button {
 .topic-sentence-label {
   color: var(--accent);
   font-weight: 700;
-  font-size: 11.5px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: .05em;
+  letter-spacing: .06em;
   margin-right: 6px;
 }
 

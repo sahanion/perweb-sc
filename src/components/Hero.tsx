@@ -43,12 +43,36 @@ export function Hero() {
           </div>
 
           <div className="topic-sentence-box" aria-live="polite">
-            {activePillar && (
-              <p className="topic-sentence">
-                <strong className="topic-sentence-label">{activePillar.title}:</strong>{' '}
-                {activePillar.overview}
-              </p>
-            )}
+            <div
+              className={`topic-placeholder-layer ${activePillar === null ? 'is-visible' : 'is-hidden'}`}
+              aria-hidden={activePillar !== null}
+            >
+              <div className="reticular-lattice-graphic">
+                <svg className="lattice-svg" viewBox="0 0 460 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <line x1="16" y1="11" x2="444" y2="11" stroke="var(--line)" strokeWidth="1.5" strokeDasharray="3 3" />
+                  <line x1="68" y1="11" x2="230" y2="11" stroke="var(--accent)" strokeWidth="1.5" strokeOpacity="0.45" />
+                  <line x1="230" y1="11" x2="392" y2="11" stroke="var(--accent)" strokeWidth="1.5" strokeOpacity="0.45" />
+                  <circle cx="68" cy="11" r="5" fill="var(--paper)" stroke="var(--accent)" strokeWidth="2" />
+                  <circle cx="68" cy="11" r="2" fill="var(--accent)" />
+                  <circle cx="230" cy="11" r="5.5" fill="var(--paper)" stroke="var(--ink)" strokeWidth="2" strokeOpacity="0.6" />
+                  <circle cx="230" cy="11" r="2.2" fill="var(--ink)" fillOpacity="0.6" />
+                  <circle cx="392" cy="11" r="5" fill="var(--paper)" stroke="var(--accent)" strokeWidth="2" />
+                  <circle cx="392" cy="11" r="2" fill="var(--accent)" />
+                </svg>
+              </div>
+            </div>
+
+            <div
+              className={`topic-sentence-layer ${activePillar !== null ? 'is-visible' : 'is-hidden'}`}
+              aria-hidden={activePillar === null}
+            >
+              {activePillar && (
+                <p className="topic-sentence" key={activePillar.id}>
+                  <strong className="topic-sentence-label">{activePillar.title}:</strong>{' '}
+                  {activePillar.overview}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
