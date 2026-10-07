@@ -4,14 +4,15 @@ import { researcher } from '../data/researcher'
 const links = [
   { label: 'Research', href: '#research' },
   { label: 'CV', href: '#cv' },
+  { label: 'Mentoring', href: '#mentoring' },
   { label: 'Gallery', href: '#gallery' },
   { label: 'Contact', href: '#contact' },
 ]
 
 type NavbarProps = {
   compact: boolean
-  currentPage?: 'home' | 'gallery'
-  onNavigate?: (page: 'home' | 'gallery', targetHash?: string) => void
+  currentPage?: 'home' | 'gallery' | 'mentoring'
+  onNavigate?: (page: 'home' | 'gallery' | 'mentoring', targetHash?: string) => void
 }
 
 export function Navbar({ compact, currentPage = 'home', onNavigate }: NavbarProps) {
@@ -28,7 +29,14 @@ export function Navbar({ compact, currentPage = 'home', onNavigate }: NavbarProp
       } else {
         window.location.hash = '#gallery'
       }
-    } else if (currentPage === 'gallery') {
+    } else if (link.href === '#mentoring') {
+      e.preventDefault()
+      if (onNavigate) {
+        onNavigate('mentoring')
+      } else {
+        window.location.hash = '#mentoring'
+      }
+    } else if (currentPage !== 'home') {
       e.preventDefault()
       if (onNavigate) {
         onNavigate('home', link.href)
@@ -40,7 +48,7 @@ export function Navbar({ compact, currentPage = 'home', onNavigate }: NavbarProp
 
   const handleBrandClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     closeMenu()
-    if (currentPage === 'gallery') {
+    if (currentPage !== 'home') {
       e.preventDefault()
       if (onNavigate) {
         onNavigate('home', '#top')
@@ -68,7 +76,9 @@ export function Navbar({ compact, currentPage = 'home', onNavigate }: NavbarProp
         </button>
         <div className={`nav-links ${isOpen ? 'is-open' : ''}`} id="site-menu">
           {links.map((link) => {
-            const isActive = link.href === '#gallery' && currentPage === 'gallery'
+            const isActive =
+              (link.href === '#gallery' && currentPage === 'gallery') ||
+              (link.href === '#mentoring' && currentPage === 'mentoring')
             return (
               <a
                 href={link.href}
