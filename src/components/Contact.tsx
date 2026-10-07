@@ -17,7 +17,7 @@ export function Contact() {
       <div className="container">
         {/* Section Header */}
         <div className="section-heading">
-          <p className="eyebrow">05 / Contact & Connect</p>
+          <p className="eyebrow">04 / Contact & Connect</p>
           <h2 id="contact-heading">Get in touch.</h2>
           <p className="contact-intro">
             Open to academic collaborations, discussions on reticular chemistry, MOFs/COFs, photocatalytic CO₂ reduction, and speaking opportunities.

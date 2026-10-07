@@ -5,7 +5,7 @@ export function AcademicCV() {
     <section className="cv-section section" id="cv" aria-labelledby="cv-heading">
       <div className="container">
         <div className="cv-heading">
-          <div><p className="eyebrow">04 / Curriculum vitae</p><h2 id="cv-heading">A research career in frameworks, materials and applications.</h2></div>
+          <div><p className="eyebrow">03 / Curriculum vitae</p><h2 id="cv-heading">A research career in frameworks, materials and applications.</h2></div>
           <p>Selected academic record, research outputs and scientific presentations.</p>
         </div>
 

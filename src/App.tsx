@@ -4,7 +4,6 @@ import { Hero } from './components/Hero'
 import { Navbar } from './components/Navbar'
 import { CurrentResearch } from './components/CurrentResearch'
 import { AcademicCV } from './components/AcademicCV'
-import { ResearchJourney } from './components/ResearchJourney'
 import { ResearchSnapshot } from './components/ResearchSnapshot'
 import { Contact } from './components/Contact'
 import { GalleryPage } from './components/GalleryPage'
@@ -75,7 +74,6 @@ export default function App() {
           <>
             <Hero />
             <ResearchSnapshot />
-            <ResearchJourney />
             <CurrentResearch />
             <AcademicCV />
             <Contact />
