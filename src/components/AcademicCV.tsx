@@ -1,12 +1,13 @@
 import { academics, positions, presentations, publications } from '../data/researcher'
+import { ResearchWordArt } from './ResearchWordArt'
 
 export function AcademicCV() {
   return (
     <section className="cv-section section" id="cv" aria-labelledby="cv-heading">
       <div className="container">
         <div className="cv-heading">
-          <div><p className="eyebrow">03 / Curriculum vitae</p><h2 id="cv-heading">A research career in frameworks, materials and applications.</h2></div>
-          <p>Selected academic record, research outputs and scientific presentations.</p>
+          <div><p className="eyebrow">03 / Curriculum vitae</p><h2 id="cv-heading">Tuning empty spaces to solve larger challenges. </h2></div>
+          <ResearchWordArt />
         </div>
 
         <div className="cv-block" id="positions">
