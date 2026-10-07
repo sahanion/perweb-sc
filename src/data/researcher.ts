@@ -1,27 +1,34 @@
+export interface HeroPillar {
+  id: string
+  title: string
+  overview: string
+}
+
+export const heroPillars: HeroPillar[] = [
+  {
+    id: 'reticular-chemistry',
+    title: 'Reticular Chemistry',
+    overview: 'Framework editing and atomic-level precision design of porphyrin-based crystalline networks.',
+  },
+  {
+    id: 'cofs-and-mofs',
+    title: 'COFs and MOFs',
+    overview: 'Hierarchical architectures spanning gels, aerogels, monoliths, thin films, and continuous membranes.',
+  },
+  {
+    id: 'applications',
+    title: 'Applications',
+    overview: 'Artificial photosynthesis, solar photocatalysis, environmental adsorption, and targeted NanoCOF drug delivery characterized via SEM & TEM.',
+  },
+]
+
 export const researcher = {
   name: 'Dr. Sumanta Chowdhury',
   shortName: 'Sumanta Chowdhury',
   role: 'Postdoctoral Researcher',
   affiliation: 'CEISAM · University of Nantes',
   location: 'Nantes, France',
-  identity: 'Reticular Chemistry & Framework Editing · COF Gels, Aerogels & Membranes · Photocatalysis, Adsorption & NanoCOFs',
-  focusPoints: [
-    {
-      index: '01',
-      title: 'Reticular Chemistry & Framework Editing',
-      subtitle: 'Porphyrin-Based MOFs & COFs',
-    },
-    {
-      index: '02',
-      title: 'COF Gels, Aerogels, Thin Films & Membranes',
-      subtitle: 'Monoliths & Nanostructured Networks',
-    },
-    {
-      index: '03',
-      title: 'Photocatalysis, Adsorption & NanoCOF Delivery',
-      subtitle: 'Artificial Photosynthesis & Electron Microscopy (SEM / TEM)',
-    },
-  ],
+  identity: 'Reticular Chemistry · COFs and MOFs · Applications',
   introduction: 'Interested in Reticular Chemistry research discipline, extending but not limited to Air, Water, Soil and Physiology.',
   currentResearch: {
     project: 'POWER-CO₂',
@@ -33,7 +40,7 @@ export const researcher = {
 export const researchThemes = [
   {
     index: '01',
-    title: 'Reticular Chemistry & Framework Editing',
+    title: 'Reticular Chemistry',
     detail: 'Molecular building blocks, framework editing, and porphyrin-based MOFs & COFs.',
     lead: 'Designing atomically precise frameworks through de novo synthesis and post-synthetic framework editing.',
     areas: ['Framework Editing', 'Porphyrin-Based MOFs & COFs', 'Ordered Network Architecture'],
@@ -41,15 +48,15 @@ export const researchThemes = [
   },
   {
     index: '02',
-    title: 'COF Gels, Aerogels, Thin Films & Membranes',
-    detail: 'Hierarchical porous materials, monoliths, and nanostructured continuous membranes.',
+    title: 'COFs and MOFs',
+    detail: 'Hierarchical porous materials: gels, aerogels, monoliths, thin films, and membranes.',
     lead: 'Transforming crystalline porous frameworks into macroscopic functional forms: aerogels, monoliths, and thin films.',
-    areas: ['Aerogels & Monoliths', 'Ultrathin Membranes', 'Hierarchical Porous Structures'],
+    areas: ['Gels, Aerogels & Monoliths', 'Ultrathin Membranes', 'Hierarchical Porous Structures'],
     context: 'Engineering practical forms for efficient mass transport, separation, and molecular encapsulation.',
   },
   {
     index: '03',
-    title: 'Photocatalysis, Adsorption & NanoCOF Delivery',
+    title: 'Applications',
     detail: 'Artificial photosynthesis, environmental adsorption, targeted drug delivery, and electron microscopy.',
     lead: 'Applying tailored frameworks to solar energy conversion, gas/pollutant adsorption, and nanomedicine.',
     areas: ['Artificial Photosynthesis & CO₂ Reduction', 'Adsorption & Environmental Trapping', 'NanoCOF Drug Delivery', 'Electron Microscopy (SEM / TEM)'],
