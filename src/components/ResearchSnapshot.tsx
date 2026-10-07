@@ -26,10 +26,18 @@ export function ResearchSnapshot() {
               role="tab"
               type="button"
             >
-              <span className="theme-index">{theme.index}</span>
-              <span className="theme-title">{theme.title}</span>
-              <span className="theme-detail">{theme.detail}</span>
-              <span className="theme-arrow" aria-hidden="true">↗</span>
+              <div
+                className="theme-card-bg"
+                style={{ backgroundImage: `url(${theme.bgImage})` }}
+                aria-hidden="true"
+              />
+              <div className="theme-card-overlay" aria-hidden="true" />
+              <div className="theme-card-body">
+                <span className="theme-index">{theme.index}</span>
+                <span className="theme-title">{theme.title}</span>
+                <span className="theme-detail">{theme.detail}</span>
+                <span className="theme-arrow" aria-hidden="true">↗</span>
+              </div>
             </button>
           ))}
         </div>
@@ -37,7 +45,8 @@ export function ResearchSnapshot() {
           <div className="research-detail-intro">
             <span className="detail-number">Focus / {selectedTheme.index}</span>
             <h3>{selectedTheme.title}</h3>
-            <p>{selectedTheme.lead}</p>
+            <p className="detail-lead">{selectedTheme.lead}</p>
+            <p className="research-detail-context">{selectedTheme.context}</p>
           </div>
           <div className="research-detail-areas">
             <span className="detail-label">Research directions</span>
@@ -45,7 +54,22 @@ export function ResearchSnapshot() {
               {selectedTheme.areas.map((area) => <li key={area}>{area}</li>)}
             </ul>
           </div>
-          <p className="research-detail-context">{selectedTheme.context}</p>
+          <div className="research-detail-publications">
+            <span className="detail-label">Related publications (placeholders)</span>
+            <ul className="theme-pub-list">
+              {selectedTheme.publications?.map((pub, idx) => (
+                <li key={idx} className="theme-pub-item">
+                  <span className="theme-pub-index">[{idx + 1}]</span>
+                  <div className="theme-pub-info">
+                    <span className="theme-pub-title">{pub.title}</span>
+                    <span className="theme-pub-meta">
+                      <em>{pub.journal}</em> ({pub.year}) {pub.doi && <>· <span className="theme-pub-doi">DOI: {pub.doi}</span></>}
+                    </span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
     </section>

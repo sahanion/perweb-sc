@@ -1,7 +1,31 @@
+import theme01Bg from '../assets/themes/theme-01.svg'
+import theme02Bg from '../assets/themes/theme-02.svg'
+import theme03Bg from '../assets/themes/theme-03.svg'
+import theme04Bg from '../assets/themes/theme-04.svg'
+
 export interface HeroPillar {
   id: string
   title: string
   overview: string
+}
+
+export interface PublicationPlaceholder {
+  title: string
+  journal: string
+  year: string
+  doi?: string
+  link?: string
+}
+
+export interface ResearchTheme {
+  index: string
+  title: string
+  detail: string
+  bgImage: string
+  lead: string
+  areas: string[]
+  context: string
+  publications: PublicationPlaceholder[]
 }
 
 export const heroPillars: HeroPillar[] = [
@@ -37,30 +61,106 @@ export const researcher = {
   },
 }
 
-export const researchThemes = [
+export const researchThemes: ResearchTheme[] = [
   {
     index: '01',
-    title: 'Reticular Chemistry',
-    detail: 'Molecular building blocks, framework editing, and porphyrin-based MOFs & COFs.',
-    lead: 'Designing atomically precise frameworks through de novo synthesis and post-synthetic framework editing.',
-    areas: ['Framework Editing', 'Porphyrin-Based MOFs & COFs', 'Ordered Network Architecture'],
-    context: 'A molecular-design foundation bridging reticular chemistry with functional porosity and responsive properties.',
+    title: 'MOF and COF',
+    detail: 'Crystalline porous networks, framework editing, and hierarchically structured architectures.',
+    bgImage: theme01Bg,
+    lead: 'Designing atomically precise frameworks through molecular building block synthesis, post-synthetic framework editing, and processing into functional gels, aerogels, monoliths, and thin films.',
+    areas: ['Porphyrin-Based MOFs & COFs', 'Framework Editing', 'COF Gels, Aerogels & Monoliths', 'Thin Films & Continuous Membranes'],
+    context: 'A molecular-design foundation connecting modular chemistry with functional porosity, structural integrity, and tunable pore environments.',
+    publications: [
+      {
+        title: 'Porphyrin-Based Metal-Organic Frameworks for Solar Energy Conversion',
+        journal: 'J. Am. Chem. Soc.',
+        year: '2024',
+        doi: '10.1021/jacs.xxxx',
+        link: 'https://doi.org',
+      },
+      {
+        title: 'Ultrathin Covalent Organic Framework Membranes for High-Flux Molecular Separation',
+        journal: 'Angew. Chem. Int. Ed.',
+        year: '2023',
+        doi: '10.1002/anie.xxxx',
+        link: 'https://doi.org',
+      },
+    ],
   },
   {
     index: '02',
-    title: 'COFs and MOFs',
-    detail: 'Hierarchical porous materials: gels, aerogels, monoliths, thin films, and membranes.',
-    lead: 'Transforming crystalline porous frameworks into macroscopic functional forms: aerogels, monoliths, and thin films.',
-    areas: ['Gels, Aerogels & Monoliths', 'Ultrathin Membranes', 'Hierarchical Porous Structures'],
-    context: 'Engineering practical forms for efficient mass transport, separation, and molecular encapsulation.',
+    title: 'CO2 Conversion & Catalysis',
+    detail: 'Photo- and electroactive molecular frameworks for solar energy conversion and artificial photosynthesis.',
+    bgImage: theme02Bg,
+    lead: 'Developing functional framework-based platforms for catalytic and solar-driven carbon dioxide conversion.',
+    areas: ['Solar-Driven CO₂ Reduction', 'Molecular Catalysts & Active Centers', 'Photoelectrocatalytic Systems', 'Artificial Photosynthesis'],
+    context: 'Current postdoctoral research through the CNRS-funded POWER-CO₂ project at CEISAM, University of Nantes.',
+    publications: [
+      {
+        title: 'Photocatalytic CO₂ Reduction via Engineered Photoactive Covalent Organic Frameworks',
+        journal: 'Nature Catalysis',
+        year: '2024',
+        doi: '10.1038/s41929-xxxx',
+        link: 'https://doi.org',
+      },
+      {
+        title: 'Charge-Separation Dynamics in Metalloporphyrin Frameworks for Artificial Photosynthesis',
+        journal: 'ACS Catalysis',
+        year: '2023',
+        doi: '10.1021/acscatal.xxxx',
+        link: 'https://doi.org',
+      },
+    ],
   },
   {
     index: '03',
-    title: 'Applications',
-    detail: 'Artificial photosynthesis, environmental adsorption, targeted drug delivery, and electron microscopy.',
-    lead: 'Applying tailored frameworks to solar energy conversion, gas/pollutant adsorption, and nanomedicine.',
-    areas: ['Artificial Photosynthesis & CO₂ Reduction', 'Adsorption & Environmental Trapping', 'NanoCOF Drug Delivery', 'Electron Microscopy (SEM / TEM)'],
-    context: 'Targeted applications addressing climate, clean water, environmental soil remediation, and physiological therapeutic delivery.',
+    title: 'Adsorption Chemistry',
+    detail: 'High-capacity porous networks for volatile capture, gas separation, and environmental remediation.',
+    bgImage: theme03Bg,
+    lead: 'Engineering porous framework monoliths and aerogels toward volatile radioiodine removal and air/water pollutant trapping.',
+    areas: ['Volatile Radioiodine Capture', 'Gas Separation & Purification', 'Environmental Air & Water Remediation', 'Porous Aerogels for Long-term Trapping'],
+    context: 'Focus of upcoming Marie Skłodowska-Curie Actions (MSCA) project VIOLET at Universidad Autónoma de Madrid.',
+    publications: [
+      {
+        title: 'Volatile Radioiodine Removal by Covalent-Organic Aerogels: Mechanism and Long-Term Trapping',
+        journal: 'Adv. Mater.',
+        year: '2025',
+        doi: '10.1002/adma.xxxx',
+        link: 'https://doi.org',
+      },
+      {
+        title: 'Hierarchically Porous Frameworks for High-Capacity Gas Adsorption and Selective Capture',
+        journal: 'Chem. Sci.',
+        year: '2023',
+        doi: '10.1039/xxxx',
+        link: 'https://doi.org',
+      },
+    ],
+  },
+  {
+    index: '04',
+    title: 'Therapeutic Applications',
+    detail: 'Biocompatible nanoscale COFs for stimuli-responsive drug delivery and physiological therapy.',
+    bgImage: theme04Bg,
+    lead: 'Tailoring NanoCOFs and porous matrices for targeted anticancer drug delivery and physiological release.',
+    areas: ['NanoCOF Drug Delivery', 'Stimuli-Responsive Drug Release', 'Anticancer Nanomedicine', 'Electron Microscopy (SEM / TEM) Characterization'],
+    context: 'Biomedical applications extending reticular chemistry into nanoscale therapeutic transport and cellular targeting.',
+    publications: [
+      {
+        title: 'Nanoscale Covalent Organic Frameworks for Targeted Anticancer Drug Delivery and In Vivo Imaging',
+        journal: 'Biomaterials',
+        year: '2024',
+        doi: '10.1016/j.biomaterials.xxxx',
+        link: 'https://doi.org',
+      },
+      {
+        title: 'Cellular Uptake and Biodistribution of Functionalized Nano-Porous Vehicles',
+        journal: 'ACS Nano',
+        year: '2023',
+        doi: '10.1021/acsnano.xxxx',
+        link: 'https://doi.org',
+      },
+    ],
   },
 ]
 

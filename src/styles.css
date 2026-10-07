@@ -521,7 +521,7 @@ button {
 
 .theme-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
   margin-top: 60px;
@@ -530,6 +530,7 @@ button {
 .theme-card {
   min-height: 244px;
   position: relative;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -538,10 +539,56 @@ button {
   border: 0;
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: transparent;
+  background: var(--paper);
   color: var(--ink);
   cursor: pointer;
   transition: background .25s, color .25s;
+}
+
+.theme-card-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.16;
+  filter: grayscale(15%);
+  transition: opacity .35s ease, transform .45s ease;
+  pointer-events: none;
+}
+
+.theme-card:hover .theme-card-bg {
+  opacity: 0.28;
+  transform: scale(1.05);
+}
+
+.theme-card.is-active .theme-card-bg {
+  opacity: 0.22;
+  transform: scale(1.03);
+}
+
+.theme-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(248, 245, 238, 0.45) 0%, rgba(248, 245, 238, 0.94) 85%);
+  transition: background .25s ease;
+  pointer-events: none;
+}
+
+.theme-card:hover .theme-card-overlay,
+.theme-card.is-active .theme-card-overlay {
+  background: linear-gradient(180deg, rgba(34, 45, 71, 0.5) 0%, rgba(34, 45, 71, 0.95) 85%);
+}
+
+.theme-card-body {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+  flex: 1;
 }
 
 .theme-card:hover,
@@ -574,7 +621,7 @@ button {
   max-width: 190px;
   margin-top: auto;
   font-family: var(--font-serif);
-  font-size: 24px;
+  font-size: 23px;
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -.02em;
@@ -612,9 +659,9 @@ button {
 
 .research-detail {
   display: grid;
-  grid-template-columns: 1.25fr .85fr .75fr;
-  gap: 42px;
-  min-height: 250px;
+  grid-template-columns: 1.15fr 0.85fr 1.1fr;
+  gap: 36px;
+  min-height: 260px;
   padding: 38px 42px;
   border: 1px solid var(--line);
   border-top: 0;
@@ -632,21 +679,31 @@ button {
 }
 
 .research-detail h3 {
-  margin: 20px 0 12px;
+  margin: 18px 0 12px;
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: clamp(2rem, 3.6vw, 3.2rem);
+  font-size: clamp(2rem, 3.4vw, 3rem);
   font-weight: 600;
-  line-height: .95;
+  line-height: .98;
   letter-spacing: -.025em;
 }
 
-.research-detail-intro p {
+.detail-lead {
   max-width: 490px;
-  margin: 0;
+  margin: 0 0 16px;
   color: var(--muted);
   font-size: 14px;
-  line-height: 1.7;
+  line-height: 1.65;
+}
+
+.research-detail-context {
+  margin: 0;
+  padding-left: 16px;
+  border-left: 2px solid var(--accent);
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  font-style: italic;
 }
 
 .research-detail-areas {
@@ -666,9 +723,9 @@ button {
   border-bottom: 1px solid var(--line);
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 600;
-  line-height: 1.05;
+  line-height: 1.1;
 }
 
 .research-detail-areas li:before {
@@ -681,14 +738,61 @@ button {
   vertical-align: 2px;
 }
 
-.research-detail-context {
-  align-self: end;
-  margin: 0;
-  padding-left: 18px;
-  border-left: 2px solid var(--accent-soft);
+.research-detail-publications {
+  padding-top: 3px;
+}
+
+.theme-pub-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 19px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.theme-pub-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+}
+
+.theme-pub-index {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  padding-top: 1px;
+  flex-shrink: 0;
+}
+
+.theme-pub-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.theme-pub-title {
+  font-family: var(--font-serif);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--ink);
+}
+
+.theme-pub-meta {
+  font-size: 12px;
   color: var(--muted);
-  font-size: 13px;
-  line-height: 1.65;
+  line-height: 1.4;
+}
+
+.theme-pub-doi {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: .02em;
 }
 
 @keyframes focus-reveal {
@@ -1897,6 +2001,10 @@ button {
     grid-template-columns: 1fr 1fr;
     gap: 30px;
     padding: 32px;
+  }
+
+  .research-detail-publications {
+    grid-column: 1 / -1;
   }
 
   .research-detail-context {

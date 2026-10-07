@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+  <defs>
+    <radialGradient id="mofGlow" cx="50%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#ba9c66" stop-opacity="0.25"/>
+      <stop offset="100%" stop-color="#f8f5ee" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="none"/>
+  <rect width="100%" height="100%" fill="url(#mofGlow)"/>
+  <g stroke="#ba9c66" stroke-width="1.5" stroke-opacity="0.4" fill="none">
+    <!-- Hexagonal COF Honeycomb Lattice -->
+    <polygon points="100,50 150,80 150,140 100,170 50,140 50,80" />
+    <polygon points="200,50 250,80 250,140 200,170 150,140 150,80" />
+    <polygon points="300,50 350,80 350,140 300,170 250,140 250,80" />
+    <polygon points="150,140 200,170 200,230 150,260 100,230 100,170" />
+    <polygon points="250,140 300,170 300,230 250,260 200,230 200,170" />
+    <polygon points="350,140 400,170 400,230 350,260 300,230 300,170" />
+  </g>
+  <g fill="#222d47" fill-opacity="0.35">
+    <circle cx="100" cy="50" r="4"/>
+    <circle cx="150" cy="80" r="4"/>
+    <circle cx="150" cy="140" r="4"/>
+    <circle cx="100" cy="170" r="4"/>
+    <circle cx="50" cy="140" r="4"/>
+    <circle cx="50" cy="80" r="4"/>
+    <circle cx="200" cy="50" r="4"/>
+    <circle cx="250" cy="80" r="4"/>
+    <circle cx="250" cy="140" r="4"/>
+    <circle cx="200" cy="170" r="4"/>
+    <circle cx="300" cy="50" r="4"/>
+    <circle cx="350" cy="80" r="4"/>
+    <circle cx="350" cy="140" r="4"/>
+    <circle cx="300" cy="170" r="4"/>
+    <circle cx="200" cy="230" r="4"/>
+    <circle cx="150" cy="260" r="4"/>
+    <circle cx="250" cy="260" r="4"/>
+    <circle cx="300" cy="230" r="4"/>
+  </g>
+</svg>
