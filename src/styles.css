@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
   --paper: #f8f5ee;
@@ -6,11 +6,11 @@
   --accent: #ba9c66;
   --accent-soft: #d8c5a2;
   --accent-pale: #fbf7f0;
-  --ink: #1e293b;
-  --muted: #56647e;
-  --line: rgba(30, 41, 59, 0.11);
+  --ink: #222d47;
+  --muted: #64728f;
+  --line: rgba(34, 45, 71, 0.10);
 
-  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'Space Mono', SFMono-Regular, monospace;
 
@@ -207,17 +207,17 @@ button {
   margin: 0;
   font-family: var(--font-serif);
   font-size: clamp(4.4rem, 9.4vw, 9.2rem);
-  line-height: .92;
-  letter-spacing: -.025em;
-  font-weight: 700;
+  line-height: .86;
+  letter-spacing: -.03em;
+  font-weight: 600;
   color: var(--ink);
 }
 
 .hero h1 em {
   font-family: var(--font-serif);
   font-style: italic;
-  font-weight: 500;
-  letter-spacing: -.015em;
+  font-weight: 400;
+  letter-spacing: -.02em;
   color: var(--accent);
 }
 
