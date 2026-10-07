@@ -26,11 +26,14 @@ export function ResearchSnapshot() {
               role="tab"
               type="button"
             >
-              <div
-                className="theme-card-bg"
-                style={{ backgroundImage: `url(${theme.bgImage})` }}
-                aria-hidden="true"
-              />
+              <div className="theme-card-bg" aria-hidden="true">
+                <img
+                  src={theme.bgImage}
+                  alt=""
+                  className="theme-card-img"
+                  loading="lazy"
+                />
+              </div>
               <div className="theme-card-overlay" aria-hidden="true" />
               <div className="theme-card-body">
                 <span className="theme-index">{theme.index}</span>

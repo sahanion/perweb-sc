@@ -1,28 +1,72 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%">
   <defs>
-    <radialGradient id="adsGlow" cx="50%" cy="50%" r="65%">
-      <stop offset="0%" stop-color="#ba9c66" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#f8f5ee" stop-opacity="0"/>
+    <radialGradient id="bgGrad3" cx="50%" cy="45%" r="70%">
+      <stop offset="0%" stop-color="#16383b"/>
+      <stop offset="60%" stop-color="#0e2326"/>
+      <stop offset="100%" stop-color="#061214"/>
     </radialGradient>
+    <radialGradient id="iodineSphere" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fef08a"/>
+      <stop offset="45%" stop-color="#eab308"/>
+      <stop offset="100%" stop-color="#854d0e"/>
+    </radialGradient>
+    <radialGradient id="poreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#14b8a6" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softPore">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <rect width="100%" height="100%" fill="none"/>
-  <rect width="100%" height="100%" fill="url(#adsGlow)"/>
-  <!-- Porous aerogel channels / adsorption cages -->
-  <g stroke="#ba9c66" stroke-width="1.8" stroke-opacity="0.4" fill="none">
-    <path d="M40,150 Q100,60 180,120 T300,100 T380,160" />
-    <path d="M20,200 Q90,130 170,190 T290,170 T370,230" stroke-dasharray="3 3"/>
-    <circle cx="130" cy="110" r="32" stroke="#222d47" stroke-opacity="0.3"/>
-    <circle cx="250" cy="135" r="40" stroke="#222d47" stroke-opacity="0.3"/>
-    <circle cx="190" cy="210" r="28" stroke="#222d47" stroke-opacity="0.3"/>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGrad3)"/>
+
+  <!-- Porous Aerogel Matrix Web & Cavities -->
+  <circle cx="240" cy="180" r="130" fill="url(#poreGlow)"/>
+  <circle cx="390" cy="220" r="100" fill="url(#poreGlow)"/>
+
+  <!-- Interconnected Aerogel Struts and Pore Boundaries -->
+  <g stroke="#2dd4bf" stroke-width="2.5" stroke-opacity="0.75" fill="none">
+    <!-- Macro Pore Cavity 1 -->
+    <path d="M120,240 C140,130 240,110 310,160 C380,210 320,310 210,300 C150,290 110,270 120,240 Z" stroke-dasharray="8 4" stroke-width="2.5"/>
+    
+    <!-- Meso Pore Cavity 2 -->
+    <path d="M290,140 C340,70 450,90 480,180 C500,240 430,310 360,260 C320,230 270,180 290,140 Z" stroke-opacity="0.6"/>
+
+    <!-- Nano Pore Cavity 3 -->
+    <ellipse cx="190" cy="120" rx="60" ry="40" stroke="#d4af37" stroke-opacity="0.5"/>
+    <ellipse cx="400" cy="310" rx="70" ry="45" stroke="#d4af37" stroke-opacity="0.5"/>
+    
+    <!-- Mass Transport Pathway Channels -->
+    <path d="M40,200 Q150,160 260,200 T460,180 T560,220" stroke="#5eead4" stroke-width="2" stroke-opacity="0.5" stroke-dasharray="3 3"/>
+    <path d="M80,310 Q210,250 330,270 T520,290" stroke="#5eead4" stroke-width="1.5" stroke-opacity="0.4"/>
   </g>
-  <!-- Trapped guest molecules / adsorbates -->
-  <g fill="#ba9c66" fill-opacity="0.7">
-    <circle cx="130" cy="110" r="6"/>
-    <circle cx="120" cy="100" r="3.5"/>
-    <circle cx="250" cy="135" r="7"/>
-    <circle cx="265" cy="125" r="4"/>
-    <circle cx="240" cy="148" r="4.5"/>
-    <circle cx="190" cy="210" r="6"/>
-    <circle cx="180" cy="200" r="3.5"/>
+
+  <!-- Trapped Guest Molecules / Adsorbates (Iodine I2 / Radioiodine Cages) -->
+  <g filter="url(#softPore)">
+    <!-- Main Pore Trapped Cluster -->
+    <circle cx="210" cy="200" r="13" fill="url(#iodineSphere)"/>
+    <circle cx="235" cy="190" r="11" fill="url(#iodineSphere)"/>
+    <circle cx="215" cy="225" r="10" fill="url(#iodineSphere)"/>
+    <circle cx="250" cy="215" r="9" fill="url(#iodineSphere)"/>
+
+    <!-- Meso Pore Trapped Cluster -->
+    <circle cx="390" cy="190" r="12" fill="url(#iodineSphere)"/>
+    <circle cx="410" cy="210" r="10" fill="url(#iodineSphere)"/>
+    <circle cx="375" cy="215" r="9" fill="url(#iodineSphere)"/>
+
+    <!-- Small Cavity Trapped -->
+    <circle cx="190" cy="118" r="8" fill="url(#iodineSphere)"/>
+    <circle cx="410" cy="308" r="8" fill="url(#iodineSphere)"/>
+
+    <!-- Free Ingress Guest Molecules -->
+    <circle cx="90" cy="170" r="6" fill="#fef08a" fill-opacity="0.8"/>
+    <circle cx="70" cy="220" r="6" fill="#fef08a" fill-opacity="0.8"/>
+    <circle cx="480" cy="120" r="6" fill="#fef08a" fill-opacity="0.8"/>
   </g>
 </svg>

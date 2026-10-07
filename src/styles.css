@@ -528,7 +528,7 @@ button {
 }
 
 .theme-card {
-  min-height: 244px;
+  min-height: 250px;
   position: relative;
   overflow: hidden;
   display: flex;
@@ -539,50 +539,59 @@ button {
   border: 0;
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: var(--paper);
-  color: var(--ink);
+  background: #111827;
+  color: #ffffff;
   cursor: pointer;
-  transition: background .25s, color .25s;
+  transition: transform .25s ease, border-color .25s ease;
 }
 
 .theme-card-bg {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.16;
-  filter: grayscale(15%);
-  transition: opacity .35s ease, transform .45s ease;
+  overflow: hidden;
   pointer-events: none;
 }
 
-.theme-card:hover .theme-card-bg {
-  opacity: 0.28;
-  transform: scale(1.05);
+.theme-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.72;
+  transition: opacity .35s ease, transform .45s ease;
+  display: block;
 }
 
-.theme-card.is-active .theme-card-bg {
-  opacity: 0.22;
+.theme-card:hover .theme-card-img {
+  opacity: 0.92;
+  transform: scale(1.06);
+}
+
+.theme-card.is-active .theme-card-img {
+  opacity: 0.96;
   transform: scale(1.03);
 }
 
 .theme-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(248, 245, 238, 0.45) 0%, rgba(248, 245, 238, 0.94) 85%);
-  transition: background .25s ease;
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.25) 0%, rgba(17, 24, 39, 0.65) 55%, rgba(17, 24, 39, 0.94) 100%);
+  transition: background .25s ease, border .25s ease;
   pointer-events: none;
 }
 
-.theme-card:hover .theme-card-overlay,
+.theme-card:hover .theme-card-overlay {
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.15) 0%, rgba(17, 24, 39, 0.52) 55%, rgba(17, 24, 39, 0.90) 100%);
+}
+
 .theme-card.is-active .theme-card-overlay {
-  background: linear-gradient(180deg, rgba(34, 45, 71, 0.5) 0%, rgba(34, 45, 71, 0.95) 85%);
+  background: linear-gradient(180deg, rgba(17, 24, 39, 0.1) 0%, rgba(17, 24, 39, 0.55) 55%, rgba(17, 24, 39, 0.95) 100%);
+  border-bottom: 3.5px solid var(--accent);
 }
 
 .theme-card-body {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -591,40 +600,23 @@ button {
   flex: 1;
 }
 
-.theme-card:hover,
-.theme-card.is-active {
-  background: var(--ink);
-  color: var(--paper);
-}
-
-.theme-card:hover .theme-index,
-.theme-card.is-active .theme-index {
-  color: var(--accent);
-  opacity: 1;
-}
-
-.theme-card:hover .theme-arrow,
-.theme-card.is-active .theme-arrow {
-  color: var(--accent);
-  opacity: 1;
-  transform: none;
-}
-
 .theme-index {
-  font: 11px var(--font-mono);
-  opacity: .7;
+  font: 700 12px var(--font-mono);
+  color: var(--accent);
   letter-spacing: .08em;
-  transition: color .2s, opacity .2s;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
 }
 
 .theme-title {
-  max-width: 190px;
+  max-width: 210px;
   margin-top: auto;
   font-family: var(--font-serif);
   font-size: 23px;
   font-weight: 600;
-  line-height: 1.1;
+  line-height: 1.15;
   letter-spacing: -.02em;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 .theme-detail {
@@ -635,16 +627,18 @@ button {
   font-family: var(--font-sans);
   font-size: 13px;
   line-height: 1.5;
+  color: rgba(248, 245, 238, 0.92);
   opacity: 0;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
   transition: max-height .25s, margin .25s, opacity .2s;
 }
 
 .theme-card:hover .theme-detail,
 .theme-card:focus-visible .theme-detail,
 .theme-card.is-active .theme-detail {
-  max-height: 70px;
-  margin-top: 13px;
-  opacity: .88;
+  max-height: 75px;
+  margin-top: 11px;
+  opacity: 1;
 }
 
 .theme-arrow {
@@ -652,9 +646,17 @@ button {
   top: 19px;
   right: 18px;
   font-size: 19px;
+  color: var(--accent);
   opacity: 0;
-  transform: translate(-5px, 5px);
+  transform: translate(-4px, 4px);
   transition: .2s;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.theme-card:hover .theme-arrow,
+.theme-card.is-active .theme-arrow {
+  opacity: 1;
+  transform: none;
 }
 
 .research-detail {

@@ -1,39 +1,77 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%">
   <defs>
-    <radialGradient id="mofGlow" cx="50%" cy="50%" r="60%">
-      <stop offset="0%" stop-color="#ba9c66" stop-opacity="0.25"/>
-      <stop offset="100%" stop-color="#f8f5ee" stop-opacity="0"/>
+    <radialGradient id="bgGrad1" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#24344d"/>
+      <stop offset="60%" stop-color="#141c2b"/>
+      <stop offset="100%" stop-color="#0c111a"/>
     </radialGradient>
+    <radialGradient id="goldSphere" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fde047"/>
+      <stop offset="40%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#785c14"/>
+    </radialGradient>
+    <radialGradient id="blueSphere" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#93c5fd"/>
+      <stop offset="45%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </radialGradient>
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#d4af37" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#d4af37" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
   </defs>
-  <rect width="100%" height="100%" fill="none"/>
-  <rect width="100%" height="100%" fill="url(#mofGlow)"/>
-  <g stroke="#ba9c66" stroke-width="1.5" stroke-opacity="0.4" fill="none">
-    <!-- Hexagonal COF Honeycomb Lattice -->
-    <polygon points="100,50 150,80 150,140 100,170 50,140 50,80" />
-    <polygon points="200,50 250,80 250,140 200,170 150,140 150,80" />
-    <polygon points="300,50 350,80 350,140 300,170 250,140 250,80" />
-    <polygon points="150,140 200,170 200,230 150,260 100,230 100,170" />
-    <polygon points="250,140 300,170 300,230 250,260 200,230 200,170" />
-    <polygon points="350,140 400,170 400,230 350,260 300,230 300,170" />
+
+  <!-- Background Canvas -->
+  <rect width="100%" height="100%" fill="url(#bgGrad1)"/>
+  <circle cx="300" cy="200" r="160" fill="url(#coreGlow)"/>
+
+  <!-- 3D Crystalline MOF/COF Honeycomb Channels -->
+  <g stroke="#d4af37" stroke-width="2.5" stroke-opacity="0.8" stroke-linecap="round">
+    <!-- Back bonds -->
+    <line x1="160" y1="120" x2="300" y2="70" stroke-opacity="0.4" stroke-dasharray="4 4"/>
+    <line x1="300" y1="70" x2="440" y2="120" stroke-opacity="0.4" stroke-dasharray="4 4"/>
+    <line x1="300" y1="70" x2="300" y2="180" stroke-opacity="0.5"/>
+
+    <!-- Central Hexagonal Pore 1 -->
+    <polygon points="300,90 400,150 400,260 300,320 200,260 200,150" fill="#1e293b" fill-opacity="0.4" stroke="#d4af37" stroke-width="3"/>
+    
+    <!-- Adjacent Hexagonal Pore Left -->
+    <polygon points="200,150 300,90 200,35 100,90 100,200 200,260" fill="#0f172a" fill-opacity="0.5" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.6"/>
+    
+    <!-- Adjacent Hexagonal Pore Right -->
+    <polygon points="300,90 400,150 500,90 500,200 400,260 300,320" fill="#0f172a" fill-opacity="0.5" stroke="#60a5fa" stroke-width="2" stroke-opacity="0.6"/>
+    
+    <!-- Inner Linker Struts -->
+    <line x1="300" y1="90" x2="300" y2="205" stroke="#d4af37" stroke-width="2.5"/>
+    <line x1="200" y1="150" x2="300" y2="205" stroke="#60a5fa" stroke-width="2"/>
+    <line x1="400" y1="150" x2="300" y2="205" stroke="#60a5fa" stroke-width="2"/>
+    <line x1="200" y1="260" x2="300" y2="205" stroke="#d4af37" stroke-width="2.5"/>
+    <line x1="400" y1="260" x2="300" y2="205" stroke="#d4af37" stroke-width="2.5"/>
+    <line x1="300" y1="320" x2="300" y2="205" stroke="#d4af37" stroke-width="2.5"/>
   </g>
-  <g fill="#222d47" fill-opacity="0.35">
-    <circle cx="100" cy="50" r="4"/>
-    <circle cx="150" cy="80" r="4"/>
-    <circle cx="150" cy="140" r="4"/>
-    <circle cx="100" cy="170" r="4"/>
-    <circle cx="50" cy="140" r="4"/>
-    <circle cx="50" cy="80" r="4"/>
-    <circle cx="200" cy="50" r="4"/>
-    <circle cx="250" cy="80" r="4"/>
-    <circle cx="250" cy="140" r="4"/>
-    <circle cx="200" cy="170" r="4"/>
-    <circle cx="300" cy="50" r="4"/>
-    <circle cx="350" cy="80" r="4"/>
-    <circle cx="350" cy="140" r="4"/>
-    <circle cx="300" cy="170" r="4"/>
-    <circle cx="200" cy="230" r="4"/>
-    <circle cx="150" cy="260" r="4"/>
-    <circle cx="250" cy="260" r="4"/>
-    <circle cx="300" cy="230" r="4"/>
+
+  <!-- Spherical Metal Nodes & Vertices -->
+  <g filter="url(#softGlow)">
+    <!-- Main Center Core Node -->
+    <circle cx="300" cy="205" r="14" fill="url(#goldSphere)"/>
+    <circle cx="300" cy="90" r="10" fill="url(#blueSphere)"/>
+    <circle cx="400" cy="150" r="11" fill="url(#goldSphere)"/>
+    <circle cx="400" cy="260" r="10" fill="url(#blueSphere)"/>
+    <circle cx="300" cy="320" r="12" fill="url(#goldSphere)"/>
+    <circle cx="200" cy="260" r="10" fill="url(#blueSphere)"/>
+    <circle cx="200" cy="150" r="11" fill="url(#goldSphere)"/>
+
+    <!-- Peripheral Secondary Nodes -->
+    <circle cx="100" cy="90" r="8" fill="url(#blueSphere)"/>
+    <circle cx="100" cy="200" r="8" fill="url(#goldSphere)"/>
+    <circle cx="500" cy="90" r="8" fill="url(#blueSphere)"/>
+    <circle cx="500" cy="200" r="8" fill="url(#goldSphere)"/>
   </g>
 </svg>
