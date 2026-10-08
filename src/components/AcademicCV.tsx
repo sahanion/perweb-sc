@@ -28,12 +28,62 @@ export function AcademicCV() {
         </div>
 
         <div className="cv-block" id="publications">
-          <div className="cv-block-heading cv-block-heading-with-note"><span>03</span><h3>Publications</h3><p>11 peer-reviewed publications</p></div>
+          <div className="cv-block-heading cv-block-heading-with-note">
+            <span>03</span>
+            <div>
+              <h3>Publications</h3>
+              <div className="publications-subhead">
+                <span>11 peer-reviewed articles</span>
+                <span className="subhead-sep">•</span>
+                <span>≈ 150 citations</span>
+                <span className="subhead-sep">•</span>
+                <span>h-index: 8</span>
+              </div>
+            </div>
+            <div className="publications-legend">
+              <span className="legend-item"><strong className="legend-mark">*</strong> Joint-corresponding author</span>
+              <span className="legend-item"><strong className="legend-mark">‡</strong> Equally contributed first author</span>
+            </div>
+          </div>
           <ol className="publication-list">
-            {publications.map((publication, index) => <li key={publication.title}>
-              <span className="publication-number">{String(index + 1).padStart(2, '0')}</span>
-              <div><div className="publication-meta"><span>{publication.type}</span><span>{publication.year}</span></div><h4>{publication.title}</h4><p className="publication-authors">{publication.authors}</p><p className="publication-citation">{publication.citation}</p></div>
-            </li>)}
+            {publications.map((publication, index) => (
+              <li key={publication.title}>
+                <span className="publication-number">{String(index + 1).padStart(2, '0')}</span>
+                <div>
+                  <div className="publication-meta">
+                    <span className="publication-type">{publication.type}</span>
+                    <span className="publication-year">{publication.year}</span>
+                    {publication.badges?.map((badge) => (
+                      <span
+                        key={badge}
+                        className={`pub-role-badge ${
+                          badge.includes('corresponding')
+                            ? 'badge-corresponding'
+                            : badge.includes('Equal')
+                            ? 'badge-equal'
+                            : badge.includes('Cover')
+                            ? 'badge-cover'
+                            : 'badge-first'
+                        }`}
+                      >
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+                  <h4>{publication.title}</h4>
+                  <p className="publication-authors">
+                    {publication.authors.split(/(Chowdhury,\s*S\.[*‡]*)/g).map((part, idx) =>
+                      part.startsWith('Chowdhury, S.') ? (
+                        <strong key={idx} className="author-self">{part}</strong>
+                      ) : (
+                        part
+                      )
+                    )}
+                  </p>
+                  <p className="publication-citation">{publication.citation}</p>
+                </div>
+              </li>
+            ))}
           </ol>
         </div>
 

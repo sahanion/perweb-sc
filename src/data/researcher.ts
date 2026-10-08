@@ -49,11 +49,11 @@ export const heroPillars: HeroPillar[] = [
 export const researcher = {
   name: 'Dr. Sumanta Chowdhury',
   shortName: 'Sumanta Chowdhury',
-  role: 'Postdoctoral Researcher',
-  affiliation: 'CEISAM · University of Nantes',
+  role: 'Postdoctoral Researcher, Marie Curie Fellow',
+  affiliation: 'CEISAM, University of Nantes',
   location: 'Nantes, France',
   identity: 'Reticular Chemistry · COFs and MOFs · Applications',
-  introduction: 'Interested in Reticular Chemistry research discipline, extending but not limited to Air, Water, Soil and Physiology.',
+  introduction: 'Interested in Reticular Chemistry research discipline, extending but not limited to air, water, soil, and physiology.',
   currentResearch: {
     project: 'POWER-CO₂',
     funder: 'CNRS',
@@ -223,18 +223,99 @@ export const academics = [
   },
 ]
 
-export const publications = [
-  { type: 'Review', year: '2025', title: 'A Decade-Long Journey in Design Strategies and Structure–Property Relationships of Covalent Organic Framework Nanocarriers for Anticancer Drug Delivery', citation: 'Small · 2025 · e05835', authors: 'Rathi, P.; Chowdhury, S.; Siril, P. F.' },
-  { type: 'Full paper', year: '2024', title: 'Electrospun Nanofiber Supported Nano/Mesoscale Covalent Organic Frameworks Boost Iodine Sorption', citation: 'Small · 2024 · 21, 2409495', authors: 'Chowdhury, S.; Hasnat, A.; Rathi, P.; Saha, S.; Randhawa, J. K.; Siril, P. F.' },
-  { type: 'Full paper', year: '2024', title: 'Fine-Tuning Covalent Organic Frameworks for Structure-Activity Correlation via Adsorption and Catalytic Studies', citation: 'Journal of Colloid and Interface Science · 2024 · 665, 988', authors: 'Chowdhury, S.; Sharma, A.; Das, P. P.; Rathi, P.; Siril, P. F.' },
-  { type: 'Review', year: '2024', title: 'Emerging Trends in Membrane-Based Wastewater Treatment: Electrospun Nanofibers and Reticular Porous Adsorbents as Key Components', citation: 'Environmental Science: Water Research & Technology · 2024 · 10, 29', authors: 'Kumar, M.; Chowdhury, S.; Randhawa, J. K.' },
-  { type: 'Communication', year: '2024', title: 'Pore-Interface Engineering Improves Doxorubicin Loading to Triazine-Based Covalent Organic Framework', citation: 'Materials Advances · 2024 · 5, 136', authors: 'Rathi, P.; Chowdhury, S.; Das, P. P.; Keshri, A. K.; Chaudhary, A.; Siril, P. F.' },
-  { type: 'Full paper', year: '2023', title: 'Systematic Thiol Decoration in a Redox-Active UiO-66-(SH)₂ Metal–Organic Framework: A Case Study Under Oxidative and Reductive Conditions', citation: 'Inorganic Chemistry · 2023 · 62, 3875', authors: 'Chowdhury, S.; Sharma, P.; Kundu, K.; Das, P. P.; Rathi, P.; Siril, P. F.' },
-  { type: 'Full paper', year: '2024', title: 'Mechanically Pulverized Covalent Organic Framework as a Metal-Free Photocatalyst for Fenton-Like Degradation of Organic Pollutants and Hexavalent Chromium Reduction', citation: 'Journal of Environmental Chemical Engineering · 2024 · 12, 112006', authors: 'Gogoi, R.; Jena, S. K.; Singh, A.; Sharma, K.; Khanna, K.; Chowdhury, S.; Sharma, R.; Siril, P. F.' },
-  { type: 'Review', year: '2022', title: 'Environmental Concerns and Long-Term Solutions for Solar-Powered Water Desalination', citation: 'Journal of Cleaner Production · 2022 · 345, 131180', authors: 'Kumar, S.; Kumar, M.; Chowdhury, S.; Rajpurohit, B. S.; Randhawa, J. K.' },
-  { type: 'Full paper', year: '2022', title: 'Enhanced Photocatalytic Activity of Hierarchical C/ZnO Nanocomposite Derived from Solvothermally Restructured Zn-BTC Microspheres', citation: 'Journal of Environmental Chemical Engineering · 2022 · 10, 107674', authors: 'Sharma, K.; Kaushik, R.; Pandey, P. K.; Chowdhury, S.; Gogoi, R.; Singh, A.; Halder, A.; Siril, P. F.' },
-  { type: 'Full paper', year: '2022', title: 'Graphene-Supported Palladium Nanostructures as Highly Active Catalysts for Formic Acid Oxidation Reaction', citation: 'ACS Applied Energy Materials · 2022 · 5, 13480', authors: 'Pramanick, B.; Kumar, T.; Chowdhury, S.; Halder, A.; Siril, P. F.' },
-  { type: 'Full paper', year: '2021', title: 'Intermediate Organic–Inorganic Hybrid with Highly Accessible Pore Structure and Proton Conductivity: Journey from Inorganic Oxide to Metal–Organic Framework', citation: 'ACS Applied Energy Materials · 2021 · 4, 6082', authors: 'Sharma, K.; Pandey, P. K.; Chowdhury, S.; Naithani, N.; Gogoi, R.; Siril, P. F.' },
+export interface PublicationItem {
+  type: string
+  year: string
+  title: string
+  citation: string
+  authors: string
+  badges?: string[]
+}
+
+export const publications: PublicationItem[] = [
+  {
+    type: 'Review',
+    year: '2025',
+    title: 'A Decade-Long Journey in Design Strategies and Structure–Property Relationships of Covalent Organic Framework Nanocarriers for Anticancer Drug Delivery',
+    citation: 'Small · 2025 · e05835',
+    authors: 'Rathi, P.; Chowdhury, S.*; Siril, P. F.*',
+    badges: ['Joint-corresponding author'],
+  },
+  {
+    type: 'Full paper',
+    year: '2024',
+    title: 'Electrospun Nanofiber Supported Nano/Mesoscale Covalent Organic Frameworks Boost Iodine Sorption',
+    citation: 'Small · 2024 · 21, 2409495',
+    authors: 'Chowdhury, S.*; Hasnat, A.; Rathi, P.; Saha, S.; Randhawa, J. K.; Siril, P. F.*',
+    badges: ['First author', 'Joint-corresponding author'],
+  },
+  {
+    type: 'Full paper',
+    year: '2024',
+    title: 'Fine-Tuning Covalent Organic Frameworks for Structure-Activity Correlation via Adsorption and Catalytic Studies',
+    citation: 'Journal of Colloid and Interface Science · 2024 · 665, 988',
+    authors: 'Chowdhury, S.*; Sharma, A.; Das, P. P.; Rathi, P.; Siril, P. F.*',
+    badges: ['First author', 'Joint-corresponding author'],
+  },
+  {
+    type: 'Review',
+    year: '2024',
+    title: 'Emerging Trends in Membrane-Based Wastewater Treatment: Electrospun Nanofibers and Reticular Porous Adsorbents as Key Components',
+    citation: 'Environmental Science: Water Research & Technology · 2024 · 10, 29',
+    authors: 'Kumar, M.‡; Chowdhury, S.‡; Randhawa, J. K.*',
+    badges: ['Equal contribution first author', 'Featured Inside Cover Art'],
+  },
+  {
+    type: 'Communication',
+    year: '2024',
+    title: 'Pore-Interface Engineering Improves Doxorubicin Loading to Triazine-Based Covalent Organic Framework',
+    citation: 'Materials Advances · 2024 · 5, 136',
+    authors: 'Rathi, P.‡; Chowdhury, S.‡*; Das, P. P.; Keshri, A. K.; Chaudhary, A.; Siril, P. F.*',
+    badges: ['Equal contribution first author', 'Joint-corresponding author'],
+  },
+  {
+    type: 'Full paper',
+    year: '2023',
+    title: 'Systematic Thiol Decoration in a Redox-Active UiO-66-(SH)₂ Metal–Organic Framework: A Case Study Under Oxidative and Reductive Conditions',
+    citation: 'Inorganic Chemistry · 2023 · 62, 3875',
+    authors: 'Chowdhury, S.*; Sharma, P.; Kundu, K.; Das, P. P.; Rathi, P.; Siril, P. F.*',
+    badges: ['First author', 'Joint-corresponding author'],
+  },
+  {
+    type: 'Full paper',
+    year: '2024',
+    title: 'Mechanically Pulverized Covalent Organic Framework as a Metal-Free Photocatalyst for Fenton-Like Degradation of Organic Pollutants and Hexavalent Chromium Reduction',
+    citation: 'Journal of Environmental Chemical Engineering · 2024 · 12, 112006',
+    authors: 'Gogoi, R.; Jena, S. K.; Singh, A.; Sharma, K.; Khanna, K.; Chowdhury, S.; Sharma, R.; Siril, P. F.*',
+  },
+  {
+    type: 'Review',
+    year: '2022',
+    title: 'Environmental Concerns and Long-Term Solutions for Solar-Powered Water Desalination',
+    citation: 'Journal of Cleaner Production · 2022 · 345, 131180',
+    authors: 'Kumar, S.; Kumar, M.; Chowdhury, S.; Rajpurohit, B. S.; Randhawa, J. K.*',
+  },
+  {
+    type: 'Full paper',
+    year: '2022',
+    title: 'Enhanced Photocatalytic Activity of Hierarchical C/ZnO Nanocomposite Derived from Solvothermally Restructured Zn-BTC Microspheres',
+    citation: 'Journal of Environmental Chemical Engineering · 2022 · 10, 107674',
+    authors: 'Sharma, K.; Kaushik, R.; Pandey, P. K.; Chowdhury, S.; Gogoi, R.; Singh, A.; Halder, A.; Siril, P. F.*',
+  },
+  {
+    type: 'Full paper',
+    year: '2022',
+    title: 'Graphene-Supported Palladium Nanostructures as Highly Active Catalysts for Formic Acid Oxidation Reaction',
+    citation: 'ACS Applied Energy Materials · 2022 · 5, 13480',
+    authors: 'Pramanick, B.; Kumar, T.; Chowdhury, S.; Halder, A.*; Siril, P. F.*',
+  },
+  {
+    type: 'Full paper',
+    year: '2021',
+    title: 'Intermediate Organic–Inorganic Hybrid with Highly Accessible Pore Structure and Proton Conductivity: Journey from Inorganic Oxide to Metal–Organic Framework',
+    citation: 'ACS Applied Energy Materials · 2021 · 4, 6082',
+    authors: 'Sharma, K.; Pandey, P. K.; Chowdhury, S.; Naithani, N.; Gogoi, R.; Siril, P. F.*',
+  },
 ]
 
 export const presentations = [
