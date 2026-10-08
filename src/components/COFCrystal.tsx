@@ -16,6 +16,69 @@ export interface ComponentMetadata {
   accentColor: string
 }
 
+// ============================================================================
+// THEME MATERIALS DEFINITIONS (Matched to Website Palette)
+// --paper: #f8f5ee, --ink: #222d47, --accent: #ba9c66, --accent-soft: #d8c5a2
+// ============================================================================
+
+export const themeMaterials: Record<
+  string,
+  {
+    color: string
+    metalness: number
+    roughness: number
+  }
+> = {
+  // ZrNode: Warm signature metallic gold coordination clusters
+  ZrNode: {
+    color: '#ba9c66',
+    metalness: 0.48,
+    roughness: 0.32,
+  },
+  // BlueCollar: Soft champagne gold coordination collar
+  BlueCollar: {
+    color: '#d8c5a2',
+    metalness: 0.28,
+    roughness: 0.44,
+  },
+  // Carbon: Deep slate ink aromatic rings (matching website --ink)
+  Carbon: {
+    color: '#222d47',
+    metalness: 0.12,
+    roughness: 0.52,
+  },
+  // C-C_Bond: Delocalized conjugated bonds in antique satin bronze/gold
+  'C-C_Bond': {
+    color: '#a88d59',
+    metalness: 0.42,
+    roughness: 0.40,
+  },
+  // LinkRod: Framework linker struts in mineral slate
+  LinkRod: {
+    color: '#4a5b78',
+    metalness: 0.30,
+    roughness: 0.48,
+  },
+  // Icosphere: Active surface clusters in warm amber/terracotta
+  Icosphere: {
+    color: '#c27944',
+    metalness: 0.35,
+    roughness: 0.38,
+  },
+  // TagStem: Functional pendant stems in warm copper/bronze
+  TagStem: {
+    color: '#b06a3b',
+    metalness: 0.30,
+    roughness: 0.40,
+  },
+  // Central_Seam: Boundary seam in soft champagne gold
+  Central_Seam: {
+    color: '#ba9c66',
+    metalness: 0.35,
+    roughness: 0.40,
+  },
+}
+
 export const objectMetadata: Record<string, ComponentMetadata> = {
   Carbon: {
     label: 'Carbon Atom',
@@ -23,7 +86,7 @@ export const objectMetadata: Record<string, ComponentMetadata> = {
     type: 'Framework Node',
     category: 'Aromatic Conjugated Carbon',
     description: 'sp²-hybridized carbon core forming the π-conjugated macrocycle',
-    accentColor: '#8ea0b5',
+    accentColor: '#ba9c66',
   },
   'C-C_Bond': {
     label: 'C–C Bond',
@@ -39,7 +102,7 @@ export const objectMetadata: Record<string, ComponentMetadata> = {
     type: 'Secondary Building Unit (SBU)',
     category: 'Metal-Oxo Coordination Cluster',
     description: 'Coordinating metallic junction connecting organic linker struts',
-    accentColor: '#5a8dee',
+    accentColor: '#ba9c66',
   },
   BlueCollar: {
     label: 'Coordination Collar',
@@ -47,7 +110,7 @@ export const objectMetadata: Record<string, ComponentMetadata> = {
     type: 'Interface Junction',
     category: 'Pore Aperture Ring',
     description: 'Coordinating boundary ring framing the microporous aperture',
-    accentColor: '#38bdf8',
+    accentColor: '#d8c5a2',
   },
   LinkRod: {
     label: 'Linker Strut',
@@ -55,7 +118,7 @@ export const objectMetadata: Record<string, ComponentMetadata> = {
     type: 'Framework Strut',
     category: 'Rigid Reticular Linker',
     description: 'Conjugated linear pillar defining pore diameter and geometry',
-    accentColor: '#64748b',
+    accentColor: '#64728f',
   },
   Icosphere: {
     label: 'Functional Cluster',
@@ -63,7 +126,7 @@ export const objectMetadata: Record<string, ComponentMetadata> = {
     type: 'Active Surface Site',
     category: 'High-Density Catalytic SBU',
     description: 'Surface-exposed coordination sphere for gas adsorption and catalysis',
-    accentColor: '#f59e0b',
+    accentColor: '#c27944',
   },
   TagStem: {
     label: 'Functional Pendant',
@@ -71,7 +134,7 @@ export const objectMetadata: Record<string, ComponentMetadata> = {
     type: 'Pendant Group',
     category: 'Pore Surface Modification',
     description: 'Tailored chemical tag projecting into pores for selective capture',
-    accentColor: '#ec4899',
+    accentColor: '#b06a3b',
   },
   Central_Seam: {
     label: 'Central Seam',
@@ -203,10 +266,46 @@ function CrystalScene({
     box.getBoundingSphere(sphere)
     const radius = (sphere.radius || rawMaxDim / 2) * scaleFactor
 
-    // Initialize mesh references & materials
+    // Initialize shared theme materials cache so meshes of the same category share a single standard material
+    const materialCache = new Map<string, THREE.MeshStandardMaterial>()
+
+    // Apply website theme palette to all meshes
     sceneClone.traverse((child) => {
       if ((child as THREE.Mesh).isMesh) {
         const mesh = child as THREE.Mesh
+
+        // Match category prefix
+        let cat = ''
+        for (const key of Object.keys(themeMaterials)) {
+          if (mesh.name.startsWith(key)) {
+            cat = key
+            break
+          }
+        }
+        if (!cat) {
+          const match = mesh.name.match(/^([A-Za-z_-]+)/)
+          if (match) {
+            const base = match[1].replace(/[-_]+$/, '')
+            if (themeMaterials[base]) cat = base
+          }
+        }
+
+        const themeDef = cat ? themeMaterials[cat] : null
+        if (themeDef) {
+          if (!materialCache.has(cat)) {
+            materialCache.set(
+              cat,
+              new THREE.MeshStandardMaterial({
+                color: new THREE.Color(themeDef.color),
+                metalness: themeDef.metalness,
+                roughness: themeDef.roughness,
+                side: THREE.DoubleSide,
+              })
+            )
+          }
+          mesh.material = materialCache.get(cat)!
+        }
+
         mesh.userData.origMaterial = mesh.material
         mesh.userData.origScale = mesh.scale.clone()
         mesh.castShadow = false
