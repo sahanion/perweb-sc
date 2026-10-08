@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { mentorshipColleagues, mentoringPillars } from '../data/mentoring'
+import { mentorshipColleagues } from '../data/mentoring'
 
 type MentoringPageProps = {
   onBackToHome: (targetHash?: string) => void
@@ -55,31 +55,10 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
           </div>
         </div>
 
-        {/* Mentorship Core Pillars */}
-        <div className="mentoring-pillars-section">
-          <div className="section-heading">
-            <p className="eyebrow">01 / Mentoring approach</p>
-            <h2>Hands-on guidance from hypothesis to publication.</h2>
-          </div>
-
-          <div className="mentoring-pillars-grid">
-            {mentoringPillars.map((pillar, idx) => (
-              <div key={pillar.title} className="mentoring-pillar-card">
-                <span className="pillar-number">0{idx + 1}</span>
-                <div className="pillar-header">
-                  <span className="pillar-subtitle">{pillar.subtitle}</span>
-                  <h3>{pillar.title}</h3>
-                </div>
-                <p>{pillar.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Colleagues & Related Projects Section */}
         <div className="mentoring-colleagues-section">
           <div className="section-heading">
-            <p className="eyebrow">02 / Colleagues &amp; Projects</p>
+            <p className="eyebrow">Colleagues &amp; Projects</p>
             <h2>Research colleagues &amp; collaborative projects</h2>
             <p className="colleagues-subheading">
               Select individuals and teams I have mentored or co-investigated with across interdisciplinary porous materials research.
