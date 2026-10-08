@@ -374,10 +374,10 @@ export function InteractivePowerCo2() {
                 <circle cx="935" cy="72" r="4.5" fill="#ffffff" filter="url(#pco2SparkGlow)" className="photon-wave wave-3" />
               </g>
 
-              {/* Tag Annotation */}
-              <g transform="translate(820, 115)" className="photon-annotation">
-                <rect x="-8" y="-12" width="108" height="20" rx="3" fill="rgba(24, 33, 54, 0.88)" stroke="#fcd34d" strokeWidth="1" />
-                <text x="4" y="2" fill="#fcd34d" fontFamily="'Space Mono', monospace" fontSize="9.5" fontWeight="700">hν PHOTONS</text>
+              {/* Tag Annotation - Prominent & High-Legibility */}
+              <g transform="translate(775, 105)" className="photon-annotation">
+                <rect x="0" y="0" width="148" height="30" rx="6" fill="rgba(17, 23, 38, 0.94)" stroke="#fcd34d" strokeWidth="1.6" />
+                <text x="74" y="16" fill="#fcd34d" fontFamily="'Space Mono', monospace" fontSize="13.5" fontWeight="800" letterSpacing="0.06em" textAnchor="middle" dominantBaseline="central">hν PHOTONS</text>
               </g>
             </g>
           )}
@@ -501,34 +501,34 @@ export function InteractivePowerCo2() {
           {/* 4 PROMINENT, HIGH-CONTRAST, EXTRA-LARGE READABLE ELECTRON (e⁻) MARKERS */}
           {/* Marker 1: Semiconductor base surface */}
           <g transform="translate(336, 527)" className="electron-bead bead-1">
-            <circle cx="0" cy="0" r="26" className="bead-ripple" fill="#38bdf8" />
-            <circle cx="0" cy="0" r="20" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="2.5" filter="url(#pco2ElectronGlow)" />
-            <circle cx="0" cy="0" r="20" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2.5" />
-            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="16.5" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
+            <circle cx="0" cy="0" r="34" className="bead-ripple" fill="#38bdf8" />
+            <circle cx="0" cy="0" r="26" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="3" filter="url(#pco2ElectronGlow)" />
+            <circle cx="0" cy="0" r="26" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="3" />
+            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="22" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
           </g>
 
           {/* Marker 2: Framework front-left corner pillar */}
           <g transform="translate(376, 401)" className="electron-bead bead-2">
-            <circle cx="0" cy="0" r="26" className="bead-ripple" fill="#38bdf8" />
-            <circle cx="0" cy="0" r="20" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="2.5" filter="url(#pco2ElectronGlow)" />
-            <circle cx="0" cy="0" r="20" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2.5" />
-            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="16.5" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
+            <circle cx="0" cy="0" r="34" className="bead-ripple" fill="#38bdf8" />
+            <circle cx="0" cy="0" r="26" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="3" filter="url(#pco2ElectronGlow)" />
+            <circle cx="0" cy="0" r="26" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="3" />
+            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="22" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
           </g>
 
           {/* Marker 3: Top-left framework corner */}
           <g transform="translate(426, 318)" className="electron-bead bead-3">
-            <circle cx="0" cy="0" r="26" className="bead-ripple" fill="#38bdf8" />
-            <circle cx="0" cy="0" r="20" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="2.5" filter="url(#pco2ElectronGlow)" />
-            <circle cx="0" cy="0" r="20" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2.5" />
-            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="16.5" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
+            <circle cx="0" cy="0" r="34" className="bead-ripple" fill="#38bdf8" />
+            <circle cx="0" cy="0" r="26" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="3" filter="url(#pco2ElectronGlow)" />
+            <circle cx="0" cy="0" r="26" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="3" />
+            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="22" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
           </g>
 
           {/* Marker 4: Top-right framework surface */}
           <g transform="translate(638, 304)" className="electron-bead bead-4">
-            <circle cx="0" cy="0" r="26" className="bead-ripple" fill="#38bdf8" />
-            <circle cx="0" cy="0" r="20" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="2.5" filter="url(#pco2ElectronGlow)" />
-            <circle cx="0" cy="0" r="20" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2.5" />
-            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="16.5" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
+            <circle cx="0" cy="0" r="34" className="bead-ripple" fill="#38bdf8" />
+            <circle cx="0" cy="0" r="26" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="3" filter="url(#pco2ElectronGlow)" />
+            <circle cx="0" cy="0" r="26" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="3" />
+            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="22" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
           </g>
 
           {/* ELECTRONS MOVING (0.5 - 2 sec): Electric charge surge along the exact curve path */}
