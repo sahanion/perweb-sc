@@ -1498,28 +1498,14 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   3. Movement of CO2 Molecules to Framework (Step 2 - Smooth Single Influx)
+   3. Movement of CO2 Molecules into Framework Pores (Step 2 - Deep Pore Entry)
    -------------------------------------------------------------------------- */
-.co2-influx-arrow-1,
-.co2-influx-arrow-2 {
+.co2-influx-arrow-clean {
+  stroke: #94a3b8;
+  stroke-width: 2.2px;
+  stroke-opacity: 0.75;
+  fill: none;
   transition: opacity 0.35s ease;
-}
-
-.interactive-powerco2-frame.is-hovered .co2-influx-arrow-1,
-.interactive-powerco2-frame.is-hovered .co2-influx-arrow-2,
-.interactive-powerco2-frame.is-running .co2-influx-arrow-1,
-.interactive-powerco2-frame.is-running .co2-influx-arrow-2 {
-  stroke-dasharray: 8 8;
-  animation: co2ArrowFlow 1.2s linear infinite;
-}
-
-@keyframes co2ArrowFlow {
-  from {
-    stroke-dashoffset: 32;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
 }
 
 /* CO2 Molecules at rest */
@@ -1556,122 +1542,122 @@ button {
   transform: translate(90px, 275px) rotate(20deg);
 }
 
-/* Smooth Single Influx into Pores (No random looping!) */
-.co2-molecules-cluster.is-gliding-once .unit-1 {
-  animation: co2GlideOnce1 1.6s cubic-bezier(0.25, 0.7, 0.4, 1) forwards;
+/* Smooth Absorption Deep into Framework Pores (Disappearing inside cavities!) */
+.co2-molecules-cluster.is-gliding-into-pores .unit-1 {
+  animation: co2GlideDeepPores1 1.7s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
 }
 
-.co2-molecules-cluster.is-gliding-once .unit-2 {
-  animation: co2GlideOnce2 1.7s cubic-bezier(0.25, 0.7, 0.4, 1) forwards;
+.co2-molecules-cluster.is-gliding-into-pores .unit-2 {
+  animation: co2GlideDeepPores2 1.8s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
   animation-delay: 0.15s;
 }
 
-.co2-molecules-cluster.is-gliding-once .unit-3 {
-  animation: co2GlideOnce3 1.7s cubic-bezier(0.25, 0.7, 0.4, 1) forwards;
+.co2-molecules-cluster.is-gliding-into-pores .unit-3 {
+  animation: co2GlideDeepPores3 1.8s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
   animation-delay: 0.3s;
 }
 
-.co2-molecules-cluster.is-gliding-once .unit-4 {
-  animation: co2GlideOnce4 1.8s cubic-bezier(0.25, 0.7, 0.4, 1) forwards;
+.co2-molecules-cluster.is-gliding-into-pores .unit-4 {
+  animation: co2GlideDeepPores4 1.9s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
   animation-delay: 0.45s;
 }
 
-.co2-molecules-cluster.is-gliding-once .unit-5 {
-  animation: co2GlideOnce5 1.8s cubic-bezier(0.25, 0.7, 0.4, 1) forwards;
+.co2-molecules-cluster.is-gliding-into-pores .unit-5 {
+  animation: co2GlideDeepPores5 1.9s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
   animation-delay: 0.6s;
 }
 
-@keyframes co2GlideOnce1 {
+@keyframes co2GlideDeepPores1 {
   0% {
     transform: translate(110px, 105px) rotate(-25deg) scale(1);
     opacity: 1;
   }
-  50% {
-    transform: translate(165px, 175px) rotate(5deg) scale(0.9);
+  40% {
+    transform: translate(180px, 180px) rotate(10deg) scale(0.9);
     opacity: 1;
   }
-  85% {
-    transform: translate(235px, 245px) rotate(30deg) scale(0.75);
+  75% {
+    transform: translate(270px, 265px) rotate(35deg) scale(0.72);
     opacity: 0.85;
   }
   100% {
-    transform: translate(265px, 275px) rotate(45deg) scale(0.45);
+    transform: translate(320px, 310px) rotate(45deg) scale(0.35);
     opacity: 0;
   }
 }
 
-@keyframes co2GlideOnce2 {
+@keyframes co2GlideDeepPores2 {
   0% {
     transform: translate(180px, 150px) rotate(25deg) scale(1);
     opacity: 1;
   }
-  50% {
-    transform: translate(215px, 210px) rotate(35deg) scale(0.9);
+  45% {
+    transform: translate(240px, 205px) rotate(35deg) scale(0.9);
     opacity: 1;
   }
-  85% {
-    transform: translate(260px, 270px) rotate(45deg) scale(0.75);
+  80% {
+    transform: translate(315px, 255px) rotate(45deg) scale(0.72);
     opacity: 0.85;
   }
   100% {
-    transform: translate(290px, 300px) rotate(55deg) scale(0.45);
+    transform: translate(365px, 290px) rotate(55deg) scale(0.35);
     opacity: 0;
   }
 }
 
-@keyframes co2GlideOnce3 {
+@keyframes co2GlideDeepPores3 {
   0% {
     transform: translate(80px, 195px) rotate(40deg) scale(1);
     opacity: 1;
   }
-  50% {
-    transform: translate(145px, 250px) rotate(25deg) scale(0.9);
+  45% {
+    transform: translate(160px, 260px) rotate(25deg) scale(0.9);
     opacity: 1;
   }
-  85% {
-    transform: translate(220px, 305px) rotate(35deg) scale(0.75);
+  80% {
+    transform: translate(240px, 320px) rotate(35deg) scale(0.72);
     opacity: 0.85;
   }
   100% {
-    transform: translate(250px, 335px) rotate(45deg) scale(0.45);
+    transform: translate(295px, 360px) rotate(45deg) scale(0.35);
     opacity: 0;
   }
 }
 
-@keyframes co2GlideOnce4 {
+@keyframes co2GlideDeepPores4 {
   0% {
     transform: translate(160px, 230px) rotate(-35deg) scale(1);
     opacity: 1;
   }
-  50% {
-    transform: translate(205px, 275px) rotate(10deg) scale(0.9);
+  45% {
+    transform: translate(225px, 280px) rotate(10deg) scale(0.9);
     opacity: 1;
   }
-  85% {
-    transform: translate(250px, 320px) rotate(30deg) scale(0.75);
+  80% {
+    transform: translate(290px, 315px) rotate(30deg) scale(0.72);
     opacity: 0.85;
   }
   100% {
-    transform: translate(280px, 345px) rotate(45deg) scale(0.45);
+    transform: translate(340px, 340px) rotate(45deg) scale(0.35);
     opacity: 0;
   }
 }
 
-@keyframes co2GlideOnce5 {
+@keyframes co2GlideDeepPores5 {
   0% {
     transform: translate(90px, 275px) rotate(20deg) scale(1);
     opacity: 1;
   }
-  50% {
-    transform: translate(160px, 310px) rotate(30deg) scale(0.9);
+  45% {
+    transform: translate(175px, 320px) rotate(30deg) scale(0.9);
     opacity: 1;
   }
-  85% {
-    transform: translate(230px, 340px) rotate(40deg) scale(0.75);
+  80% {
+    transform: translate(255px, 365px) rotate(40deg) scale(0.72);
     opacity: 0.85;
   }
   100% {
-    transform: translate(265px, 360px) rotate(50deg) scale(0.45);
+    transform: translate(310px, 395px) rotate(50deg) scale(0.35);
     opacity: 0;
   }
 }
