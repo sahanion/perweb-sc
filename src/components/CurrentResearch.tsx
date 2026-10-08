@@ -10,16 +10,15 @@ export function CurrentResearch() {
         </div>
 
         <div className="current-content">
+          <p className="current-program">PEPR SPLEEN</p>
           <h2 id="current-heading">{researcher.currentResearch.project}</h2>
           <p>{researcher.currentResearch.description}</p>
-          <div className="current-tags">
-            <span>{researcher.currentResearch.funder}</span>
-            <span>PEPR SPLEEN</span>
+          <div className="current-affiliations">
+            <span>CNRS</span>
+            <span className="current-affil-sep">·</span>
             <span>CEISAM</span>
+            <span className="current-affil-sep">·</span>
             <span>University of Nantes</span>
-          </div>
-          <div className="reaction" aria-label="Carbon dioxide plus water and light converts to carbon-based fuels">
-            <span>CO₂</span><b>+</b><span>H₂O</span><i>light</i><strong>→</strong><span>carbon-based<br />fuels</span>
           </div>
         </div>
 

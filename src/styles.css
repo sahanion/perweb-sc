@@ -1906,6 +1906,14 @@ button {
   box-shadow: 0 0 8px rgba(216, 197, 162, 0.5);
 }
 
+.current-program {
+  font: 700 13px/1.2 var(--font-mono);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 10px 0 !important;
+}
+
 .current-content h2 {
   margin: 0;
   font-family: var(--font-serif);
@@ -1918,10 +1926,27 @@ button {
 
 .current-content p {
   max-width: 495px;
-  margin: 24px 0 26px;
+  margin: 20px 0 24px;
   line-height: 1.68;
   font-size: 15px;
   color: #d8deeb;
+}
+
+.current-affiliations {
+  margin-top: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  font: 600 12.5px/1.4 var(--font-mono);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+}
+
+.current-affil-sep {
+  opacity: 0.45;
+  color: var(--accent-soft);
 }
 
 .current-tags {

@@ -57,7 +57,8 @@ export const researcher = {
   currentResearch: {
     project: 'POWER-CO₂',
     funder: 'CNRS',
-    description: 'Developing photo/electroactive MOF and COF-based materials for solar-driven CO₂ reduction.',
+    description:
+      'Developing photo- and electro-active Metal–Organic Frameworks (MOFs) and Covalent Organic Frameworks (COFs) integrated with semiconductor interfaces. By engineering atomically precise catalytic sites, ordered nano-channels, and efficient interfacial charge transport, the project harnesses solar energy to selectively convert captured CO₂ and water into clean solar fuels and chemical feedstocks.',
   },
 }
 
