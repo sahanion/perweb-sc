@@ -53,22 +53,29 @@ export function AcademicCV() {
                   <div className="publication-meta">
                     <span className="publication-type">{publication.type}</span>
                     <span className="publication-year">{publication.year}</span>
-                    {publication.badges?.map((badge) => (
-                      <span
-                        key={badge}
-                        className={`pub-role-badge ${
-                          badge.includes('corresponding')
-                            ? 'badge-corresponding'
-                            : badge.includes('Equal')
-                            ? 'badge-equal'
-                            : badge.includes('Cover')
-                            ? 'badge-cover'
-                            : 'badge-first'
-                        }`}
-                      >
-                        {badge}
-                      </span>
-                    ))}
+                    {publication.badges?.map((badge) => {
+                      const isCorresponding = badge.toLowerCase().includes('corresponding')
+                      const isEqual = badge.toLowerCase().includes('equal')
+                      const isCover = badge.toLowerCase().includes('cover')
+                      const glyph = isCorresponding ? '*' : isEqual ? '‡' : isCover ? '✦' : null
+                      return (
+                        <span
+                          key={badge}
+                          className={`pub-role-annotation ${
+                            isCorresponding
+                              ? 'role-corresponding'
+                              : isEqual
+                              ? 'role-equal'
+                              : isCover
+                              ? 'role-cover'
+                              : 'role-first'
+                          }`}
+                        >
+                          {glyph && <span className="pub-role-glyph" aria-hidden="true">{glyph}</span>}
+                          <span className="pub-role-text">{badge}</span>
+                        </span>
+                      )
+                    })}
                   </div>
                   <h4>{publication.title}</h4>
                   <p className="publication-authors">

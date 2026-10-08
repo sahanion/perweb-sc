@@ -247,7 +247,7 @@ export const publications: PublicationItem[] = [
     title: 'Electrospun Nanofiber Supported Nano/Mesoscale Covalent Organic Frameworks Boost Iodine Sorption',
     citation: 'Small · 2024 · 21, 2409495',
     authors: 'Chowdhury, S.*; Hasnat, A.; Rathi, P.; Saha, S.; Randhawa, J. K.; Siril, P. F.*',
-    badges: ['First author', 'Joint-corresponding author'],
+    badges: ['Joint-corresponding author'],
   },
   {
     type: 'Full paper',
@@ -255,7 +255,7 @@ export const publications: PublicationItem[] = [
     title: 'Fine-Tuning Covalent Organic Frameworks for Structure-Activity Correlation via Adsorption and Catalytic Studies',
     citation: 'Journal of Colloid and Interface Science · 2024 · 665, 988',
     authors: 'Chowdhury, S.*; Sharma, A.; Das, P. P.; Rathi, P.; Siril, P. F.*',
-    badges: ['First author', 'Joint-corresponding author'],
+    badges: ['Joint-corresponding author'],
   },
   {
     type: 'Review',
@@ -279,7 +279,7 @@ export const publications: PublicationItem[] = [
     title: 'Systematic Thiol Decoration in a Redox-Active UiO-66-(SH)₂ Metal–Organic Framework: A Case Study Under Oxidative and Reductive Conditions',
     citation: 'Inorganic Chemistry · 2023 · 62, 3875',
     authors: 'Chowdhury, S.*; Sharma, P.; Kundu, K.; Das, P. P.; Rathi, P.; Siril, P. F.*',
-    badges: ['First author', 'Joint-corresponding author'],
+    badges: ['Joint-corresponding author'],
   },
   {
     type: 'Full paper',
