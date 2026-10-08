@@ -300,35 +300,37 @@ export function InteractivePowerCo2() {
         {/* 1. SUN & SUNRAYS MOVING (0 - 3 sec) */}
         {/* =================================================================== */}
         <g id="interactive-sun-group">
-          {/* Ambient Corona Halo on Hover / Click */}
-          <circle
-            cx="935"
-            cy="72"
-            r="44"
-            className="sun-corona-halo"
-            fill="#f59e0b"
-            filter="url(#pco2SunGlow)"
-          />
-          <circle
-            cx="935"
-            cy="72"
-            r="36"
-            className="sun-core-pulse"
-            fill="#fcd34d"
-            filter="url(#pco2SunGlow)"
-          />
+          {/* Sun Core & Corona Disk Group (Locked at 935, 72) */}
+          <g transform="translate(935, 72)" className="sun-disks-cluster">
+            <circle
+              cx="0"
+              cy="0"
+              r="44"
+              className="sun-corona-halo"
+              fill="#f59e0b"
+              filter="url(#pco2SunGlow)"
+            />
+            <circle
+              cx="0"
+              cy="0"
+              r="36"
+              className="sun-core-pulse"
+              fill="#fcd34d"
+              filter="url(#pco2SunGlow)"
+            />
 
-          {/* Rotating Solar Dashed Ring */}
-          <circle
-            cx="935"
-            cy="72"
-            r="55"
-            className="sun-spin-ring"
-            fill="none"
-            stroke="#f59e0b"
-            strokeWidth="1.5"
-            strokeDasharray="4 6"
-          />
+            {/* Rotating Solar Dashed Ring */}
+            <circle
+              cx="0"
+              cy="0"
+              r="55"
+              className="sun-spin-ring"
+              fill="none"
+              stroke="#f59e0b"
+              strokeWidth="1.5"
+              strokeDasharray="4 6"
+            />
+          </g>
 
           {/* SUNRAYS MOVING: Active from 0 to 3 sec */}
           {phase.sunRays && (
@@ -560,25 +562,7 @@ export function InteractivePowerCo2() {
           )}
         </g>
 
-        {/* =================================================================== */}
-        {/* 4. FRAMEWORK CATALYTIC REACTION SPARKS (Active during 0.5 - 2.5s) */}
-        {/* =================================================================== */}
-        {(phase.electronsMoving || phase.fuelsMoving) && (
-          <g id="framework-catalytic-reactions">
-            <g transform="translate(380, 340)" className="catalytic-burst burst-1">
-              <circle cx="0" cy="0" r="18" fill="#f59e0b" filter="url(#pco2SparkGlow)" opacity="0.85" />
-              <circle cx="0" cy="0" r="9" fill="#fffbeb" />
-            </g>
-            <g transform="translate(480, 320)" className="catalytic-burst burst-2">
-              <circle cx="0" cy="0" r="20" fill="#22c55e" filter="url(#pco2SparkGlow)" opacity="0.85" />
-              <circle cx="0" cy="0" r="10" fill="#ffffff" />
-            </g>
-            <g transform="translate(580, 310)" className="catalytic-burst burst-3">
-              <circle cx="0" cy="0" r="18" fill="#f59e0b" filter="url(#pco2SparkGlow)" opacity="0.85" />
-              <circle cx="0" cy="0" r="9" fill="#fffbeb" />
-            </g>
-          </g>
-        )}
+
 
         {/* =================================================================== */}
         {/* 5. SOLAR FUEL MOLECULES MOVING FROM FRAMEWORK (1 - 3 sec) */}
@@ -715,14 +699,16 @@ export function InteractivePowerCo2() {
 
           {/* Emergence Sparkle Wave inside Circle when Formed at t = 3 sec */}
           {phase.circleFormed && animStatus !== 'idle' && (
-            <circle
-              cx="885"
-              cy="250"
-              r="25"
-              className="fuel-synthesis-burst"
-              fill="#22c55e"
-              filter="url(#pco2FuelGlow)"
-            />
+            <g transform="translate(885, 250)">
+              <circle
+                cx="0"
+                cy="0"
+                r="25"
+                className="fuel-synthesis-burst"
+                fill="#22c55e"
+                filter="url(#pco2FuelGlow)"
+              />
+            </g>
           )}
         </g>
       </svg>
