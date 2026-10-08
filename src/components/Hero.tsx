@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ReticularFramework3D } from './ReticularFramework3D'
+import { COFCrystal } from './COFCrystal'
 import { researcher, heroPillars } from '../data/researcher'
 
 export function Hero() {
@@ -94,7 +94,7 @@ export function Hero() {
         </div>
       </div>
       <div className="hero-art reveal reveal-delay-2">
-        <ReticularFramework3D />
+        <COFCrystal />
       </div>
     </section>
   )
