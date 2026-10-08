@@ -38,7 +38,7 @@ export function GalleryPage({ onBackToHome }: GalleryPageProps) {
             <a href="#contact" className="button button-quiet" onClick={() => {
               window.location.hash = '#contact'
             }}>
-              Contact Sumanta Chowdhury, PhD <span aria-hidden="true">↗</span>
+              Contact Dr. Chowdhury <span aria-hidden="true">↗</span>
             </a>
           </div>
         </div>
@@ -111,7 +111,7 @@ export function GalleryPage({ onBackToHome }: GalleryPageProps) {
             Interested in scientific illustration or visual collaboration in reticular chemistry?
           </p>
           <a href="mailto:sumanta.chowdhury@univ-nantes.fr" className="gallery-banner-link">
-            Get in touch with Sumanta Chowdhury, PhD <span>→</span>
+            Get in touch with Dr. Chowdhury <span>→</span>
           </a>
         </div>
       </div>
