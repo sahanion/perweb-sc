@@ -5,7 +5,7 @@ export function CurrentResearch() {
   return (
     <section className="current section" id="current-research" aria-labelledby="current-heading">
       <div className="container current-card">
-        <div className="current-label">
+        <div className="current-card-top">
           <p className="eyebrow">02 / Current research</p>
           <span className="live-dot">Current</span>
         </div>
