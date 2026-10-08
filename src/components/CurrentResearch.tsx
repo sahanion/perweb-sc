@@ -7,7 +7,6 @@ export function CurrentResearch() {
       <div className="container current-card">
         <div className="current-card-top">
           <p className="eyebrow">02 / Current research</p>
-          <span className="live-dot">Current</span>
         </div>
 
         <div className="current-content">
