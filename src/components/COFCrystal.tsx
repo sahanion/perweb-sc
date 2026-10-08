@@ -765,14 +765,6 @@ export function COFCrystal({ className = '' }: COFCrystalProps) {
           )}
         </aside>
       )}
-
-      {/* Subtle interaction cue indicator at bottom-right of model */}
-      <div className="cof-hud-status" aria-hidden="true">
-        <span className="hud-pulse" />
-        <span className="hud-text">
-          {isLocked ? 'Structure Pinned' : isPointerInside ? 'Hover to inspect atom/bond' : '3D COF Crystal · Interactive'}
-        </span>
-      </div>
     </div>
   )
 }
