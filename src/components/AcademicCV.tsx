@@ -1,5 +1,4 @@
 import { academics, positions, presentations, publications } from '../data/researcher'
-import { ResearchWordArt } from './ResearchWordArt'
 
 export function AcademicCV() {
   return (
@@ -7,7 +6,6 @@ export function AcademicCV() {
       <div className="container">
         <div className="cv-heading">
           <div><p className="eyebrow">03 / Curriculum vitae</p><h2 id="cv-heading">Tuning empty spaces to solve larger challenges. </h2></div>
-          <ResearchWordArt />
         </div>
 
         <div className="cv-block" id="positions">
