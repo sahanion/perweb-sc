@@ -40,16 +40,16 @@ export const heroPillars: HeroPillar[] = [
     overview: 'Hierarchical architectures spanning gels, aerogels, monoliths, thin films, and continuous membranes.',
   },
   {
-    id: 'applications',
-    title: 'Applications',
+    id: 'sorption',
+    title: 'Sorption',
     overview: 'Artificial photosynthesis, solar photocatalysis, environmental adsorption, and targeted NanoCOF drug delivery characterized via SEM & TEM.',
   },
 ]
 
 export const researcher = {
-  name: 'Dr. Sumanta Chowdhury',
+  name: 'Sumanta Chowdhury, PhD',
   shortName: 'Sumanta Chowdhury',
-  role: 'Postdoctoral Researcher, Marie Curie Fellow',
+  role: 'Postdoctoral Researcher, MSCA PF',
   affiliation: 'CEISAM, University of Nantes',
   location: 'Nantes, France',
   identity: 'Reticular Chemistry · COFs and MOFs · Applications',
@@ -335,7 +335,7 @@ export const presentations = [
 ]
 
 export const contactData = {
-  name: 'Dr. Sumanta Chowdhury',
+  name: 'Sumanta Chowdhury, PhD',
   role: 'Postdoctoral Researcher · CNRS Fellow',
   affiliation: 'CEISAM (UMR CNRS 6230) · University of Nantes',
   place: 'Nantes, France',

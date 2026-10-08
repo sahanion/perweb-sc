@@ -12,7 +12,7 @@ export function Hero() {
       <div className="hero-copy">
         <p className="eyebrow reveal">Research portfolio</p>
         <h1 id="hero-title" className="reveal reveal-delay-1">
-          Dr. Sumanta<br /><em>Chowdhury</em>
+          Sumanta<br /><em>Chowdhury</em><span className="hero-phd">, PhD</span>
         </h1>
 
         <div className="hero-topics-wrapper reveal reveal-delay-2" aria-label="Research pillars">

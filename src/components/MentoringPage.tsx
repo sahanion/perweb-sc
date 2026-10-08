@@ -156,7 +156,7 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
             style={{ border: 'none', background: 'transparent', cursor: 'pointer', font: 'inherit' }}
             onClick={() => onBackToHome('#contact')}
           >
-            Get in touch with Dr. Chowdhury <span>→</span>
+            Get in touch with Sumanta Chowdhury, PhD <span>→</span>
           </button>
         </div>
       </div>
