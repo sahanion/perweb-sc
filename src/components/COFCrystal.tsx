@@ -193,9 +193,15 @@ function CrystalScene({
     // Center geometry at (0, 0, 0)
     sceneClone.position.set(-center.x, -center.y, -center.z)
 
+    // Scale model to heroic dimensions (like before: max dimension ~ 16.2 units)
+    const rawMaxDim = Math.max(sizeVec.x, sizeVec.y, sizeVec.z) || 8.5
+    const targetDim = 16.2
+    const scaleFactor = targetDim / rawMaxDim
+    sceneClone.scale.setScalar(scaleFactor)
+
     const sphere = new THREE.Sphere()
     box.getBoundingSphere(sphere)
-    const radius = sphere.radius || Math.max(sizeVec.x, sizeVec.y, sizeVec.z) / 2
+    const radius = (sphere.radius || rawMaxDim / 2) * scaleFactor
 
     // Initialize mesh references & materials
     sceneClone.traverse((child) => {
@@ -214,12 +220,11 @@ function CrystalScene({
   // Responsive camera framing based on bounding sphere
   useEffect(() => {
     const fov = (camera as THREE.PerspectiveCamera).fov || 35
-    const aspect = viewportSize.width / viewportSize.height
     const isMobile = viewportSize.width < 768
 
-    // Frame camera so the crystal fits comfortably with breathing room
+    // Frame camera so the crystal is prominently showcased ("a lil bit bigger like before")
     const verticalFovRad = (fov * Math.PI) / 360
-    const distanceNeeded = (radius / Math.sin(verticalFovRad)) * (isMobile ? 1.25 : 1.15)
+    const distanceNeeded = (radius / Math.sin(verticalFovRad)) * (isMobile ? 1.08 : 0.94)
 
     camera.position.set(0, 0, distanceNeeded)
     camera.lookAt(0, 0, 0)
@@ -227,7 +232,7 @@ function CrystalScene({
 
     // Offset position: shift right on desktop to frame hero text cleanly, center on mobile
     if (rotationGroupRef.current) {
-      rotationGroupRef.current.position.set(isMobile ? 0 : 1.8, 0, 0)
+      rotationGroupRef.current.position.set(isMobile ? 0 : 2.5, 0, 0)
     }
   }, [camera, radius, viewportSize])
 
@@ -675,3 +680,4 @@ export function COFCrystal({ className = '' }: COFCrystalProps) {
 
 // Preload the crystal model for instant rendering
 useGLTF.preload(`${import.meta.env.BASE_URL}models/cof-crystal.glb`)
+
