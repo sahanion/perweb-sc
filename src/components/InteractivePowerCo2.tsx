@@ -125,20 +125,7 @@ export function InteractivePowerCo2() {
     return () => clearAllTimers()
   }, [clearAllTimers])
 
-  const getStatusText = () => {
-    if (animStatus === 'idle') {
-      return isHovered
-        ? 'Click to run photoelectrochemical simulation'
-        : 'Interactive model · Hover or click to simulate reaction'
-    }
-    if (phase.sunRays && !phase.fuelsMoving) {
-      return '0 - 1.5s · CO₂ gas streams deep into pores while e⁻ flow activates'
-    }
-    if (phase.fuelsMoving) {
-      return '1 - 3s · Catalytic conversion: Solar fuel molecules moving from framework'
-    }
-    return '3s · Synthesis Complete: Solar fuels circle formed · Auto-resetting...'
-  }
+
 
   // Exact curved spline path for electron streamline
   const electronCurvePath =
@@ -708,41 +695,6 @@ export function InteractivePowerCo2() {
         </g>
       </svg>
 
-      {/* Interactive HUD / Status Control Pill */}
-      <div className="powerco2-hud-bar">
-        <div className="hud-badge">
-          <span className={`hud-dot ${animStatus === 'running' ? 'is-active' : ''}`} />
-          <span className="hud-text">{getStatusText()}</span>
-        </div>
-
-        <button
-          type="button"
-          className="hud-action-btn"
-          onClick={(e) => {
-            e.stopPropagation()
-            if (animStatus === 'running') {
-              resetSimulation()
-            } else {
-              startSimulation()
-            }
-          }}
-          aria-label={animStatus === 'running' ? 'Reset Simulation' : 'Run Reaction Simulation'}
-        >
-          {animStatus === 'running' ? (
-            <>
-              <span className="hud-btn-icon">⏹</span> Reset
-            </>
-          ) : animStatus === 'completed' ? (
-            <>
-              <span className="hud-btn-icon">↻</span> Replaying...
-            </>
-          ) : (
-            <>
-              <span className="hud-btn-icon">▶</span> Simulate Reaction
-            </>
-          )}
-        </button>
-      </div>
     </div>
   )
 }
