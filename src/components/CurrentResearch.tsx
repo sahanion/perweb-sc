@@ -1,5 +1,5 @@
 import { researcher } from '../data/researcher'
-import powerCo2Diagram from '../assets/power-co2-project.jpg'
+import { InteractivePowerCo2 } from './InteractivePowerCo2'
 
 export function CurrentResearch() {
   return (
@@ -25,12 +25,7 @@ export function CurrentResearch() {
         </div>
 
         <div className="current-diagram-frame">
-          <img
-            src={powerCo2Diagram}
-            alt="PEPR SPLEEN POWER-CO2 Project Scheme: Solar-driven photocatalytic and photoelectrochemical CO2 reduction over MOF/COF thin films on semiconductor electrodes"
-            className="current-diagram-image"
-            loading="lazy"
-          />
+          <InteractivePowerCo2 />
         </div>
       </div>
     </section>

@@ -1118,7 +1118,7 @@ button {
   overflow: hidden;
   border: 1px solid rgba(186, 156, 102, 0.35);
   box-shadow: 0 16px 36px rgba(10, 14, 25, 0.40);
-  background: var(--paper);
+  background: #111726;
   transition: transform 0.25s ease, border-color 0.25s ease;
 }
 
@@ -1127,12 +1127,757 @@ button {
   border-color: rgba(186, 156, 102, 0.65);
 }
 
-.current-diagram-image {
+/* ==========================================================================
+   INTERACTIVE POWER-CO2 SCIENTIFIC SIMULATION
+   ========================================================================== */
+.interactive-powerco2-frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #111726;
+  cursor: pointer;
+  outline: none;
+}
+
+.interactive-powerco2-frame:focus-visible {
+  box-shadow: 0 0 0 3px var(--accent);
+}
+
+.powerco2-base-img {
   width: 100%;
   height: auto;
-  max-height: 380px;
-  object-fit: cover;
   display: block;
+  transition: filter 0.3s ease;
+}
+
+.powerco2-svg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   1. Sun Hover Glow & Active Solar Irradiation
+   -------------------------------------------------------------------------- */
+.sun-corona-halo {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.35s ease;
+}
+
+.sun-core-pulse {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.35s ease;
+}
+
+.sun-flares {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.35s ease;
+}
+
+.sun-spin-ring {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.35s ease;
+}
+
+/* On Hover: Sun begins glowing */
+.interactive-powerco2-frame.is-hovered .sun-corona-halo,
+.interactive-powerco2-frame.is-running .sun-corona-halo {
+  opacity: 0.85;
+  animation: sunCoronaPulse 2s ease-in-out infinite;
+}
+
+.interactive-powerco2-frame.is-hovered .sun-core-pulse,
+.interactive-powerco2-frame.is-running .sun-core-pulse {
+  opacity: 0.9;
+  animation: sunCorePulse 1.8s ease-in-out infinite;
+}
+
+.interactive-powerco2-frame.is-hovered .sun-flares,
+.interactive-powerco2-frame.is-running .sun-flares {
+  opacity: 0.95;
+  animation: sunFlaresPulse 2.4s ease-in-out infinite;
+}
+
+.interactive-powerco2-frame.is-hovered .sun-spin-ring,
+.interactive-powerco2-frame.is-running .sun-spin-ring {
+  opacity: 0.75;
+  animation: sunSpin 14s linear infinite;
+}
+
+@keyframes sunCoronaPulse {
+  0%, 100% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.22);
+    opacity: 0.95;
+  }
+}
+
+@keyframes sunCorePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 1;
+  }
+}
+
+@keyframes sunFlaresPulse {
+  0%, 100% {
+    transform: scale(0.96) rotate(0deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.18) rotate(15deg);
+    opacity: 1;
+  }
+}
+
+@keyframes sunSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Sun's Rays Falling upon the Framework */
+.animated-solar-rays {
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.solar-light-cone {
+  animation: lightConePulse 2s ease-in-out infinite;
+}
+
+@keyframes lightConePulse {
+  0%, 100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.photon-beam {
+  animation: photonBeamStream 1.2s linear infinite;
+}
+
+.beam-1 {
+  animation-duration: 1s;
+}
+
+.beam-2 {
+  animation-duration: 0.8s;
+}
+
+.beam-3 {
+  animation-duration: 1.3s;
+}
+
+@keyframes photonBeamStream {
+  from {
+    stroke-dashoffset: 40;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Cascading Photons Falling from Sun to Framework */
+.photon-wave {
+  opacity: 0;
+}
+
+.wave-1 {
+  animation: photonFall1 1.6s ease-in infinite;
+  animation-delay: 0.1s;
+}
+
+.wave-2 {
+  animation: photonFall2 1.8s ease-in infinite;
+  animation-delay: 0.45s;
+}
+
+.wave-3 {
+  animation: photonFall1 1.5s ease-in infinite;
+  animation-delay: 0.8s;
+}
+
+.wave-4 {
+  animation: photonFall3 1.9s ease-in infinite;
+  animation-delay: 1.1s;
+}
+
+@keyframes photonFall1 {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-394px, 294px);
+    opacity: 0;
+  }
+}
+
+@keyframes photonFall2 {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-534px, 274px);
+    opacity: 0;
+  }
+}
+
+@keyframes photonFall3 {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(-264px, 314px);
+    opacity: 0;
+  }
+}
+
+.photon-annotation {
+  animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* --------------------------------------------------------------------------
+   2. Electrons Hover Glow & Semiconductor-to-Framework Injection
+   -------------------------------------------------------------------------- */
+.electron-glow-path {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.electron-core-path {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.electron-bead .bead-ripple {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.35s ease;
+}
+
+.electron-bead .bead-core {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+/* On Hover: Electron path & markers glow */
+.interactive-powerco2-frame.is-hovered .electron-glow-path,
+.interactive-powerco2-frame.is-running .electron-glow-path {
+  opacity: 0.85;
+  animation: electronGlowPulse 1.8s ease-in-out infinite;
+}
+
+.interactive-powerco2-frame.is-hovered .electron-core-path,
+.interactive-powerco2-frame.is-running .electron-core-path {
+  opacity: 0.95;
+}
+
+.interactive-powerco2-frame.is-hovered .electron-bead .bead-core,
+.interactive-powerco2-frame.is-running .electron-bead .bead-core {
+  opacity: 1;
+}
+
+.interactive-powerco2-frame.is-hovered .electron-bead .bead-ripple,
+.interactive-powerco2-frame.is-running .electron-bead .bead-ripple {
+  opacity: 0.9;
+  animation: beadRipplePulse 1.6s cubic-bezier(0, 0.4, 0.6, 1) infinite;
+}
+
+.bead-2 .bead-ripple {
+  animation-delay: 0.3s !important;
+}
+.bead-3 .bead-ripple {
+  animation-delay: 0.6s !important;
+}
+.bead-4 .bead-ripple {
+  animation-delay: 0.9s !important;
+}
+.bead-5 .bead-ripple {
+  animation-delay: 1.2s !important;
+}
+
+@keyframes electronGlowPulse {
+  0%, 100% {
+    stroke-opacity: 0.55;
+    stroke-width: 4.5px;
+  }
+  50% {
+    stroke-opacity: 0.95;
+    stroke-width: 6.5px;
+  }
+}
+
+@keyframes beadRipplePulse {
+  0% {
+    transform: scale(0.65);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Traveling Electron Packets (Step 3) */
+.traveling-electron {
+  opacity: 0;
+}
+
+.packet-1 {
+  animation: travelElectronRoute 1.6s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+  animation-delay: 0s;
+}
+
+.packet-2 {
+  animation: travelElectronRoute 1.6s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+  animation-delay: 0.45s;
+}
+
+.packet-3 {
+  animation: travelElectronRoute 1.6s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+  animation-delay: 0.9s;
+}
+
+@keyframes travelElectronRoute {
+  0% {
+    transform: translate(840px, 492px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  30% {
+    transform: translate(628px, 510px);
+  }
+  52% {
+    transform: translate(475px, 515px);
+  }
+  68% {
+    transform: translate(430px, 460px);
+  }
+  84% {
+    transform: translate(380px, 395px);
+  }
+  96% {
+    transform: translate(288px, 305px);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(288px, 305px);
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. Movement of CO2 Molecules to the Framework (Step 2)
+   -------------------------------------------------------------------------- */
+.co2-guide-path-1,
+.co2-guide-path-2 {
+  animation: co2PathStream 1.5s linear infinite;
+  opacity: 0.7;
+}
+
+@keyframes co2PathStream {
+  from {
+    stroke-dashoffset: 24;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.traveling-co2 {
+  opacity: 0;
+}
+
+.mol-1 {
+  animation: co2Travel1 2s cubic-bezier(0.25, 0.7, 0.4, 1) infinite;
+  animation-delay: 0.1s;
+}
+
+.mol-2 {
+  animation: co2Travel2 2.2s cubic-bezier(0.25, 0.7, 0.4, 1) infinite;
+  animation-delay: 0.6s;
+}
+
+.mol-3 {
+  animation: co2Travel3 2.1s cubic-bezier(0.25, 0.7, 0.4, 1) infinite;
+  animation-delay: 1.1s;
+}
+
+@keyframes co2Travel1 {
+  0% {
+    transform: translate(140px, 110px) rotate(-20deg) scale(0.9);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.95;
+    transform: translate(230px, 270px) rotate(15deg) scale(0.85);
+  }
+  100% {
+    transform: translate(265px, 320px) rotate(35deg) scale(0.65);
+    opacity: 0;
+  }
+}
+
+@keyframes co2Travel2 {
+  0% {
+    transform: translate(100px, 180px) rotate(-10deg) scale(0.9);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.95;
+    transform: translate(195px, 300px) rotate(25deg) scale(0.85);
+  }
+  100% {
+    transform: translate(235px, 365px) rotate(45deg) scale(0.65);
+    opacity: 0;
+  }
+}
+
+@keyframes co2Travel3 {
+  0% {
+    transform: translate(160px, 200px) rotate(-30deg) scale(0.85);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 0.95;
+    transform: translate(240px, 290px) rotate(10deg) scale(0.8);
+  }
+  100% {
+    transform: translate(290px, 335px) rotate(30deg) scale(0.6);
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Framework Catalytic Active Site Flashes
+   -------------------------------------------------------------------------- */
+.catalytic-burst {
+  transform-box: fill-box;
+  transform-origin: center;
+  opacity: 0;
+}
+
+.burst-1 {
+  animation: catalyticPop 1.5s ease-out infinite;
+  animation-delay: 0.2s;
+}
+.burst-2 {
+  animation: catalyticPop 1.5s ease-out infinite;
+  animation-delay: 0.6s;
+}
+.burst-3 {
+  animation: catalyticPop 1.5s ease-out infinite;
+  animation-delay: 1s;
+}
+
+@keyframes catalyticPop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  30% {
+    transform: scale(1.35);
+    opacity: 0.95;
+  }
+  70% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. Solar Fuels Generation from Framework into Circle (Step 4)
+   -------------------------------------------------------------------------- */
+.solar-fuels-halo {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.35s ease;
+}
+
+.interactive-powerco2-frame.is-hovered .solar-fuels-halo,
+.interactive-powerco2-frame.is-running .solar-fuels-halo {
+  opacity: 0.8;
+  animation: fuelHaloPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes fuelHaloPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.95;
+  }
+}
+
+.fuel-flow-stream {
+  stroke-dasharray: 12 12;
+  animation: fuelStreamFlow 1.2s linear infinite;
+}
+
+@keyframes fuelStreamFlow {
+  from {
+    stroke-dashoffset: 48;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.traveling-fuel-molecule {
+  opacity: 0;
+}
+
+.fuel-1 {
+  animation: fuelTravelRoute 2s cubic-bezier(0.2, 0.7, 0.35, 1) infinite;
+  animation-delay: 0.1s;
+}
+
+.fuel-2 {
+  animation: fuelTravelRoute 2.2s cubic-bezier(0.2, 0.7, 0.35, 1) infinite;
+  animation-delay: 0.7s;
+}
+
+.fuel-3 {
+  animation: fuelTravelRoute 2.1s cubic-bezier(0.2, 0.7, 0.35, 1) infinite;
+  animation-delay: 1.3s;
+}
+
+@keyframes fuelTravelRoute {
+  0% {
+    transform: translate(630px, 375px) scale(0.65);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+    transform: translate(680px, 370px) scale(0.85);
+  }
+  60% {
+    transform: translate(770px, 340px) scale(1);
+  }
+  88% {
+    transform: translate(845px, 295px) scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(895px, 275px) scale(0.7);
+    opacity: 0;
+  }
+}
+
+.fuel-synthesis-burst {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: fuelBurstWave 1.8s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+
+@keyframes fuelBurstWave {
+  0% {
+    transform: scale(0.3);
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(3.5);
+    opacity: 0;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   HUD Status & Action Control Bar
+   -------------------------------------------------------------------------- */
+.powerco2-hud-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 16px;
+  background: rgba(17, 23, 38, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(186, 156, 102, 0.3);
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.hud-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.hud-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hud-dot.is-active {
+  background: #22c55e;
+  box-shadow: 0 0 8px #22c55e;
+  animation: activeDotPulse 1.2s infinite;
+}
+
+@keyframes activeDotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.4);
+    opacity: 0.7;
+  }
+}
+
+.hud-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: #d8c5a2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.02em;
+}
+
+.hud-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  background: rgba(186, 156, 102, 0.15);
+  border: 1px solid rgba(186, 156, 102, 0.45);
+  border-radius: 4px;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.hud-action-btn:hover {
+  background: var(--accent);
+  color: #111726;
+  border-color: var(--accent);
+  box-shadow: 0 2px 10px rgba(186, 156, 102, 0.35);
+}
+
+.hud-btn-icon {
+  font-size: 10px;
+}
+
+@media (max-width: 640px) {
+  .powerco2-hud-bar {
+    padding: 8px 12px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .hud-badge {
+    justify-content: center;
+  }
+
+  .hud-action-btn {
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sun-corona-halo,
+  .sun-core-pulse,
+  .sun-flares,
+  .sun-spin-ring,
+  .solar-light-cone,
+  .photon-beam,
+  .photon-wave,
+  .electron-glow-path,
+  .electron-bead .bead-ripple,
+  .traveling-electron,
+  .co2-guide-path-1,
+  .co2-guide-path-2,
+  .traveling-co2,
+  .catalytic-burst,
+  .solar-fuels-halo,
+  .fuel-flow-stream,
+  .traveling-fuel-molecule,
+  .fuel-synthesis-burst {
+    animation: none !important;
+  }
 }
 
 .current .eyebrow {
