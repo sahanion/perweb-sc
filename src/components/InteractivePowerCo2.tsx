@@ -83,7 +83,7 @@ export function InteractivePowerCo2() {
 
     // t = 1.5s (1500ms): CO2 molecules have finished moving deep into framework pores
     const t3 = window.setTimeout(() => {
-      setPhase((p) => ({ ...p, co2Moving: false, co2Absorbed: true }))
+      setPhase((p) => ({ ...p, co2Absorbed: true }))
     }, 1500)
 
     // t = 2.0s (2000ms): Electrons finish active surge across framework

@@ -1497,12 +1497,9 @@ button {
 }
 
 /* CO2 Molecules at rest */
-.co2-molecules-cluster {
-  transition: opacity 0.5s ease;
-}
-
 .co2-molecules-cluster.is-absorbed {
-  opacity: 0;
+  opacity: 0 !important;
+  visibility: hidden !important;
   pointer-events: none;
 }
 
@@ -1530,29 +1527,29 @@ button {
   transform: translate(90px, 275px) rotate(20deg);
 }
 
-/* Smooth Absorption Deep into Framework Pores (0 - 1.5s) */
+/* Smooth Absorption Deep into Framework Pores (0 - 1.5s, finishes cleanly before 1.4s) */
 .co2-molecules-cluster.is-gliding-deep-0to15 .unit-1 {
-  animation: co2GlideDeep0to15_1 1.45s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
+  animation: co2GlideDeep0to15_1 1.15s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
 }
 
 .co2-molecules-cluster.is-gliding-deep-0to15 .unit-2 {
-  animation: co2GlideDeep0to15_2 1.45s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
-  animation-delay: 0.08s;
+  animation: co2GlideDeep0to15_2 1.15s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
+  animation-delay: 0.05s;
 }
 
 .co2-molecules-cluster.is-gliding-deep-0to15 .unit-3 {
-  animation: co2GlideDeep0to15_3 1.45s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
-  animation-delay: 0.15s;
+  animation: co2GlideDeep0to15_3 1.15s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
+  animation-delay: 0.1s;
 }
 
 .co2-molecules-cluster.is-gliding-deep-0to15 .unit-4 {
-  animation: co2GlideDeep0to15_4 1.45s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
-  animation-delay: 0.22s;
+  animation: co2GlideDeep0to15_4 1.15s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
+  animation-delay: 0.15s;
 }
 
 .co2-molecules-cluster.is-gliding-deep-0to15 .unit-5 {
-  animation: co2GlideDeep0to15_5 1.45s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
-  animation-delay: 0.3s;
+  animation: co2GlideDeep0to15_5 1.15s cubic-bezier(0.25, 0.7, 0.35, 1) forwards;
+  animation-delay: 0.2s;
 }
 
 @keyframes co2GlideDeep0to15_1 {
