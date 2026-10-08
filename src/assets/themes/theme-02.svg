@@ -1,82 +1,413 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" width="100%" height="100%" fill="none">
   <defs>
-    <radialGradient id="bgGrad2" cx="50%" cy="45%" r="70%">
-      <stop offset="0%" stop-color="#2a1f3d"/>
-      <stop offset="60%" stop-color="#181324"/>
-      <stop offset="100%" stop-color="#0a0812"/>
+    <!-- Background Gradient: Subtle Warm Paper Fade -->
+    <radialGradient id="cardBgGrad" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#2a3550"/>
+      <stop offset="65%" stop-color="#1b2438"/>
+      <stop offset="100%" stop-color="#111726"/>
     </radialGradient>
-    <radialGradient id="sunGlow" cx="20%" cy="15%" r="60%">
-      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.6"/>
-      <stop offset="40%" stop-color="#ea580c" stop-opacity="0.3"/>
-      <stop offset="100%" stop-color="#ea580c" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="catalystCore" cx="35%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#fed7aa"/>
-      <stop offset="45%" stop-color="#f97316"/>
-      <stop offset="100%" stop-color="#9a3412"/>
-    </radialGradient>
-    <radialGradient id="tealNode" cx="35%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#a7f3d0"/>
-      <stop offset="45%" stop-color="#10b981"/>
-      <stop offset="100%" stop-color="#064e3b"/>
-    </radialGradient>
-    <filter id="laserGlow">
-      <feGaussianBlur stdDeviation="4" result="blur"/>
+
+    <!-- Solar Light Rays Gradient -->
+    <linearGradient id="solarRayGrad" x1="0%" y1="0%" x2="45%" y2="85%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.45"/>
+      <stop offset="35%" stop-color="#fcd34d" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="#d8c5a2" stop-opacity="0"/>
+    </linearGradient>
+
+    <!-- Semiconductor Substrate Gradients -->
+    <linearGradient id="semiconductorTop" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#c5a870"/>
+      <stop offset="50%" stop-color="#ab8c52"/>
+      <stop offset="100%" stop-color="#8a6f3b"/>
+    </linearGradient>
+    <linearGradient id="semiconductorSide" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#7a6234"/>
+      <stop offset="100%" stop-color="#4d3e20"/>
+    </linearGradient>
+    <linearGradient id="semiconductorFront" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#967b43"/>
+      <stop offset="100%" stop-color="#695328"/>
+    </linearGradient>
+
+    <!-- Framework Layer Gradients -->
+    <linearGradient id="frameworkTopGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#344363"/>
+      <stop offset="60%" stop-color="#25324d"/>
+      <stop offset="100%" stop-color="#182136"/>
+    </linearGradient>
+    <linearGradient id="frameworkFrontGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#25324d"/>
+      <stop offset="100%" stop-color="#141c2c"/>
+    </linearGradient>
+    <linearGradient id="frameworkSideGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#202a40"/>
+      <stop offset="100%" stop-color="#121826"/>
+    </linearGradient>
+
+    <!-- Electron Streamline Glow Filter -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="3.5" result="blur"/>
       <feMerge>
         <feMergeNode in="blur"/>
         <feMergeNode in="SourceGraphic"/>
       </feMerge>
     </filter>
+    <filter id="sunGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Metallic Node Gradients -->
+    <radialGradient id="goldNode" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fff2d6"/>
+      <stop offset="45%" stop-color="#d8c5a2"/>
+      <stop offset="100%" stop-color="#9e8455"/>
+    </radialGradient>
+    <radialGradient id="slateNode" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#8ba0bd"/>
+      <stop offset="60%" stop-color="#4a5f7d"/>
+      <stop offset="100%" stop-color="#26364d"/>
+    </radialGradient>
+    <radialGradient id="catalystActiveSite" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fed7aa"/>
+      <stop offset="45%" stop-color="#f97316"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </radialGradient>
+
+    <!-- Molecule Atom Gradients -->
+    <radialGradient id="oxygenAtom" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fca5a5"/>
+      <stop offset="45%" stop-color="#ef4444"/>
+      <stop offset="100%" stop-color="#991b1b"/>
+    </radialGradient>
+    <radialGradient id="carbonAtom" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#94a3b8"/>
+      <stop offset="50%" stop-color="#475569"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </radialGradient>
+    <radialGradient id="hydrogenAtom" cx="35%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="60%" stop-color="#e2e8f0"/>
+      <stop offset="100%" stop-color="#94a3b8"/>
+    </radialGradient>
   </defs>
 
-  <!-- Background -->
-  <rect width="100%" height="100%" fill="url(#bgGrad2)"/>
-  <rect width="100%" height="100%" fill="url(#sunGlow)"/>
+  <!-- Container / Background -->
+  <rect width="100%" height="100%" rx="16" fill="url(#cardBgGrad)"/>
 
-  <!-- Solar Photon Beams striking active site -->
-  <g stroke="#f59e0b" stroke-width="2.5" stroke-dasharray="8 4" stroke-opacity="0.75" filter="url(#laserGlow)">
-    <line x1="60" y1="40" x2="280" y2="195"/>
-    <line x1="110" y1="30" x2="300" y2="205"/>
-    <line x1="160" y1="20" x2="320" y2="215"/>
+  <!-- Subtle Blueprint Hexagonal Grid in Background -->
+  <g opacity="0.04" stroke="#d8c5a2" stroke-width="1.2">
+    <pattern id="hexGrid" width="40" height="69.28" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 20 11.55 L 0 0 L 0 23.09 L 20 34.64 L 40 23.09 Z M 0 34.64 L 20 46.19 L 40 34.64 L 40 57.74 L 20 69.28 L 0 57.74 Z"/>
+    </pattern>
+    <rect width="100%" height="100%" fill="url(#hexGrid)"/>
   </g>
 
-  <!-- Catalytic Macrocycle Ring & Electron Orbitals -->
-  <g stroke="#fb923c" stroke-width="2" stroke-opacity="0.6" fill="none">
-    <ellipse cx="300" cy="210" rx="170" ry="75" stroke-dasharray="6 6" transform="rotate(-15 300 210)"/>
-    <ellipse cx="300" cy="210" rx="170" ry="75" stroke-dasharray="6 6" transform="rotate(35 300 210)"/>
-    <circle cx="300" cy="210" r="105" stroke="#f59e0b" stroke-opacity="0.3" stroke-width="1.5"/>
+  <!-- ======================================================================== -->
+  <!-- PROJECT IDENTITY BADGE (Upper Left) -->
+  <!-- ======================================================================== -->
+  <g transform="translate(48, 44)">
+    <!-- Badge Container with Glassmorphism Border -->
+    <rect width="360" height="98" rx="8" fill="rgba(34, 45, 71, 0.65)" stroke="rgba(186, 156, 102, 0.40)" stroke-width="1"/>
+
+    <!-- Subtle Accent Edge Bar -->
+    <rect x="0" y="8" width="3" height="82" rx="1.5" fill="#ba9c66"/>
+
+    <!-- Header Text -->
+    <text x="24" y="30" font-family="'Space Mono', monospace" font-size="10.5" font-weight="700" letter-spacing="0.1em" fill="#d8c5a2">PEPR SPLEEN · CNRS RESEARCH</text>
+
+    <!-- Main Title -->
+    <text x="24" y="62" font-family="'Plus Jakarta Sans', sans-serif" font-size="22" font-weight="700" letter-spacing="-0.02em" fill="#ffffff">
+      POWER-CO₂ <tspan font-family="'Cormorant Garamond', Georgia, serif" font-weight="400" font-style="italic" fill="#ba9c66">Project</tspan>
+    </text>
+
+    <!-- Subtitle -->
+    <text x="24" y="84" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="500" fill="#94a3b8">
+      Solar-Driven CO₂ Photoelectrocatalytic Reduction
+    </text>
+
+    <!-- Decorative Solar/Electron Spark Icon -->
+    <g transform="translate(315, 20)">
+      <circle cx="16" cy="16" r="14" fill="rgba(186, 156, 102, 0.12)" stroke="rgba(186, 156, 102, 0.35)" stroke-width="1"/>
+      <path d="M16 7 L17.5 13.5 L24 14 L18.5 18 L20.5 25 L16 20.5 L11.5 25 L13.5 18 L8 14 L14.5 13.5 Z" fill="#ba9c66"/>
+    </g>
   </g>
 
-  <!-- Metalloporphyrin Coordination Chelation Arms -->
-  <g stroke="#d4af37" stroke-width="3" stroke-linecap="round">
-    <line x1="300" y1="210" x2="210" y2="160"/>
-    <line x1="300" y1="210" x2="390" y2="160"/>
-    <line x1="300" y1="210" x2="230" y2="280"/>
-    <line x1="300" y1="210" x2="370" y2="280"/>
+  <!-- ======================================================================== -->
+  <!-- SOLAR RADIATION (Upper Right) -->
+  <!-- ======================================================================== -->
+  <!-- Angular Light Cone Striking the Framework Surface -->
+  <polygon points="870 70, 520 280, 840 270" fill="url(#solarRayGrad)"/>
+
+  <!-- Sun Rays & Core -->
+  <g transform="translate(865, 75)" filter="url(#sunGlow)">
+    <circle cx="0" cy="0" r="28" fill="#f59e0b" opacity="0.35"/>
+    <circle cx="0" cy="0" r="18" fill="#fcd34d" opacity="0.85"/>
+    <circle cx="0" cy="0" r="11" fill="#fffbeb"/>
+
+    <!-- Dynamic Solar Flares / Rays -->
+    <g stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round">
+      <line x1="0" y1="-26" x2="0" y2="-36"/>
+      <line x1="0" y1="26" x2="0" y2="36"/>
+      <line x1="-26" y1="0" x2="-36" y2="0"/>
+      <line x1="26" y1="0" x2="36" y2="0"/>
+      <line x1="-18" y1="-18" x2="-26" y2="-26"/>
+      <line x1="18" y1="18" x2="26" y2="26"/>
+      <line x1="-18" y1="18" x2="-26" y2="26"/>
+      <line x1="18" y1="-18" x2="26" y2="-26"/>
+    </g>
   </g>
 
-  <!-- Central Catalytic Metal Center -->
-  <circle cx="300" cy="210" r="18" fill="url(#catalystCore)" filter="url(#laserGlow)"/>
-  <circle cx="300" cy="210" r="8" fill="#ffffff" fill-opacity="0.9"/>
+  <!-- Solar Light Annotation Tag -->
+  <g transform="translate(735, 120)">
+    <text x="0" y="0" font-family="'Space Mono', monospace" font-size="10.5" font-weight="700" fill="#fcd34d" letter-spacing="0.06em">hν SOLAR PHOTONS</text>
+    <path d="M-8 8 L40 40" stroke="#fcd34d" stroke-width="1.2" stroke-dasharray="3 3"/>
+  </g>
 
-  <!-- Coordinating Ligand Atoms -->
-  <circle cx="210" cy="160" r="9" fill="url(#tealNode)"/>
-  <circle cx="390" cy="160" r="9" fill="url(#tealNode)"/>
-  <circle cx="230" cy="280" r="9" fill="url(#tealNode)"/>
-  <circle cx="370" cy="280" r="9" fill="url(#tealNode)"/>
+  <!-- ======================================================================== -->
+  <!-- 3D ISOMETRIC SEMICONDUCTOR SUBSTRATE (Base Electrode) -->
+  <!-- ======================================================================== -->
+  <g id="semiconductor-base">
+    <!-- Substrate Top Face -->
+    <polygon points="380 435, 680 320, 910 395, 610 515" fill="url(#semiconductorTop)" stroke="#e4cd9f" stroke-width="1.2"/>
 
-  <!-- CO2 Molecular Conversion Flux (O=C=O) -->
-  <g filter="url(#laserGlow)">
-    <!-- Approaching CO2 -->
-    <circle cx="160" cy="100" r="6" fill="#ef4444"/>
-    <line x1="160" y1="100" x2="180" y2="100" stroke="#94a3b8" stroke-width="2"/>
-    <circle cx="180" cy="100" r="7" fill="#64748b"/>
-    <line x1="180" y1="100" x2="200" y2="100" stroke="#94a3b8" stroke-width="2"/>
-    <circle cx="200" cy="100" r="6" fill="#ef4444"/>
+    <!-- Substrate Front Left Edge -->
+    <polygon points="380 435, 610 515, 610 535, 380 455" fill="url(#semiconductorFront)" stroke="#8a6f3b" stroke-width="0.8"/>
 
-    <!-- Converted product CO / Fuel departing -->
-    <circle cx="430" cy="290" r="6" fill="#ef4444"/>
-    <line x1="430" y1="290" x2="448" y2="290" stroke="#94a3b8" stroke-width="2"/>
-    <circle cx="448" cy="290" r="7" fill="#64748b"/>
+    <!-- Substrate Front Right Edge -->
+    <polygon points="610 515, 910 395, 910 415, 610 535" fill="url(#semiconductorSide)" stroke="#695328" stroke-width="0.8"/>
+
+    <!-- Semiconductor Label Tag -->
+    <g transform="translate(740, 480) rotate(-16)">
+      <rect x="-8" y="-14" width="168" height="24" rx="4" fill="rgba(24, 33, 54, 0.85)" stroke="rgba(186, 156, 102, 0.45)" stroke-width="1"/>
+      <text x="6" y="2" font-family="'Space Mono', monospace" font-size="10.5" font-weight="700" letter-spacing="0.08em" fill="#d8c5a2">SEMICONDUCTOR BASE</text>
+    </g>
+  </g>
+
+  <!-- ======================================================================== -->
+  <!-- 3D LAYERED RETICULAR METAL/COVALENT ORGANIC FRAMEWORK (MOF/COF SLAB) -->
+  <!-- ======================================================================== -->
+  <g id="porous-framework-slab">
+    <!-- Framework Slab Shadow -->
+    <polygon points="440 415, 680 325, 850 375, 610 468" fill="#141c2b" opacity="0.7" filter="url(#glow)"/>
+
+    <!-- Layer 1 (Bottom Lattice Interface) -->
+    <!-- Front Left Face of Porous Block -->
+    <polygon points="450 395, 615 458, 615 478, 450 415" fill="url(#frameworkFrontGrad)" stroke="rgba(186, 156, 102, 0.3)" stroke-width="1"/>
+    <!-- Front Right Face of Porous Block -->
+    <polygon points="615 458, 835 378, 835 398, 615 478" fill="url(#frameworkSideGrad)" stroke="rgba(186, 156, 102, 0.3)" stroke-width="1"/>
+
+    <!-- Middle Porous Intermediate Layer -->
+    <polygon points="450 355, 615 418, 835 338, 670 275" fill="#202b42" stroke="rgba(186, 156, 102, 0.35)" stroke-width="1"/>
+
+    <!-- Top Active Porous Surface (Hexagonal Honeycomb Pore Openings) -->
+    <polygon points="450 305, 615 368, 835 288, 670 225" fill="url(#frameworkTopGrad)" stroke="#ba9c66" stroke-width="1.5"/>
+
+    <!-- Reticular Hexagonal Pores on Top Surface -->
+    <g stroke="#ba9c66" stroke-width="1.6" fill="rgba(18, 25, 41, 0.9)">
+      <!-- Pore 1 (Center) -->
+      <polygon points="630 285, 650 277, 665 288, 660 305, 640 312, 625 302"/>
+      <!-- Pore 2 (Left) -->
+      <polygon points="560 312, 580 304, 595 315, 590 332, 570 339, 555 329"/>
+      <!-- Pore 3 (Right) -->
+      <polygon points="700 258, 720 250, 735 261, 730 278, 710 285, 695 275"/>
+      <!-- Pore 4 (Front Center) -->
+      <polygon points="610 335, 630 327, 645 338, 640 355, 620 362, 605 352"/>
+      <!-- Pore 5 (Back Center) -->
+      <polygon points="650 240, 670 232, 685 243, 680 260, 660 267, 645 257"/>
+      <!-- Pore 6 (Front Left) -->
+      <polygon points="520 335, 540 327, 555 338, 550 355, 530 362, 515 352"/>
+      <!-- Pore 7 (Far Right) -->
+      <polygon points="750 280, 770 272, 785 283, 780 300, 760 307, 745 297"/>
+    </g>
+
+    <!-- Metallic Coordination Nodes (Gold & Slate Spheres at Junctions) -->
+    <g>
+      <circle cx="450" cy="305" r="4.5" fill="url(#goldNode)"/>
+      <circle cx="615" cy="368" r="5" fill="url(#goldNode)"/>
+      <circle cx="835" cy="288" r="4.5" fill="url(#goldNode)"/>
+      <circle cx="670" cy="225" r="4.5" fill="url(#goldNode)"/>
+      <circle cx="630" cy="285" r="4" fill="url(#slateNode)"/>
+      <circle cx="665" cy="288" r="4" fill="url(#goldNode)"/>
+      <circle cx="560" cy="312" r="4" fill="url(#goldNode)"/>
+      <circle cx="595" cy="315" r="4" fill="url(#slateNode)"/>
+      <circle cx="700" cy="258" r="4" fill="url(#goldNode)"/>
+      <circle cx="735" cy="261" r="4" fill="url(#slateNode)"/>
+      <!-- Active Molecular Catalysts Immobilized in Pores (Orange/Gold Centers) -->
+      <circle cx="645" cy="298" r="4" fill="url(#catalystActiveSite)" filter="url(#glow)"/>
+      <circle cx="575" cy="323" r="4" fill="url(#catalystActiveSite)" filter="url(#glow)"/>
+      <circle cx="715" cy="270" r="4" fill="url(#catalystActiveSite)" filter="url(#glow)"/>
+      <circle cx="625" cy="347" r="4" fill="url(#catalystActiveSite)" filter="url(#glow)"/>
+    </g>
+
+    <!-- Reticular Cross-Sectional Struts (Vertical Pillars in Pore Channels) -->
+    <g stroke="#3a4b6b" stroke-width="1.8" opacity="0.6">
+      <line x1="450" y1="305" x2="450" y2="395"/>
+      <line x1="615" y1="368" x2="615" y2="458"/>
+      <line x1="835" y1="288" x2="835" y2="378"/>
+      <line x1="535" y1="330" x2="535" y2="420"/>
+      <line x1="725" y1="260" x2="725" y2="350"/>
+    </g>
+
+    <!-- Framework Annotation Label -->
+    <g transform="translate(470, 205)">
+      <rect x="-8" y="-14" width="260" height="24" rx="4" fill="rgba(17, 23, 38, 0.90)" stroke="rgba(186, 156, 102, 0.45)" stroke-width="1"/>
+      <text x="4" y="2" font-family="'Space Mono', monospace" font-size="10.5" font-weight="700" letter-spacing="0.08em" fill="#d8c5a2">METAL / COVALENT ORGANIC FRAMEWORK</text>
+      <path d="M120 12 L140 32" stroke="#ba9c66" stroke-width="1.2" stroke-dasharray="3 2"/>
+    </g>
+  </g>
+
+  <!-- ======================================================================== -->
+  <!-- ELECTRON TRANSPORT STREAMLINE PATHWAY (e-) -->
+  <!-- ======================================================================== -->
+  <g id="electron-pathway">
+    <!-- Outer Glow Tube -->
+    <path d="M 850 405 L 610 500 L 470 445 L 470 375 L 540 345 L 645 298"
+          fill="none" stroke="#f59e0b" stroke-width="7" stroke-opacity="0.35" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+
+    <!-- Sharp Illuminated Core Pathway -->
+    <path d="M 850 405 L 610 500 L 470 445 L 470 375 L 540 345 L 645 298"
+          fill="none" stroke="#fcd34d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Dynamic Arrowhead Entering Active Site -->
+    <polygon points="642 292, 655 298, 646 306" fill="#fcd34d"/>
+
+    <!-- e- Pulse Beads on the Line -->
+    <g filter="url(#glow)">
+      <!-- e- Bead 1 (On Semiconductor) -->
+      <g transform="translate(760, 442)">
+        <circle cx="0" cy="0" r="10" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+        <text x="-6" y="4" font-family="'Space Mono', monospace" font-size="10" font-weight="700" fill="#111726">e⁻</text>
+      </g>
+      <!-- e- Bead 2 (At Junction Corner) -->
+      <g transform="translate(470, 410)">
+        <circle cx="0" cy="0" r="10" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+        <text x="-6" y="4" font-family="'Space Mono', monospace" font-size="10" font-weight="700" fill="#111726">e⁻</text>
+      </g>
+      <!-- e- Bead 3 (Entering Framework Pore) -->
+      <g transform="translate(565, 335)">
+        <circle cx="0" cy="0" r="10" fill="#f59e0b" stroke="#ffffff" stroke-width="1.5"/>
+        <text x="-6" y="4" font-family="'Space Mono', monospace" font-size="10" font-weight="700" fill="#111726">e⁻</text>
+      </g>
+    </g>
+
+    <!-- Annotation Callout for Electron Flow -->
+    <g transform="translate(320, 395)">
+      <rect x="-8" y="-12" width="130" height="22" rx="3" fill="rgba(24, 33, 54, 0.9)" stroke="rgba(245, 158, 11, 0.5)" stroke-width="1"/>
+      <text x="2" y="3" font-family="'Space Mono', monospace" font-size="9.5" font-weight="700" fill="#fcd34d" letter-spacing="0.06em">e⁻ INJECTION PATH</text>
+      <line x1="124" y1="-1" x2="148" y2="12" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="2 2"/>
+    </g>
+  </g>
+
+  <!-- ======================================================================== -->
+  <!-- CO2 REACTANT FEED MOLECULES (O=C=O) -->
+  <!-- ======================================================================== -->
+  <g id="co2-molecules">
+    <!-- Molecule 1 (Descending towards central pore) -->
+    <g transform="translate(580, 160) rotate(-25)">
+      <!-- Double Bonds -->
+      <line x1="-16" y1="-2" x2="16" y2="-2" stroke="#cbd5e1" stroke-width="1.8"/>
+      <line x1="-16" y1="2" x2="16" y2="2" stroke="#cbd5e1" stroke-width="1.8"/>
+      <!-- Carbon Center -->
+      <circle cx="0" cy="0" r="9" fill="url(#carbonAtom)"/>
+      <circle cx="-2" cy="-2" r="2.5" fill="#ffffff" opacity="0.6"/>
+      <!-- Oxygen Left -->
+      <circle cx="-22" cy="0" r="8" fill="url(#oxygenAtom)"/>
+      <!-- Oxygen Right -->
+      <circle cx="22" cy="0" r="8" fill="url(#oxygenAtom)"/>
+      <text x="-4" y="24" font-family="'Plus Jakarta Sans', sans-serif" font-size="11" font-weight="700" fill="#f87171">CO₂</text>
+    </g>
+
+    <!-- Molecule 2 (Approaching from top left) -->
+    <g transform="translate(510, 110) rotate(15)">
+      <line x1="-14" y1="-1.5" x2="14" y2="-1.5" stroke="#cbd5e1" stroke-width="1.5"/>
+      <line x1="-14" y1="1.5" x2="14" y2="1.5" stroke="#cbd5e1" stroke-width="1.5"/>
+      <circle cx="0" cy="0" r="7.5" fill="url(#carbonAtom)"/>
+      <circle cx="-18" cy="0" r="7" fill="url(#oxygenAtom)"/>
+      <circle cx="18" cy="0" r="7" fill="url(#oxygenAtom)"/>
+    </g>
+
+    <!-- Molecule 3 (Entering Pore Channel) -->
+    <g transform="translate(635, 210) rotate(40)">
+      <line x1="-14" y1="-1.5" x2="14" y2="-1.5" stroke="#cbd5e1" stroke-width="1.5"/>
+      <line x1="-14" y1="1.5" x2="14" y2="1.5" stroke="#cbd5e1" stroke-width="1.5"/>
+      <circle cx="0" cy="0" r="7" fill="url(#carbonAtom)"/>
+      <circle cx="-16" cy="0" r="6.5" fill="url(#oxygenAtom)"/>
+      <circle cx="16" cy="0" r="6.5" fill="url(#oxygenAtom)"/>
+    </g>
+
+    <!-- Reactant Adsorption Flow Arrow -->
+    <g stroke="#ba9c66" stroke-width="1.5" fill="none">
+      <path d="M 545 145 C 570 175, 600 210, 625 245" stroke-dasharray="4 3"/>
+      <polygon points="622 248, 631 251, 628 241" fill="#ba9c66"/>
+    </g>
+  </g>
+
+  <!-- ======================================================================== -->
+  <!-- SOLAR FUEL DESORPTION & PRODUCT CONVERSION (Ethylene / CO / Ethanol) -->
+  <!-- ======================================================================== -->
+  <g id="fuel-products">
+    <!-- Curved Catalytic Conversion Arc -->
+    <path d="M 645 320 C 580 340, 480 320, 420 280"
+          fill="none" stroke="#22c55e" stroke-width="2.5" stroke-dasharray="5 3" stroke-linecap="round"/>
+    <polygon points="415 285, 412 272, 424 278" fill="#22c55e"/>
+
+    <!-- Desorbing Ethylene Molecule (C2H4) -->
+    <g transform="translate(360, 240) rotate(-10)">
+      <!-- Carbon-Carbon Double Bond -->
+      <line x1="-12" y1="-1.5" x2="12" y2="-1.5" stroke="#94a3b8" stroke-width="2.2"/>
+      <line x1="-12" y1="1.5" x2="12" y2="1.5" stroke="#94a3b8" stroke-width="2.2"/>
+      <!-- Carbons -->
+      <circle cx="-12" cy="0" r="8" fill="url(#carbonAtom)"/>
+      <circle cx="12" cy="0" r="8" fill="url(#carbonAtom)"/>
+      <!-- Hydrogens -->
+      <line x1="-12" y1="0" x2="-24" y2="-10" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="-12" y1="0" x2="-24" y2="10" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="-24" cy="-10" r="5" fill="url(#hydrogenAtom)"/>
+      <circle cx="-24" cy="10" r="5" fill="url(#hydrogenAtom)"/>
+      <line x1="12" y1="0" x2="24" y2="-10" stroke="#94a3b8" stroke-width="1.5"/>
+      <line x1="12" y1="0" x2="24" y2="10" stroke="#94a3b8" stroke-width="1.5"/>
+      <circle cx="24" cy="-10" r="5" fill="url(#hydrogenAtom)"/>
+      <circle cx="24" cy="10" r="5" fill="url(#hydrogenAtom)"/>
+    </g>
+
+    <!-- Solar Fuel Products Callout Badge -->
+    <g transform="translate(200, 210)">
+      <rect width="210" height="74" rx="6" fill="rgba(20, 28, 45, 0.95)" stroke="rgba(34, 197, 94, 0.45)" stroke-width="1"/>
+      <circle cx="18" cy="22" r="5" fill="#22c55e" filter="url(#glow)"/>
+      <text x="32" y="25" font-family="'Space Mono', monospace" font-size="10.5" font-weight="700" fill="#4ade80" letter-spacing="0.06em">SOLAR FUELS &amp; PRODUCTS</text>
+      <text x="18" y="47" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" font-weight="700" fill="#ffffff">
+        Ethylene (C₂H₄) &amp; CO
+      </text>
+      <text x="18" y="63" font-family="'Plus Jakarta Sans', sans-serif" font-size="10" font-weight="500" fill="#94a3b8">
+        Selective C–C Bond Coupling Catalysis
+      </text>
+    </g>
+  </g>
+
+  <!-- ======================================================================== -->
+  <!-- SCIENTIFIC SUMMARY FOOTER LEGEND -->
+  <!-- ======================================================================== -->
+  <g transform="translate(48, 510)">
+    <g font-family="'Space Mono', monospace" font-size="9.5" fill="#94a3b8">
+      <!-- Item 1: Photon Capture -->
+      <circle cx="6" cy="6" r="3.5" fill="#f59e0b"/>
+      <text x="16" y="9">1. Solar Photon Excitation</text>
+
+      <!-- Item 2: Electron Transfer -->
+      <circle cx="200" cy="6" r="3.5" fill="#fcd34d"/>
+      <text x="210" y="9">2. e⁻ Substrate Injection</text>
+
+      <!-- Item 3: Reticular Transport -->
+      <circle cx="395" cy="6" r="3.5" fill="#ba9c66"/>
+      <text x="405" y="9">3. MOF/COF Pore Transport</text>
+
+      <!-- Item 4: Catalytic Reduction -->
+      <circle cx="600" cy="6" r="3.5" fill="#22c55e"/>
+      <text x="610" y="9">4. Selective CO₂ Reduction</text>
+    </g>
   </g>
 </svg>
