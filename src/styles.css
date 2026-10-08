@@ -1457,43 +1457,25 @@ button {
   }
 }
 
-/* Traveling Electron Packets (Step 3: Following exact curved spline via offset-path) */
-.traveling-electron-packet {
-  offset-path: path("M 270 550 L 336 527 C 360 520, 370 470, 376 401 C 382 350, 400 324, 426 318 C 480 308, 570 305, 638 304 L 675 302");
-  offset-rotate: 0deg;
-  transform-box: fill-box;
-  transform-origin: center;
+/* Active Electron Charge Surge along the Framework Curve (0.5 - 2s) */
+.electron-charge-surge-glow {
+  stroke-dasharray: 60 140;
+  animation: electronSurgeStream 1.2s linear infinite;
+  opacity: 0.95;
 }
 
-.pkt-1 {
-  animation: moveAlongExactCurve 1.6s cubic-bezier(0.3, 0.7, 0.35, 1) infinite;
-  animation-delay: 0s;
+.electron-charge-surge-core {
+  stroke-dasharray: 45 155;
+  animation: electronSurgeStream 1.2s linear infinite;
+  opacity: 1;
 }
 
-.pkt-2 {
-  animation: moveAlongExactCurve 1.6s cubic-bezier(0.3, 0.7, 0.35, 1) infinite;
-  animation-delay: 0.45s;
-}
-
-.pkt-3 {
-  animation: moveAlongExactCurve 1.6s cubic-bezier(0.3, 0.7, 0.35, 1) infinite;
-  animation-delay: 0.9s;
-}
-
-@keyframes moveAlongExactCurve {
-  0% {
-    offset-distance: 0%;
-    opacity: 0;
+@keyframes electronSurgeStream {
+  from {
+    stroke-dashoffset: 400;
   }
-  10% {
-    opacity: 1;
-  }
-  88% {
-    opacity: 1;
-  }
-  100% {
-    offset-distance: 100%;
-    opacity: 0;
+  to {
+    stroke-dashoffset: 0;
   }
 }
 
@@ -1505,15 +1487,6 @@ button {
   text-anchor: middle;
   dominant-baseline: central;
   letter-spacing: -0.04em;
-}
-
-.traveling-electron-packet text {
-  font-family: var(--font-mono);
-  font-size: 13.5px !important;
-  font-weight: 900 !important;
-  fill: #0284c7 !important;
-  text-anchor: middle;
-  dominant-baseline: central;
 }
 
 /* --------------------------------------------------------------------------

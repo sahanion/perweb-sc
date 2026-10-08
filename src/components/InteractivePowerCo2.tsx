@@ -534,24 +534,28 @@ export function InteractivePowerCo2() {
             <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="16.5" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
           </g>
 
-          {/* ELECTRONS MOVING (0.5 - 2 sec): Traveling Charge Packets with Large e⁻ */}
+          {/* ELECTRONS MOVING (0.5 - 2 sec): Electric charge surge along the exact curve path */}
           {phase.electronsMoving && (
             <g className="animated-electron-stream">
-              <g className="traveling-electron-packet pkt-1">
-                <circle cx="0" cy="0" r="18" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
-                <circle cx="0" cy="0" r="13.5" fill="#ffffff" />
-                <text x="0" y="0.5" fill="#0284c7" fontFamily="'Space Mono', monospace" fontSize="13.5" fontWeight="900" textAnchor="middle" dominantBaseline="central">e⁻</text>
-              </g>
-              <g className="traveling-electron-packet pkt-2">
-                <circle cx="0" cy="0" r="18" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
-                <circle cx="0" cy="0" r="13.5" fill="#ffffff" />
-                <text x="0" y="0.5" fill="#0284c7" fontFamily="'Space Mono', monospace" fontSize="13.5" fontWeight="900" textAnchor="middle" dominantBaseline="central">e⁻</text>
-              </g>
-              <g className="traveling-electron-packet pkt-3">
-                <circle cx="0" cy="0" r="18" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
-                <circle cx="0" cy="0" r="13.5" fill="#ffffff" />
-                <text x="0" y="0.5" fill="#0284c7" fontFamily="'Space Mono', monospace" fontSize="13.5" fontWeight="900" textAnchor="middle" dominantBaseline="central">e⁻</text>
-              </g>
+              <path
+                d={electronCurvePath}
+                fill="none"
+                stroke="#38bdf8"
+                strokeWidth="7"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="electron-charge-surge-glow"
+                filter="url(#pco2ElectronGlow)"
+              />
+              <path
+                d={electronCurvePath}
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="3.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="electron-charge-surge-core"
+              />
             </g>
           )}
         </g>
