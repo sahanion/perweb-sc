@@ -1713,26 +1713,35 @@ button {
 
 /* Biofuel Molecules Zone */
 .biofuel-molecules-zone {
-  transition: opacity 0.45s ease;
+  transition: opacity 0.35s ease;
+}
+
+.biofuel-molecules-zone.is-hidden-0to1s {
+  opacity: 0 !important;
+  pointer-events: none;
 }
 
 /* Smooth Migration of molecules from framework active site (645, 320) towards outside (1 - 3s) */
+.biofuel-molecules-zone.is-traveling-1to3s .biofuel-unit {
+  animation-fill-mode: both !important;
+}
+
 .biofuel-molecules-zone.is-traveling-1to3s .fuel-co {
-  animation: travelFuelToPlaceCO 1.9s cubic-bezier(0.18, 0.75, 0.3, 1) forwards;
+  animation: travelFuelToPlaceCO 1.9s cubic-bezier(0.18, 0.75, 0.3, 1) both;
 }
 
 .biofuel-molecules-zone.is-traveling-1to3s .fuel-meoh {
-  animation: travelFuelToPlaceMeOH 1.9s cubic-bezier(0.18, 0.75, 0.3, 1) forwards;
+  animation: travelFuelToPlaceMeOH 1.9s cubic-bezier(0.18, 0.75, 0.3, 1) both;
   animation-delay: 0.1s;
 }
 
 .biofuel-molecules-zone.is-traveling-1to3s .fuel-aa {
-  animation: travelFuelToPlaceAA 1.9s cubic-bezier(0.18, 0.75, 0.3, 1) forwards;
+  animation: travelFuelToPlaceAA 1.9s cubic-bezier(0.18, 0.75, 0.3, 1) both;
   animation-delay: 0.2s;
 }
 
 .biofuel-molecules-zone.is-traveling-1to3s .fuel-etoh {
-  animation: travelFuelToPlaceEtOH 1.9s cubic-bezier(0.18, 0.75, 0.3, 1) forwards;
+  animation: travelFuelToPlaceEtOH 1.9s cubic-bezier(0.18, 0.75, 0.3, 1) both;
   animation-delay: 0.3s;
 }
 

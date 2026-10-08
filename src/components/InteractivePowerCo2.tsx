@@ -147,12 +147,7 @@ export function InteractivePowerCo2() {
   // Green trajectory for fuel release from framework
   const fuelEgressPath = 'M 645 320 C 700 310, 760 280, 810 255'
 
-  // Solar fuels molecules are visible ONLY:
-  // - at idle (resting in place)
-  // - from t = 1.0s onward (fuelsMoving = true)
-  // In 0 - 1s: completely hidden (display: none)!
-  const showSolarFuels =
-    animStatus === 'idle' || phase.fuelsMoving || animStatus === 'completed'
+
 
   // The circular envelope and label "Solar fuels" appear at t = 3s (or at idle)
   const showCircleAndLabel =
@@ -627,8 +622,9 @@ export function InteractivePowerCo2() {
               - 0 to 1 sec: COMPLETELY HIDDEN via display: none
               - 1 to 3 sec: Glide smoothly from framework towards outside to their places
               - 3 sec+: In place inside the formed circle */}
-          {showSolarFuels && (
-            <g className={`biofuel-molecules-zone ${phase.fuelsMoving ? 'is-traveling-1to3s' : ''}`}>
+          <g
+            className={`biofuel-molecules-zone ${animStatus === 'running' && !phase.fuelsMoving ? 'is-hidden-0to1s' : ''} ${phase.fuelsMoving ? 'is-traveling-1to3s' : ''}`}
+          >
               
               {/* 1. CO (Carbon monoxide, top-left quadrant) */}
               <g transform="translate(830, 212)" className="biofuel-unit fuel-co">
@@ -695,7 +691,6 @@ export function InteractivePowerCo2() {
                 <circle cx="28" cy="-8" r="4.5" fill="url(#sphereHydrogen)" />
               </g>
             </g>
-          )}
 
           {/* Emergence Sparkle Wave inside Circle when Formed at t = 3 sec */}
           {phase.circleFormed && animStatus !== 'idle' && (
