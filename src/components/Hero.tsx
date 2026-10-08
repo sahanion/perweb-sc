@@ -10,7 +10,7 @@ export function Hero() {
   return (
     <section className="hero container" id="top" aria-labelledby="hero-title">
       <div className="hero-copy">
-        <p className="eyebrow reveal">Research portfolio · 2026</p>
+        <p className="eyebrow reveal">Research portfolio</p>
         <h1 id="hero-title" className="reveal reveal-delay-1">
           Dr. Sumanta<br /><em>Chowdhury</em>
         </h1>
