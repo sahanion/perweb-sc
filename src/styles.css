@@ -1457,62 +1457,52 @@ button {
   }
 }
 
-/* Traveling Electron Packets (Step 3: Semiconductor -> Pillar -> Top) */
-.traveling-electron {
-  opacity: 0;
+/* Traveling Electron Packets (Step 3: Following exact curved spline via offset-path) */
+.traveling-electron-packet {
+  offset-path: path("M 270 550 L 336 527 C 360 520, 370 470, 376 401 C 382 350, 400 324, 426 318 C 480 308, 570 305, 638 304 L 675 302");
+  offset-rotate: 0deg;
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
-.packet-1 {
-  animation: travelElectronNewRoute 1.7s cubic-bezier(0.2, 0.75, 0.4, 1) infinite;
+.pkt-1 {
+  animation: moveAlongExactCurve 1.6s cubic-bezier(0.3, 0.7, 0.35, 1) infinite;
   animation-delay: 0s;
 }
 
-.packet-2 {
-  animation: travelElectronNewRoute 1.7s cubic-bezier(0.2, 0.75, 0.4, 1) infinite;
-  animation-delay: 0.5s;
+.pkt-2 {
+  animation: moveAlongExactCurve 1.6s cubic-bezier(0.3, 0.7, 0.35, 1) infinite;
+  animation-delay: 0.45s;
 }
 
-.packet-3 {
-  animation: travelElectronNewRoute 1.7s cubic-bezier(0.2, 0.75, 0.4, 1) infinite;
-  animation-delay: 1.0s;
+.pkt-3 {
+  animation: moveAlongExactCurve 1.6s cubic-bezier(0.3, 0.7, 0.35, 1) infinite;
+  animation-delay: 0.9s;
 }
 
-@keyframes travelElectronNewRoute {
+@keyframes moveAlongExactCurve {
   0% {
-    transform: translate(270px, 548px);
+    offset-distance: 0%;
     opacity: 0;
   }
   10% {
     opacity: 1;
   }
-  24% {
-    transform: translate(336px, 527px);
-  }
-  48% {
-    transform: translate(376px, 401px);
-  }
-  70% {
-    transform: translate(426px, 318px);
-  }
-  92% {
-    transform: translate(638px, 304px);
-  }
-  98% {
-    transform: translate(675px, 302px);
+  88% {
     opacity: 1;
   }
   100% {
-    transform: translate(675px, 302px);
+    offset-distance: 100%;
     opacity: 0;
   }
 }
 
 /* --------------------------------------------------------------------------
-   3. Movement of CO2 Molecules to the Framework (Step 2)
+   3. Movement of CO2 Molecules to Framework (Step 2 - Smooth Single Influx)
    -------------------------------------------------------------------------- */
 .co2-influx-arrow-1,
 .co2-influx-arrow-2 {
-  transition: opacity 0.3s ease;
+  transition: opacity 0.35s ease;
 }
 
 .interactive-powerco2-frame.is-hovered .co2-influx-arrow-1,
@@ -1532,7 +1522,16 @@ button {
   }
 }
 
-/* CO2 Molecules at rest (matching original diagram placement) */
+/* CO2 Molecules at rest */
+.co2-molecules-cluster {
+  transition: opacity 0.5s ease;
+}
+
+.co2-molecules-cluster.is-absorbed {
+  opacity: 0;
+  pointer-events: none;
+}
+
 .co2-unit {
   transition: transform 0.4s ease, opacity 0.4s ease;
 }
@@ -1557,51 +1556,51 @@ button {
   transform: translate(90px, 275px) rotate(20deg);
 }
 
-/* During simulation: CO2 molecules glide into the framework pores */
-.co2-molecules-cluster.is-animating .unit-1 {
-  animation: co2Glide1 2.2s cubic-bezier(0.25, 0.7, 0.4, 1) infinite;
+/* Smooth Single Influx into Pores (No random looping!) */
+.co2-molecules-cluster.is-gliding-once .unit-1 {
+  animation: co2GlideOnce1 1.6s cubic-bezier(0.25, 0.7, 0.4, 1) forwards;
 }
 
-.co2-molecules-cluster.is-animating .unit-2 {
-  animation: co2Glide2 2.4s cubic-bezier(0.25, 0.7, 0.4, 1) infinite;
+.co2-molecules-cluster.is-gliding-once .unit-2 {
+  animation: co2GlideOnce2 1.7s cubic-bezier(0.25, 0.7, 0.4, 1) forwards;
+  animation-delay: 0.15s;
+}
+
+.co2-molecules-cluster.is-gliding-once .unit-3 {
+  animation: co2GlideOnce3 1.7s cubic-bezier(0.25, 0.7, 0.4, 1) forwards;
   animation-delay: 0.3s;
 }
 
-.co2-molecules-cluster.is-animating .unit-3 {
-  animation: co2Glide3 2.3s cubic-bezier(0.25, 0.7, 0.4, 1) infinite;
+.co2-molecules-cluster.is-gliding-once .unit-4 {
+  animation: co2GlideOnce4 1.8s cubic-bezier(0.25, 0.7, 0.4, 1) forwards;
+  animation-delay: 0.45s;
+}
+
+.co2-molecules-cluster.is-gliding-once .unit-5 {
+  animation: co2GlideOnce5 1.8s cubic-bezier(0.25, 0.7, 0.4, 1) forwards;
   animation-delay: 0.6s;
 }
 
-.co2-molecules-cluster.is-animating .unit-4 {
-  animation: co2Glide4 2.2s cubic-bezier(0.25, 0.7, 0.4, 1) infinite;
-  animation-delay: 0.8s;
-}
-
-.co2-molecules-cluster.is-animating .unit-5 {
-  animation: co2Glide5 2.5s cubic-bezier(0.25, 0.7, 0.4, 1) infinite;
-  animation-delay: 1.1s;
-}
-
-@keyframes co2Glide1 {
+@keyframes co2GlideOnce1 {
   0% {
     transform: translate(110px, 105px) rotate(-25deg) scale(1);
     opacity: 1;
   }
-  45% {
+  50% {
     transform: translate(165px, 175px) rotate(5deg) scale(0.9);
     opacity: 1;
   }
   85% {
     transform: translate(235px, 245px) rotate(30deg) scale(0.75);
-    opacity: 0.9;
+    opacity: 0.85;
   }
   100% {
-    transform: translate(265px, 275px) rotate(45deg) scale(0.5);
+    transform: translate(265px, 275px) rotate(45deg) scale(0.45);
     opacity: 0;
   }
 }
 
-@keyframes co2Glide2 {
+@keyframes co2GlideOnce2 {
   0% {
     transform: translate(180px, 150px) rotate(25deg) scale(1);
     opacity: 1;
@@ -1612,15 +1611,15 @@ button {
   }
   85% {
     transform: translate(260px, 270px) rotate(45deg) scale(0.75);
-    opacity: 0.9;
+    opacity: 0.85;
   }
   100% {
-    transform: translate(290px, 300px) rotate(55deg) scale(0.5);
+    transform: translate(290px, 300px) rotate(55deg) scale(0.45);
     opacity: 0;
   }
 }
 
-@keyframes co2Glide3 {
+@keyframes co2GlideOnce3 {
   0% {
     transform: translate(80px, 195px) rotate(40deg) scale(1);
     opacity: 1;
@@ -1631,15 +1630,15 @@ button {
   }
   85% {
     transform: translate(220px, 305px) rotate(35deg) scale(0.75);
-    opacity: 0.9;
+    opacity: 0.85;
   }
   100% {
-    transform: translate(250px, 335px) rotate(45deg) scale(0.5);
+    transform: translate(250px, 335px) rotate(45deg) scale(0.45);
     opacity: 0;
   }
 }
 
-@keyframes co2Glide4 {
+@keyframes co2GlideOnce4 {
   0% {
     transform: translate(160px, 230px) rotate(-35deg) scale(1);
     opacity: 1;
@@ -1650,15 +1649,15 @@ button {
   }
   85% {
     transform: translate(250px, 320px) rotate(30deg) scale(0.75);
-    opacity: 0.9;
+    opacity: 0.85;
   }
   100% {
-    transform: translate(280px, 345px) rotate(45deg) scale(0.5);
+    transform: translate(280px, 345px) rotate(45deg) scale(0.45);
     opacity: 0;
   }
 }
 
-@keyframes co2Glide5 {
+@keyframes co2GlideOnce5 {
   0% {
     transform: translate(90px, 275px) rotate(20deg) scale(1);
     opacity: 1;
@@ -1669,10 +1668,10 @@ button {
   }
   85% {
     transform: translate(230px, 340px) rotate(40deg) scale(0.75);
-    opacity: 0.9;
+    opacity: 0.85;
   }
   100% {
-    transform: translate(265px, 360px) rotate(50deg) scale(0.5);
+    transform: translate(265px, 360px) rotate(50deg) scale(0.45);
     opacity: 0;
   }
 }
@@ -1719,8 +1718,45 @@ button {
 }
 
 /* --------------------------------------------------------------------------
-   5. Solar Fuels Generation & Biofuel Molecules in Circle
+   5. Solar Fuels Narrative: Disappearance -> Emergence -> Circle & Label
    -------------------------------------------------------------------------- */
+.green-egress-arrow {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.green-egress-arrow.is-active {
+  opacity: 0.9;
+  stroke-dasharray: 8 8;
+  animation: fuelArrowStream 1.2s linear infinite;
+}
+
+@keyframes fuelArrowStream {
+  from {
+    stroke-dashoffset: 32;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* Circular Envelope (Border + Background + Label) */
+.solar-fuels-circle-envelope {
+  transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: 885px 250px;
+}
+
+.solar-fuels-circle-envelope.is-hidden {
+  opacity: 0;
+  transform: scale(0.92);
+  pointer-events: none;
+}
+
+.solar-fuels-circle-envelope.is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
 .solar-fuels-halo {
   opacity: 0;
   transform-box: fill-box;
@@ -1745,100 +1781,122 @@ button {
   }
 }
 
-/* Biofuel molecules inside circle */
-.biofuel-unit {
-  transition: transform 0.3s ease, filter 0.3s ease;
+/* Biofuel Molecules Zone */
+.biofuel-molecules-zone {
+  transition: opacity 0.5s ease;
 }
 
-.interactive-powerco2-frame.is-hovered .biofuel-unit {
-  filter: drop-shadow(0 2px 6px rgba(34, 197, 94, 0.25));
-}
-
-.biofuel-molecules-zone.is-generating .biofuel-unit {
-  animation: biofuelPulse 1.8s ease-in-out infinite;
-}
-
-.biofuel-molecules-zone.is-generating .fuel-meoh {
-  animation-delay: 0.25s;
-}
-.biofuel-molecules-zone.is-generating .fuel-aa {
-  animation-delay: 0.5s;
-}
-.biofuel-molecules-zone.is-generating .fuel-etoh {
-  animation-delay: 0.75s;
-}
-
-@keyframes biofuelPulse {
-  0%, 100% {
-    transform: scale(1);
-    filter: drop-shadow(0 0 2px rgba(34, 197, 94, 0.2));
-  }
-  50% {
-    transform: scale(1.08);
-    filter: drop-shadow(0 0 10px rgba(34, 197, 94, 0.7));
-  }
-}
-
-.fuel-flow-stream {
-  stroke-dasharray: 12 12;
-  animation: fuelStreamFlow 1.2s linear infinite;
-}
-
-@keyframes fuelStreamFlow {
-  from {
-    stroke-dashoffset: 48;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
-}
-
-.traveling-fuel-molecule {
+.biofuel-molecules-zone.is-hidden {
   opacity: 0;
+  pointer-events: none;
 }
 
-.fuel-packet-1 {
-  animation: fuelTravelRoute 2s cubic-bezier(0.2, 0.7, 0.35, 1) infinite;
-  animation-delay: 0.1s;
+.biofuel-molecules-zone.is-visible {
+  opacity: 1;
 }
 
-.fuel-packet-2 {
-  animation: fuelTravelRoute 2.2s cubic-bezier(0.2, 0.7, 0.35, 1) infinite;
-  animation-delay: 0.7s;
+/* Smooth Migration of molecules from framework active site (645, 320) to place */
+.biofuel-molecules-zone.is-traveling-to-place .fuel-co {
+  animation: travelFuelToPlaceCO 1.4s cubic-bezier(0.2, 0.75, 0.35, 1) forwards;
 }
 
-@keyframes fuelTravelRoute {
+.biofuel-molecules-zone.is-traveling-to-place .fuel-meoh {
+  animation: travelFuelToPlaceMeOH 1.5s cubic-bezier(0.2, 0.75, 0.35, 1) forwards;
+  animation-delay: 0.15s;
+}
+
+.biofuel-molecules-zone.is-traveling-to-place .fuel-aa {
+  animation: travelFuelToPlaceAA 1.5s cubic-bezier(0.2, 0.75, 0.35, 1) forwards;
+  animation-delay: 0.3s;
+}
+
+.biofuel-molecules-zone.is-traveling-to-place .fuel-etoh {
+  animation: travelFuelToPlaceEtOH 1.6s cubic-bezier(0.2, 0.75, 0.35, 1) forwards;
+  animation-delay: 0.45s;
+}
+
+@keyframes travelFuelToPlaceCO {
   0% {
-    transform: translate(640px, 330px) scale(0.65);
+    transform: translate(645px, 320px) scale(0.3);
     opacity: 0;
   }
   20% {
     opacity: 1;
-    transform: translate(690px, 325px) scale(0.85);
+    transform: translate(720px, 290px) scale(0.65);
   }
-  60% {
-    transform: translate(770px, 300px) scale(1);
-  }
-  88% {
-    transform: translate(845px, 265px) scale(1.05);
-    opacity: 1;
+  75% {
+    transform: translate(810px, 230px) scale(0.9);
   }
   100% {
-    transform: translate(900px, 245px) scale(0.7);
+    transform: translate(830px, 212px) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes travelFuelToPlaceMeOH {
+  0% {
+    transform: translate(645px, 320px) scale(0.3);
     opacity: 0;
+  }
+  20% {
+    opacity: 1;
+    transform: translate(740px, 285px) scale(0.65);
+  }
+  75% {
+    transform: translate(890px, 225px) scale(0.9);
+  }
+  100% {
+    transform: translate(936px, 210px) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes travelFuelToPlaceAA {
+  0% {
+    transform: translate(645px, 320px) scale(0.3);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+    transform: translate(710px, 310px) scale(0.65);
+  }
+  75% {
+    transform: translate(800px, 302px) scale(0.9);
+  }
+  100% {
+    transform: translate(830px, 298px) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes travelFuelToPlaceEtOH {
+  0% {
+    transform: translate(645px, 320px) scale(0.3);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+    transform: translate(740px, 315px) scale(0.65);
+  }
+  75% {
+    transform: translate(880px, 305px) scale(0.9);
+  }
+  100% {
+    transform: translate(936px, 298px) scale(1);
+    opacity: 1;
   }
 }
 
 .fuel-synthesis-burst {
   transform-box: fill-box;
   transform-origin: center;
-  animation: fuelBurstWave 1.8s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+  animation: fuelBurstWave 1.6s cubic-bezier(0, 0.5, 0.5, 1) infinite;
 }
 
 @keyframes fuelBurstWave {
   0% {
     transform: scale(0.3);
-    opacity: 0.85;
+    opacity: 0.9;
   }
   100% {
     transform: scale(3.5);

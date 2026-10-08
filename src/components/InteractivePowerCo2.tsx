@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import powerCo2Img from '../assets/power-co2-project.jpg'
 
-type SimulationStep = 0 | 1 | 2 | 3 | 4
+type SimulationStep = 0 | 1 | 2 | 3 | 4 | 5
 type AnimationState = 'idle' | 'running' | 'completed'
 
 export function InteractivePowerCo2() {
@@ -24,33 +24,34 @@ export function InteractivePowerCo2() {
   const startSimulation = useCallback(() => {
     clearAllTimers()
     setAnimState('running')
-    setCurrentStep(1) // Step 1: Solar photons irradiation
+    setCurrentStep(1) // Step 1: Sun irradiation + Solar fuels group disappears smoothly
 
-    // Step 2: CO2 gas streams into porous framework (after 800ms)
+    // Step 2: CO2 gas streams smoothly into porous framework (once, no random looping)
     const t1 = window.setTimeout(() => {
       setCurrentStep(2)
-    }, 850)
+    }, 900)
 
-    // Step 3: Electron injection from semiconductor (after 1850ms)
+    // Step 3: Electrons travel along exact curved path from semiconductor to framework
     const t2 = window.setTimeout(() => {
       setCurrentStep(3)
-    }, 1850)
+    }, 2000)
 
-    // Step 4: Catalytic reduction & solar fuels generation (after 2900ms)
+    // Step 4: Solar fuel molecules generate smoothly from framework and travel to place
     const t3 = window.setTimeout(() => {
       setCurrentStep(4)
-    }, 2900)
+    }, 3200)
 
-    // Completed pulse state (after 4800ms)
+    // Step 5: All molecules come together -> Circle forms and label "Solar fuels" appears!
     const t4 = window.setTimeout(() => {
+      setCurrentStep(5)
       setAnimState('completed')
-    }, 4800)
+    }, 4900)
 
-    // Automatic reset back to idle (after 7000ms - as requested by user)
+    // Automatic reset back to idle after displaying final state
     const t5 = window.setTimeout(() => {
       setAnimState('idle')
       setCurrentStep(0)
-    }, 7200)
+    }, 7600)
 
     timersRef.current = [t1, t2, t3, t4, t5]
   }, [clearAllTimers])
@@ -67,17 +68,33 @@ export function InteractivePowerCo2() {
     }
     switch (currentStep) {
       case 1:
-        return '1/4 · Solar Irradiation: Photons (hν) excite framework'
+        return '1/5 · Solar Irradiation: Photons (hν) excite framework'
       case 2:
-        return '2/4 · Adsorption: CO₂ gas streams into porous channels'
+        return '2/5 · Adsorption: CO₂ gas streams into porous channels'
       case 3:
-        return '3/4 · Charge Injection: Electrons (e⁻) transport from semiconductor'
+        return '3/5 · Charge Injection: Electrons (e⁻) transport along framework'
       case 4:
-        return '4/4 · Catalysis: Solar fuel molecules (CO, CH₃COOH, CH₃OH, C₂H₅OH) synthesized'
+        return '4/5 · Catalysis: Solar fuel molecules synthesize from framework'
+      case 5:
+        return '5/5 · Reaction Complete: Solar fuels assembled · Auto-resetting...'
       default:
         return 'Reaction Cycle Complete · Auto-resetting...'
     }
   }
+
+  // Exact curved path string for electron streamline
+  const electronCurvePath =
+    'M 270 550 L 336 527 C 360 520, 370 470, 376 401 C 382 350, 400 324, 426 318 C 480 308, 570 305, 638 304 L 675 302'
+
+  // Green trajectory for fuel release from framework
+  const fuelEgressPath = 'M 645 320 C 700 310, 760 280, 810 255'
+
+  // Visibility states for smooth narrative transition
+  const isSolarFuelGroupVisible =
+    animState === 'idle' || currentStep >= 4
+
+  const isCircleAndLabelVisible =
+    animState === 'idle' || currentStep >= 5
 
   return (
     <div
@@ -111,7 +128,32 @@ export function InteractivePowerCo2() {
         aria-hidden="true"
       >
         <defs>
-          {/* Sun & Photon Glow Filters */}
+          {/* Arrowhead Markers for Perfectly Aligned Direction Vectors */}
+          <marker
+            id="co2Arrowhead"
+            viewBox="0 0 10 10"
+            refX="6"
+            refY="5"
+            markerWidth="6"
+            markerHeight="6"
+            orient="auto-start-reverse"
+          >
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#3b82f6" />
+          </marker>
+
+          <marker
+            id="greenFuelArrowhead"
+            viewBox="0 0 10 10"
+            refX="6"
+            refY="5"
+            markerWidth="6"
+            markerHeight="6"
+            orient="auto-start-reverse"
+          >
+            <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#22c55e" />
+          </marker>
+
+          {/* Glow Filters */}
           <filter id="pco2SunGlow" x="-60%" y="-60%" width="220%" height="220%">
             <feGaussianBlur stdDeviation="12" result="blur1" />
             <feGaussianBlur stdDeviation="26" result="blur2" />
@@ -122,7 +164,6 @@ export function InteractivePowerCo2() {
             </feMerge>
           </filter>
 
-          {/* Electric Cyan/Blue Glow Filter for Electrons */}
           <filter id="pco2ElectronGlow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="4.5" result="blur1" />
             <feGaussianBlur stdDeviation="10" result="blur2" />
@@ -133,7 +174,6 @@ export function InteractivePowerCo2() {
             </feMerge>
           </filter>
 
-          {/* Green Glow Filter for Solar Fuels */}
           <filter id="pco2FuelGlow" x="-40%" y="-40%" width="180%" height="180%">
             <feGaussianBlur stdDeviation="7" result="blur1" />
             <feGaussianBlur stdDeviation="16" result="blur2" />
@@ -144,7 +184,6 @@ export function InteractivePowerCo2() {
             </feMerge>
           </filter>
 
-          {/* Catalytic Spark Glow Filter */}
           <filter id="pco2SparkGlow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="4" result="blur" />
             <feMerge>
@@ -153,29 +192,26 @@ export function InteractivePowerCo2() {
             </feMerge>
           </filter>
 
-          {/* 3D Sphere Specular Highlight Shaders */}
-          {/* Carbon (Black / Charcoal) */}
+          {/* 3D Sphere Specular Shaders */}
           <radialGradient id="sphereCarbon" cx="35%" cy="30%" r="65%">
             <stop offset="0%" stopColor="#64748b" />
             <stop offset="35%" stopColor="#1e293b" />
             <stop offset="100%" stopColor="#090d16" />
           </radialGradient>
 
-          {/* Oxygen (Coral Red) */}
           <radialGradient id="sphereOxygen" cx="35%" cy="30%" r="65%">
             <stop offset="0%" stopColor="#fca5a5" />
             <stop offset="35%" stopColor="#ef4444" />
             <stop offset="100%" stopColor="#991b1b" />
           </radialGradient>
 
-          {/* Hydrogen (Clean White) */}
           <radialGradient id="sphereHydrogen" cx="35%" cy="30%" r="65%">
             <stop offset="0%" stopColor="#ffffff" />
             <stop offset="55%" stopColor="#e2e8f0" />
             <stop offset="100%" stopColor="#94a3b8" />
           </radialGradient>
 
-          {/* Sun Rays Gradient Falling upon the Framework */}
+          {/* Sun Rays Gradient */}
           <linearGradient id="pco2SunRayGrad" x1="0%" y1="0%" x2="35%" y2="90%">
             <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.55" />
             <stop offset="35%" stopColor="#fcd34d" stopOpacity="0.28" />
@@ -183,14 +219,7 @@ export function InteractivePowerCo2() {
             <stop offset="100%" stopColor="#d8c5a2" stopOpacity="0.0" />
           </linearGradient>
 
-          {/* Electron Streamline Core Gradient */}
-          <linearGradient id="pco2ElectronGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#38bdf8" />
-            <stop offset="45%" stopColor="#60a5fa" />
-            <stop offset="100%" stopColor="#93c5fd" />
-          </linearGradient>
-
-          {/* Influx Arrow Blue Gradient */}
+          {/* Arrow Gradient */}
           <linearGradient id="pco2ArrowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#93c5fd" stopOpacity="0.8" />
             <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.95" />
@@ -303,7 +332,7 @@ export function InteractivePowerCo2() {
         </g>
 
         {/* =================================================================== */}
-        {/* 2. CO2 MOLECULES & INFLUX ARROWS (Upper Left) */}
+        {/* 2. CO2 MOLECULES & PROPERLY ALIGNED INFLUX ARROWS (Upper Left) */}
         {/* =================================================================== */}
         <g id="interactive-co2-group">
           {/* Label "CO2" */}
@@ -319,30 +348,32 @@ export function InteractivePowerCo2() {
             CO<tspan fontSize="18" dy="4">2</tspan>
           </text>
 
-          {/* Influx Flow Streamlines */}
+          {/* Perfectly Aligned Influx Flow Streamlines with Native SVG Marker Arrowheads */}
           <path
-            d="M 110 160 C 150 170, 185 200, 225 240"
+            d="M 115 165 C 160 185, 195 215, 238 250"
             fill="none"
             stroke="url(#pco2ArrowGrad)"
-            strokeWidth="5"
+            strokeWidth="4"
             strokeLinecap="round"
+            markerEnd="url(#co2Arrowhead)"
             className="co2-influx-arrow-1"
           />
-          <polygon points="222 230, 234 246, 218 248" fill="#3b82f6" opacity="0.9" />
 
           <path
-            d="M 155 240 C 180 260, 210 275, 235 295"
+            d="M 145 240 C 185 260, 215 280, 248 305"
             fill="none"
             stroke="url(#pco2ArrowGrad)"
-            strokeWidth="5"
+            strokeWidth="4"
             strokeLinecap="round"
+            markerEnd="url(#co2Arrowhead)"
             className="co2-influx-arrow-2"
           />
-          <polygon points="230 286, 243 302, 227 304" fill="#3b82f6" opacity="0.9" />
 
-          {/* DYNAMIC CO2 MOLECULES (Glides into framework during simulation, clean reset) */}
-          <g className={`co2-molecules-cluster ${animState === 'running' ? 'is-animating' : ''}`}>
-            {/* CO2 Molecule 1 (Top) */}
+          {/* CLEAN DYNAMIC CO2 MOLECULES:
+              - At idle: rest peacefully in initial cluster
+              - At Step 2: glide ONCE down into framework pores and fade out (NO infinite looping) */}
+          <g className={`co2-molecules-cluster ${currentStep === 2 ? 'is-gliding-once' : ''} ${currentStep > 2 ? 'is-absorbed' : ''}`}>
+            {/* CO2 Molecule 1 */}
             <g className="co2-unit unit-1">
               <line x1="-16" y1="0" x2="16" y2="0" stroke="#cbd5e1" strokeWidth="2.5" />
               <circle cx="0" cy="0" r="10.5" fill="url(#sphereCarbon)" />
@@ -350,7 +381,7 @@ export function InteractivePowerCo2() {
               <circle cx="18" cy="0" r="9.5" fill="url(#sphereOxygen)" />
             </g>
 
-            {/* CO2 Molecule 2 (Upper Mid) */}
+            {/* CO2 Molecule 2 */}
             <g className="co2-unit unit-2">
               <line x1="-15" y1="0" x2="15" y2="0" stroke="#cbd5e1" strokeWidth="2.5" />
               <circle cx="0" cy="0" r="10" fill="url(#sphereCarbon)" />
@@ -358,7 +389,7 @@ export function InteractivePowerCo2() {
               <circle cx="17" cy="0" r="9" fill="url(#sphereOxygen)" />
             </g>
 
-            {/* CO2 Molecule 3 (Left Mid) */}
+            {/* CO2 Molecule 3 */}
             <g className="co2-unit unit-3">
               <line x1="-15" y1="0" x2="15" y2="0" stroke="#cbd5e1" strokeWidth="2.5" />
               <circle cx="0" cy="0" r="9.5" fill="url(#sphereCarbon)" />
@@ -366,7 +397,7 @@ export function InteractivePowerCo2() {
               <circle cx="16" cy="0" r="8.5" fill="url(#sphereOxygen)" />
             </g>
 
-            {/* CO2 Molecule 4 (Center Mid) */}
+            {/* CO2 Molecule 4 */}
             <g className="co2-unit unit-4">
               <line x1="-15" y1="0" x2="15" y2="0" stroke="#cbd5e1" strokeWidth="2.5" />
               <circle cx="0" cy="0" r="10" fill="url(#sphereCarbon)" />
@@ -374,7 +405,7 @@ export function InteractivePowerCo2() {
               <circle cx="17" cy="0" r="9" fill="url(#sphereOxygen)" />
             </g>
 
-            {/* CO2 Molecule 5 (Lower Left) */}
+            {/* CO2 Molecule 5 */}
             <g className="co2-unit unit-5">
               <line x1="-15" y1="0" x2="15" y2="0" stroke="#cbd5e1" strokeWidth="2.5" />
               <circle cx="0" cy="0" r="9.5" fill="url(#sphereCarbon)" />
@@ -385,12 +416,12 @@ export function InteractivePowerCo2() {
         </g>
 
         {/* =================================================================== */}
-        {/* 3. ELECTRON STREAMLINE & MARKERS (Semiconductor -> Pillar -> Top) */}
+        {/* 3. ELECTRON STREAMLINE & PRECISE CURVE PATH TRACKING (Step 3) */}
         {/* =================================================================== */}
         <g id="interactive-electron-group">
           {/* Main Glowing Streamline Path (Electric Blue) */}
           <path
-            d="M 280 545 L 336 527 C 360 520, 370 470, 376 401 C 382 350, 400 324, 426 318 C 480 308, 570 305, 638 304 L 675 302"
+            d={electronCurvePath}
             fill="none"
             stroke="#38bdf8"
             strokeWidth="5.5"
@@ -400,7 +431,7 @@ export function InteractivePowerCo2() {
             filter="url(#pco2ElectronGlow)"
           />
           <path
-            d="M 280 545 L 336 527 C 360 520, 370 470, 376 401 C 382 350, 400 324, 426 318 C 480 308, 570 305, 638 304 L 675 302"
+            d={electronCurvePath}
             fill="none"
             stroke="#ffffff"
             strokeWidth="2.2"
@@ -414,49 +445,45 @@ export function InteractivePowerCo2() {
           <polygon points="670 298, 680 302, 670 306" fill="#ffffff" />
 
           {/* 4 Electron Markers with Concentric Ripple Halos */}
-          {/* Marker 1: Semiconductor base surface */}
           <g transform="translate(336, 527)" className="electron-bead bead-1">
             <circle cx="0" cy="0" r="16" className="bead-ripple" fill="#38bdf8" />
             <circle cx="0" cy="0" r="10.5" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="1.5" />
             <text x="-4" y="3.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="8.5" fontWeight="700">e⁻</text>
           </g>
 
-          {/* Marker 2: Framework front-left corner pillar */}
           <g transform="translate(376, 401)" className="electron-bead bead-2">
             <circle cx="0" cy="0" r="16" className="bead-ripple" fill="#38bdf8" />
             <circle cx="0" cy="0" r="10.5" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="1.5" />
             <text x="-4" y="3.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="8.5" fontWeight="700">e⁻</text>
           </g>
 
-          {/* Marker 3: Top-left framework corner */}
           <g transform="translate(426, 318)" className="electron-bead bead-3">
             <circle cx="0" cy="0" r="16" className="bead-ripple" fill="#38bdf8" />
             <circle cx="0" cy="0" r="10.5" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="1.5" />
             <text x="-4" y="3.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="8.5" fontWeight="700">e⁻</text>
           </g>
 
-          {/* Marker 4: Top-right framework surface */}
           <g transform="translate(638, 304)" className="electron-bead bead-4">
             <circle cx="0" cy="0" r="16" className="bead-ripple" fill="#38bdf8" />
             <circle cx="0" cy="0" r="10.5" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="1.5" />
             <text x="-4" y="3.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="8.5" fontWeight="700">e⁻</text>
           </g>
 
-          {/* ANIMATED ELECTRON CHARGE SURGES (Step 3: Semiconductor -> Framework) */}
-          {(animState === 'running' && currentStep >= 3) && (
+          {/* ANIMATED ELECTRONS FOLLOWING THE EXACT CURVED PATH (Hardware-accelerated offset-path) */}
+          {(animState === 'running' && currentStep >= 3 && currentStep < 5) && (
             <g className="animated-electron-stream">
-              <g className="traveling-electron packet-1">
-                <circle cx="0" cy="0" r="12" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
+              <g className="traveling-electron-packet pkt-1">
+                <circle cx="0" cy="0" r="11" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
                 <circle cx="0" cy="0" r="7.5" fill="#ffffff" />
                 <text x="-4" y="3" fill="#0f172a" fontFamily="'Space Mono', monospace" fontSize="8" fontWeight="700">e⁻</text>
               </g>
-              <g className="traveling-electron packet-2">
-                <circle cx="0" cy="0" r="12" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
+              <g className="traveling-electron-packet pkt-2">
+                <circle cx="0" cy="0" r="11" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
                 <circle cx="0" cy="0" r="7.5" fill="#ffffff" />
                 <text x="-4" y="3" fill="#0f172a" fontFamily="'Space Mono', monospace" fontSize="8" fontWeight="700">e⁻</text>
               </g>
-              <g className="traveling-electron packet-3">
-                <circle cx="0" cy="0" r="12" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
+              <g className="traveling-electron-packet pkt-3">
+                <circle cx="0" cy="0" r="11" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
                 <circle cx="0" cy="0" r="7.5" fill="#ffffff" />
                 <text x="-4" y="3" fill="#0f172a" fontFamily="'Space Mono', monospace" fontSize="8" fontWeight="700">e⁻</text>
               </g>
@@ -467,7 +494,7 @@ export function InteractivePowerCo2() {
         {/* =================================================================== */}
         {/* 4. FRAMEWORK CATALYTIC REACTION SPARKS */}
         {/* =================================================================== */}
-        {(animState === 'running' && currentStep >= 3) && (
+        {(animState === 'running' && currentStep >= 3 && currentStep < 5) && (
           <g id="framework-catalytic-reactions">
             <g transform="translate(380, 340)" className="catalytic-burst burst-1">
               <circle cx="0" cy="0" r="18" fill="#f59e0b" filter="url(#pco2SparkGlow)" opacity="0.85" />
@@ -485,198 +512,145 @@ export function InteractivePowerCo2() {
         )}
 
         {/* =================================================================== */}
-        {/* 5. SOLAR FUEL CIRCLE & BIOFUEL MOLECULES (cx=885, cy=250, r=115) */}
+        {/* 5. SOLAR FUEL NARRATIVE SEQUENCE:
+            - At start of animation: Group disappears smoothly
+            - At Step 4: Molecules generate from framework and travel to place
+            - At Step 5: After all molecules assemble, the circle forms and label appears! */}
         {/* =================================================================== */}
         <g id="interactive-solar-fuels-group">
           {/* Egress Green Transition Trajectory Arrow */}
           <path
-            d="M 680 310 C 740 300, 780 270, 810 245"
+            d={fuelEgressPath}
             fill="none"
             stroke="#22c55e"
-            strokeWidth="5"
+            strokeWidth="4.5"
             strokeLinecap="round"
-            className="green-egress-arrow"
-          />
-          <polygon points="805 235, 822 242, 812 254" fill="#22c55e" />
-
-          {/* Clean Glassmorphic Solar Fuel Circular Badge */}
-          <circle
-            cx="885"
-            cy="250"
-            r="115"
-            fill="url(#solarCircleBg)"
-            stroke="#22c55e"
-            strokeWidth="2.5"
-            className="solar-fuels-circle-border"
+            markerEnd="url(#greenFuelArrowhead)"
+            className={`green-egress-arrow ${currentStep >= 4 ? 'is-active' : ''}`}
           />
 
-          {/* Outer Pulsing Halo on Hover / Generating */}
-          <circle
-            cx="885"
-            cy="250"
-            r="118"
-            className="solar-fuels-halo"
-            fill="none"
-            stroke="#4ade80"
-            strokeWidth="3.5"
-            filter="url(#pco2FuelGlow)"
-          />
+          {/* Clean Glassmorphic Solar Fuel Circle Badge (Forms after molecules arrive) */}
+          <g className={`solar-fuels-circle-envelope ${isCircleAndLabelVisible ? 'is-visible' : 'is-hidden'}`}>
+            <circle
+              cx="885"
+              cy="250"
+              r="115"
+              fill="url(#solarCircleBg)"
+              stroke="#22c55e"
+              strokeWidth="2.5"
+              className="solar-fuels-circle-border"
+            />
 
-          {/* Heading ONLY: "Solar fuels" (NO individual molecule labels per request) */}
-          <text
-            x="885"
-            y="172"
-            fontFamily="'Cormorant Garamond', Georgia, serif"
-            fontSize="21"
-            fontStyle="italic"
-            fontWeight="600"
-            textAnchor="middle"
-            fill="#1e293b"
-            letterSpacing="0.02em"
-          >
-            Solar fuels
-          </text>
+            {/* Outer Pulsing Halo */}
+            <circle
+              cx="885"
+              cy="250"
+              r="118"
+              className="solar-fuels-halo"
+              fill="none"
+              stroke="#4ade80"
+              strokeWidth="3.5"
+              filter="url(#pco2FuelGlow)"
+            />
 
-          {/* CAREFULLY CONSTRUCTED 3D BIOFUEL MOLECULES (CO, CH3COOH, CH3OH, C2H5OH) */}
-          <g className={`biofuel-molecules-zone ${animState === 'running' && currentStep >= 4 ? 'is-generating' : ''}`}>
+            {/* Label "Solar fuels" (comes up after circle forms) */}
+            <text
+              x="885"
+              y="172"
+              fontFamily="'Cormorant Garamond', Georgia, serif"
+              fontSize="21"
+              fontStyle="italic"
+              fontWeight="600"
+              textAnchor="middle"
+              fill="#1e293b"
+              letterSpacing="0.02em"
+              className="solar-fuels-title"
+            >
+              Solar fuels
+            </text>
+          </g>
+
+          {/* DYNAMIC BIOFUEL MOLECULES (CO, CH3COOH, CH3OH, C2H5OH)
+              - In Step 4: Glide smoothly from framework (645, 320) into respective quadrants
+              - In Step 5 / Idle: Rest stably in place */}
+          <g className={`biofuel-molecules-zone ${isSolarFuelGroupVisible ? 'is-visible' : 'is-hidden'} ${currentStep === 4 ? 'is-traveling-to-place' : ''}`}>
             
             {/* 1. CO (Carbon monoxide, top-left quadrant) */}
             <g transform="translate(830, 212)" className="biofuel-unit fuel-co">
-              {/* C≡O Triple Bond */}
               <line x1="-5" y1="-3" x2="8" y2="-3" stroke="#94a3b8" strokeWidth="2" />
               <line x1="-5" y1="0" x2="8" y2="0" stroke="#94a3b8" strokeWidth="2.2" />
               <line x1="-5" y1="3" x2="8" y2="3" stroke="#94a3b8" strokeWidth="2" />
-              {/* Carbon */}
               <circle cx="-7" cy="0" r="11" fill="url(#sphereCarbon)" />
-              {/* Oxygen */}
               <circle cx="9" cy="0" r="10" fill="url(#sphereOxygen)" />
             </g>
 
             {/* 2. CH3OH (Methanol, top-right quadrant) */}
             <g transform="translate(936, 210)" className="biofuel-unit fuel-meoh">
-              {/* C-H Bonds */}
               <line x1="-12" y1="0" x2="-20" y2="-10" stroke="#94a3b8" strokeWidth="2.2" />
               <line x1="-12" y1="0" x2="-20" y2="10" stroke="#94a3b8" strokeWidth="2.2" />
               <line x1="-12" y1="0" x2="-6" y2="-12" stroke="#94a3b8" strokeWidth="2.2" />
-              {/* C-O Bond */}
               <line x1="-12" y1="0" x2="8" y2="0" stroke="#94a3b8" strokeWidth="2.5" />
-              {/* O-H Bond */}
               <line x1="8" y1="0" x2="20" y2="-8" stroke="#94a3b8" strokeWidth="2" />
-
-              {/* Carbon */}
               <circle cx="-12" cy="0" r="10.5" fill="url(#sphereCarbon)" />
-              {/* Hydrogens on carbon */}
               <circle cx="-20" cy="-10" r="5.2" fill="url(#sphereHydrogen)" />
               <circle cx="-20" cy="10" r="5.2" fill="url(#sphereHydrogen)" />
               <circle cx="-6" cy="-12" r="5.2" fill="url(#sphereHydrogen)" />
-              {/* Oxygen */}
               <circle cx="8" cy="0" r="9.5" fill="url(#sphereOxygen)" />
-              {/* Hydroxyl Hydrogen */}
               <circle cx="20" cy="-8" r="4.8" fill="url(#sphereHydrogen)" />
             </g>
 
             {/* 3. CH3COOH (Acetic acid, bottom-left quadrant) */}
             <g transform="translate(830, 298)" className="biofuel-unit fuel-aa">
-              {/* Methyl C-H bonds */}
               <line x1="-16" y1="0" x2="-25" y2="-8" stroke="#94a3b8" strokeWidth="2.2" />
               <line x1="-16" y1="0" x2="-25" y2="8" stroke="#94a3b8" strokeWidth="2.2" />
               <line x1="-16" y1="0" x2="-14" y2="13" stroke="#94a3b8" strokeWidth="2.2" />
-              {/* C-C Bond */}
               <line x1="-16" y1="0" x2="6" y2="0" stroke="#94a3b8" strokeWidth="2.5" />
-              {/* C=O Double Bond to Carbonyl Oxygen */}
               <line x1="4" y1="-2" x2="16" y2="-13" stroke="#94a3b8" strokeWidth="2" />
               <line x1="8" y1="2" x2="20" y2="-9" stroke="#94a3b8" strokeWidth="2" />
-              {/* C-O Single Bond to Hydroxyl Oxygen */}
               <line x1="6" y1="0" x2="15" y2="11" stroke="#94a3b8" strokeWidth="2.2" />
-              {/* O-H Bond */}
               <line x1="15" y1="11" x2="25" y2="14" stroke="#94a3b8" strokeWidth="1.8" />
-
-              {/* Methyl Carbon */}
               <circle cx="-16" cy="0" r="10" fill="url(#sphereCarbon)" />
               <circle cx="-25" cy="-8" r="4.8" fill="url(#sphereHydrogen)" />
               <circle cx="-25" cy="8" r="4.8" fill="url(#sphereHydrogen)" />
               <circle cx="-14" cy="13" r="4.8" fill="url(#sphereHydrogen)" />
-
-              {/* Carboxyl Carbon */}
               <circle cx="6" cy="0" r="10" fill="url(#sphereCarbon)" />
-              {/* Carbonyl Oxygen */}
               <circle cx="18" cy="-11" r="9" fill="url(#sphereOxygen)" />
-              {/* Hydroxyl Oxygen */}
               <circle cx="15" cy="11" r="8.5" fill="url(#sphereOxygen)" />
-              {/* Hydroxyl Hydrogen */}
               <circle cx="25" cy="14" r="4.5" fill="url(#sphereHydrogen)" />
             </g>
 
             {/* 4. C2H5OH (Ethanol, bottom-right quadrant) */}
             <g transform="translate(936, 298)" className="biofuel-unit fuel-etoh">
-              {/* C1-H Bonds */}
               <line x1="-18" y1="0" x2="-27" y2="-8" stroke="#94a3b8" strokeWidth="2.2" />
               <line x1="-18" y1="0" x2="-27" y2="8" stroke="#94a3b8" strokeWidth="2.2" />
               <line x1="-18" y1="0" x2="-18" y2="-13" stroke="#94a3b8" strokeWidth="2.2" />
-              {/* C1-C2 Bond */}
               <line x1="-18" y1="0" x2="2" y2="0" stroke="#94a3b8" strokeWidth="2.5" />
-              {/* C2-H Bonds */}
               <line x1="2" y1="0" x2="2" y2="-12" stroke="#94a3b8" strokeWidth="2.2" />
               <line x1="2" y1="0" x2="2" y2="12" stroke="#94a3b8" strokeWidth="2.2" />
-              {/* C2-O Bond */}
               <line x1="2" y1="0" x2="18" y2="0" stroke="#94a3b8" strokeWidth="2.5" />
-              {/* O-H Bond */}
               <line x1="18" y1="0" x2="28" y2="-8" stroke="#94a3b8" strokeWidth="1.8" />
-
-              {/* Carbon 1 */}
               <circle cx="-18" cy="0" r="9.5" fill="url(#sphereCarbon)" />
               <circle cx="-27" cy="-8" r="4.6" fill="url(#sphereHydrogen)" />
               <circle cx="-27" cy="8" r="4.6" fill="url(#sphereHydrogen)" />
               <circle cx="-18" cy="-13" r="4.6" fill="url(#sphereHydrogen)" />
-
-              {/* Carbon 2 */}
               <circle cx="2" cy="0" r="9.5" fill="url(#sphereCarbon)" />
               <circle cx="2" cy="-12" r="4.6" fill="url(#sphereHydrogen)" />
               <circle cx="2" cy="12" r="4.6" fill="url(#sphereHydrogen)" />
-
-              {/* Oxygen */}
               <circle cx="18" cy="0" r="8.8" fill="url(#sphereOxygen)" />
-              {/* Hydroxyl Hydrogen */}
               <circle cx="28" cy="-8" r="4.5" fill="url(#sphereHydrogen)" />
             </g>
           </g>
 
-          {/* ACTIVE SYNTHESIS STREAM (Generating from framework into circle during Step 4) */}
-          {(animState === 'running' && currentStep >= 4) && (
-            <g id="animated-solar-fuels-stream">
-              <path
-                d="M 660 320 C 720 310, 770 280, 815 250"
-                fill="none"
-                stroke="url(#pco2FuelTrail)"
-                strokeWidth="6"
-                strokeLinecap="round"
-                className="fuel-flow-stream"
-                filter="url(#pco2FuelGlow)"
-              />
-
-              {/* Emerging Product Packets */}
-              <g className="traveling-fuel-molecule fuel-packet-1">
-                <circle cx="0" cy="0" r="14" fill="#22c55e" opacity="0.3" filter="url(#pco2FuelGlow)" />
-                <circle cx="-4" cy="0" r="6" fill="#1e293b" />
-                <circle cx="5" cy="0" r="5.5" fill="#ef4444" />
-              </g>
-              <g className="traveling-fuel-molecule fuel-packet-2">
-                <circle cx="0" cy="0" r="15" fill="#22c55e" opacity="0.3" filter="url(#pco2FuelGlow)" />
-                <circle cx="-5" cy="0" r="6" fill="#1e293b" />
-                <circle cx="5" cy="0" r="5.5" fill="#ef4444" />
-                <circle cx="11" cy="3" r="3.5" fill="#ffffff" />
-              </g>
-
-              {/* Synthesis Success Ripple Wave */}
-              <circle
-                cx="885"
-                cy="250"
-                r="25"
-                className="fuel-synthesis-burst"
-                fill="#22c55e"
-                filter="url(#pco2FuelGlow)"
-              />
-            </g>
+          {/* Emergence Sparkle Wave inside Circle when Formed */}
+          {currentStep >= 5 && (
+            <circle
+              cx="885"
+              cy="250"
+              r="25"
+              className="fuel-synthesis-burst"
+              fill="#22c55e"
+              filter="url(#pco2FuelGlow)"
+            />
           )}
         </g>
       </svg>
@@ -707,7 +681,7 @@ export function InteractivePowerCo2() {
             </>
           ) : animState === 'completed' ? (
             <>
-              <span className="hud-btn-icon">↻</span> Replay
+              <span className="hud-btn-icon">↻</span> Replaying...
             </>
           ) : (
             <>
