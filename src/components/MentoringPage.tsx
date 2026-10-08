@@ -44,15 +44,6 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
           <p className="gallery-intro">
             Mentoring is at the core of advancing reticular chemistry. Over the years, I have had the privilege to work alongside talented colleagues, Ph.D. scholars, and master’s researchers—guiding them through precision framework synthesis, advanced characterization, and impactful scientific publications.
           </p>
-
-          <div className="gallery-actions">
-            <button type="button" className="button button-primary" onClick={() => onBackToHome('#research')}>
-              Explore Core Research <span aria-hidden="true">↘</span>
-            </button>
-            <button type="button" className="button button-quiet" onClick={() => onBackToHome('#contact')}>
-              Discuss Collaboration <span aria-hidden="true">↗</span>
-            </button>
-          </div>
         </div>
 
         {/* Colleagues & Related Projects Section */}
