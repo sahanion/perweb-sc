@@ -1,13 +1,29 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import powerCo2Img from '../assets/power-co2-project.jpg'
 
-type SimulationStep = 0 | 1 | 2 | 3 | 4 | 5
-type AnimationState = 'idle' | 'running' | 'completed'
+type AnimationStatus = 'idle' | 'running' | 'completed'
+
+interface TimelinePhase {
+  sunRays: boolean         // 0 - 3 sec: sunrays moving
+  co2Moving: boolean       // 0 - 1.5 sec: CO2 molecules move deep into framework
+  co2Absorbed: boolean     // after 1.5 sec: CO2 absorbed inside framework
+  electronsMoving: boolean // 0.5 - 2 sec: electrons start moving along framework
+  fuelsMoving: boolean     // 1 - 3 sec: solar fuel molecules moving from framework towards outside
+  circleFormed: boolean    // at 3 sec: circle forms and label "Solar fuels" appears
+}
 
 export function InteractivePowerCo2() {
   const [isHovered, setIsHovered] = useState(false)
-  const [animState, setAnimState] = useState<AnimationState>('idle')
-  const [currentStep, setCurrentStep] = useState<SimulationStep>(0)
+  const [animStatus, setAnimStatus] = useState<AnimationStatus>('idle')
+  const [phase, setPhase] = useState<TimelinePhase>({
+    sunRays: false,
+    co2Moving: false,
+    co2Absorbed: false,
+    electronsMoving: false,
+    fuelsMoving: false,
+    circleFormed: true,
+  })
+
   const timersRef = useRef<number[]>([])
 
   const clearAllTimers = useCallback(() => {
@@ -17,43 +33,92 @@ export function InteractivePowerCo2() {
 
   const resetSimulation = useCallback(() => {
     clearAllTimers()
-    setAnimState('idle')
-    setCurrentStep(0)
+    setAnimStatus('idle')
+    setPhase({
+      sunRays: false,
+      co2Moving: false,
+      co2Absorbed: false,
+      electronsMoving: false,
+      fuelsMoving: false,
+      circleFormed: true,
+    })
   }, [clearAllTimers])
 
+  // =========================================================================
+  // ANIMATION TIMELINE (Strictly matching user specification):
+  // 0 - 1.5 sec: CO2 molecules move deep into the framework.
+  // 0.5 - 2 sec: electrons start moving
+  // 1 - 3 sec: solar fuel molecules moving from framework towards outside
+  // 0 - 3 sec: sunrays moving
+  // At 3 sec: circle forms and label "Solar fuels" appears
+  // 3 - 5 sec: display complete synthesis state
+  // At 5 sec: auto-reset to idle
+  // =========================================================================
   const startSimulation = useCallback(() => {
     clearAllTimers()
-    setAnimState('running')
-    setCurrentStep(1) // Step 1: Solar photons irradiation (Solar fuels group hidden)
+    setAnimStatus('running')
 
-    // Step 2: SIMULTANEOUS CO2 adsorption into framework pores AND electron flow (after 800ms)
+    // t = 0s:
+    // - 0 to 3s: Sunrays moving
+    // - 0 to 1.5s: CO2 molecules move deep into the framework
+    // - Solar fuels circle & molecules hidden
+    setPhase({
+      sunRays: true,
+      co2Moving: true,
+      co2Absorbed: false,
+      electronsMoving: false,
+      fuelsMoving: false,
+      circleFormed: false,
+    })
+
+    // t = 0.5s (500ms): Electrons start moving along framework (0.5 - 2.0s)
     const t1 = window.setTimeout(() => {
-      setCurrentStep(2)
-    }, 800)
+      setPhase((p) => ({ ...p, electronsMoving: true }))
+    }, 500)
 
-    // Step 3: Framework catalytic reaction sparks (after 2200ms)
+    // t = 1.0s (1000ms): Solar fuel molecules start moving from framework towards outside (1 - 3s)
     const t2 = window.setTimeout(() => {
-      setCurrentStep(3)
-    }, 2200)
+      setPhase((p) => ({ ...p, fuelsMoving: true }))
+    }, 1000)
 
-    // Step 4: Solar fuel molecules generate from framework and travel to place (after 3200ms)
+    // t = 1.5s (1500ms): CO2 molecules have finished moving deep into framework pores
     const t3 = window.setTimeout(() => {
-      setCurrentStep(4)
-    }, 3200)
+      setPhase((p) => ({ ...p, co2Moving: false, co2Absorbed: true }))
+    }, 1500)
 
-    // Step 5: All molecules come together -> Circle forms and label "Solar fuels" appears! (after 4800ms)
+    // t = 2.0s (2000ms): Electrons finish active surge across framework
     const t4 = window.setTimeout(() => {
-      setCurrentStep(5)
-      setAnimState('completed')
-    }, 4800)
+      setPhase((p) => ({ ...p, electronsMoving: false }))
+    }, 2000)
 
-    // Automatic reset back to idle after displaying complete state (after 7400ms)
+    // t = 3.0s (3000ms):
+    // - Sunrays stop moving
+    // - Fuel molecules have arrived
+    // - Circle forms and label "Solar fuels" appears!
     const t5 = window.setTimeout(() => {
-      setAnimState('idle')
-      setCurrentStep(0)
-    }, 7400)
+      setPhase((p) => ({
+        ...p,
+        sunRays: false,
+        fuelsMoving: false,
+        circleFormed: true,
+      }))
+      setAnimStatus('completed')
+    }, 3000)
 
-    timersRef.current = [t1, t2, t3, t4, t5]
+    // t = 5.2s: Auto reset back to idle
+    const t6 = window.setTimeout(() => {
+      setAnimStatus('idle')
+      setPhase({
+        sunRays: false,
+        co2Moving: false,
+        co2Absorbed: false,
+        electronsMoving: false,
+        fuelsMoving: false,
+        circleFormed: true,
+      })
+    }, 5200)
+
+    timersRef.current = [t1, t2, t3, t4, t5, t6]
   }, [clearAllTimers])
 
   useEffect(() => {
@@ -61,25 +126,18 @@ export function InteractivePowerCo2() {
   }, [clearAllTimers])
 
   const getStatusText = () => {
-    if (animState === 'idle') {
+    if (animStatus === 'idle') {
       return isHovered
         ? 'Click to run photoelectrochemical simulation'
         : 'Interactive model · Hover or click to simulate reaction'
     }
-    switch (currentStep) {
-      case 1:
-        return '1/5 · Solar Irradiation: Photons (hν) excite framework'
-      case 2:
-        return '2/5 · Concurrent Transport: CO₂ adsorbs into pores while e⁻ injects'
-      case 3:
-        return '3/5 · Catalysis: Charge transfer drives chemical reduction at pores'
-      case 4:
-        return '4/5 · Fuel Generation: Solar fuel molecules synthesize from framework'
-      case 5:
-        return '5/5 · Synthesis Complete: Solar fuels assembled · Auto-resetting...'
-      default:
-        return 'Reaction Cycle Complete · Auto-resetting...'
+    if (phase.sunRays && !phase.fuelsMoving) {
+      return '0 - 1.5s · CO₂ gas streams deep into pores while e⁻ flow activates'
     }
+    if (phase.fuelsMoving) {
+      return '1 - 3s · Catalytic conversion: Solar fuel molecules moving from framework'
+    }
+    return '3s · Synthesis Complete: Solar fuels circle formed · Auto-resetting...'
   }
 
   // Exact curved spline path for electron streamline
@@ -89,24 +147,23 @@ export function InteractivePowerCo2() {
   // Green trajectory for fuel release from framework
   const fuelEgressPath = 'M 645 320 C 700 310, 760 280, 810 255'
 
-  // Strict visibility control:
-  // Solar fuels molecules are ONLY visible at idle OR starting from Step 4!
-  // In Steps 1, 2, 3: they are COMPLETELY HIDDEN (display: none), zero premature visibility!
-  const showSolarFuels = animState === 'idle' || currentStep >= 4
+  // Solar fuels molecules are visible ONLY:
+  // - at idle (resting in place)
+  // - from t = 1.0s onward (fuelsMoving = true)
+  // In 0 - 1s: completely hidden (display: none)!
+  const showSolarFuels =
+    animStatus === 'idle' || phase.fuelsMoving || animStatus === 'completed'
 
-  // The circular badge and "Solar fuels" label are ONLY visible at idle OR starting from Step 5!
-  const showCircleAndLabel = animState === 'idle' || currentStep >= 5
-
-  // Concurrently active electron transport: active in Step 2 and Step 3!
-  const isElectronFlowActive =
-    animState === 'running' && (currentStep === 2 || currentStep === 3)
+  // The circular envelope and label "Solar fuels" appear at t = 3s (or at idle)
+  const showCircleAndLabel =
+    animStatus === 'idle' || phase.circleFormed
 
   return (
     <div
-      className={`interactive-powerco2-frame ${isHovered ? 'is-hovered' : ''} ${animState === 'running' ? 'is-running' : ''}`}
+      className={`interactive-powerco2-frame ${isHovered ? 'is-hovered' : ''} ${animStatus === 'running' ? 'is-running' : ''}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={animState === 'running' ? undefined : startSimulation}
+      onClick={animStatus === 'running' ? undefined : startSimulation}
       role="button"
       tabIndex={0}
       aria-label="Interactive POWER-CO2 Photocatalytic Reaction Simulation. Click to simulate the reaction."
@@ -170,8 +227,8 @@ export function InteractivePowerCo2() {
           </filter>
 
           <filter id="pco2ElectronGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="5" result="blur1" />
-            <feGaussianBlur stdDeviation="12" result="blur2" />
+            <feGaussianBlur stdDeviation="5.5" result="blur1" />
+            <feGaussianBlur stdDeviation="14" result="blur2" />
             <feMerge>
               <feMergeNode in="blur2" />
               <feMergeNode in="blur1" />
@@ -216,7 +273,7 @@ export function InteractivePowerCo2() {
             <stop offset="100%" stopColor="#94a3b8" />
           </radialGradient>
 
-          {/* Sun Rays Gradient (Focused on framework top, away from top-left) */}
+          {/* Sun Rays Gradient */}
           <linearGradient id="pco2SunRayGrad" x1="0%" y1="0%" x2="30%" y2="90%">
             <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.55" />
             <stop offset="40%" stopColor="#fcd34d" stopOpacity="0.25" />
@@ -240,7 +297,7 @@ export function InteractivePowerCo2() {
         </defs>
 
         {/* =================================================================== */}
-        {/* 1. SUN & SOLAR PHOTON RAYS (cx=935, cy=72, r=35) */}
+        {/* 1. SUN & SUNRAYS MOVING (0 - 3 sec) */}
         {/* =================================================================== */}
         <g id="interactive-sun-group">
           {/* Ambient Corona Halo on Hover / Click */}
@@ -273,10 +330,9 @@ export function InteractivePowerCo2() {
             strokeDasharray="4 6"
           />
 
-          {/* ANIMATED SUN RAYS FALLING UPON THE FRAMEWORK */}
-          {(animState === 'running' || animState === 'completed') && (
+          {/* SUNRAYS MOVING: Active from 0 to 3 sec */}
+          {phase.sunRays && (
             <g className="animated-solar-rays">
-              {/* Light cone targeted on the framework, strictly away from top-left */}
               <polygon
                 points="935 72, 420 330, 700 290, 790 390"
                 fill="url(#pco2SunRayGrad)"
@@ -331,7 +387,7 @@ export function InteractivePowerCo2() {
         </g>
 
         {/* =================================================================== */}
-        {/* 2. CO2 MOLECULES & CLEAN INFLUX ARROWS (Upper Left - NO GLOW) */}
+        {/* 2. CO2 MOLECULES MOVE DEEP INTO FRAMEWORK (0 - 1.5 sec) */}
         {/* =================================================================== */}
         <g id="interactive-co2-group">
           {/* Label "CO2" */}
@@ -347,7 +403,7 @@ export function InteractivePowerCo2() {
             CO<tspan fontSize="18" dy="4">2</tspan>
           </text>
 
-          {/* Clean, Non-Glowing Influx Direction Arrows with Aligned Arrowheads */}
+          {/* Clean, Non-Glowing Influx Direction Arrows (Aligned arrowheads, ZERO glow) */}
           <path
             d="M 115 165 C 160 185, 195 215, 238 250"
             fill="none"
@@ -371,10 +427,9 @@ export function InteractivePowerCo2() {
           />
 
           {/* CO2 MOLECULES:
-              - At idle: rest peacefully in initial cluster
-              - At Step 2: glide smoothly DEEP INTO the framework pores and fade out into cavities
-              - During rest of simulation: completely hidden inside framework */}
-          <g className={`co2-molecules-cluster ${currentStep === 2 ? 'is-gliding-into-pores' : ''} ${currentStep > 2 ? 'is-absorbed' : ''}`}>
+              - 0 - 1.5s: Move deep into framework pore openings
+              - 1.5s+: fully absorbed inside cavities (opacity: 0) */}
+          <g className={`co2-molecules-cluster ${phase.co2Moving ? 'is-gliding-deep-0to15' : ''} ${phase.co2Absorbed ? 'is-absorbed' : ''}`}>
             {/* CO2 Molecule 1 */}
             <g className="co2-unit unit-1">
               <line x1="-16" y1="0" x2="16" y2="0" stroke="#cbd5e1" strokeWidth="2.5" />
@@ -418,7 +473,7 @@ export function InteractivePowerCo2() {
         </g>
 
         {/* =================================================================== */}
-        {/* 3. ELECTRON STREAMLINE & LARGE READABLE MARKERS (Active in Step 2 & 3) */}
+        {/* 3. ELECTRONS START MOVING (0.5 - 2 sec) & LARGE READABLE MARKERS */}
         {/* =================================================================== */}
         <g id="interactive-electron-group">
           {/* Main Glowing Streamline Path (Electric Blue) */}
@@ -426,7 +481,7 @@ export function InteractivePowerCo2() {
             d={electronCurvePath}
             fill="none"
             stroke="#38bdf8"
-            strokeWidth="5.5"
+            strokeWidth="6"
             strokeLinecap="round"
             strokeLinejoin="round"
             className="electron-glow-path"
@@ -436,75 +491,75 @@ export function InteractivePowerCo2() {
             d={electronCurvePath}
             fill="none"
             stroke="#ffffff"
-            strokeWidth="2.2"
+            strokeWidth="2.4"
             strokeLinecap="round"
             strokeLinejoin="round"
             className="electron-core-path"
           />
 
           {/* Arrowhead at path terminus on top of framework */}
-          <polygon points="670 296, 684 302, 670 308" fill="#38bdf8" />
-          <polygon points="670 298, 680 302, 670 306" fill="#ffffff" />
+          <polygon points="670 295, 686 302, 670 309" fill="#38bdf8" />
+          <polygon points="670 297, 682 302, 670 307" fill="#ffffff" />
 
-          {/* 4 LARGE, HIGH-CONTRAST, HIGHLY READABLE ELECTRON MARKERS (e⁻) */}
+          {/* 4 PROMINENT, HIGH-CONTRAST, EXTRA-LARGE READABLE ELECTRON (e⁻) MARKERS */}
           {/* Marker 1: Semiconductor base surface */}
           <g transform="translate(336, 527)" className="electron-bead bead-1">
-            <circle cx="0" cy="0" r="22" className="bead-ripple" fill="#38bdf8" />
-            <circle cx="0" cy="0" r="16" className="bead-core-bg" fill="#0b1329" stroke="#ffffff" strokeWidth="2" filter="url(#pco2ElectronGlow)" />
-            <circle cx="0" cy="0" r="16" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2" />
-            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="13.5" fontWeight="800" textAnchor="middle" dominantBaseline="central">e⁻</text>
+            <circle cx="0" cy="0" r="26" className="bead-ripple" fill="#38bdf8" />
+            <circle cx="0" cy="0" r="20" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="2.5" filter="url(#pco2ElectronGlow)" />
+            <circle cx="0" cy="0" r="20" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2.5" />
+            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="16.5" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
           </g>
 
           {/* Marker 2: Framework front-left corner pillar */}
           <g transform="translate(376, 401)" className="electron-bead bead-2">
-            <circle cx="0" cy="0" r="22" className="bead-ripple" fill="#38bdf8" />
-            <circle cx="0" cy="0" r="16" className="bead-core-bg" fill="#0b1329" stroke="#ffffff" strokeWidth="2" filter="url(#pco2ElectronGlow)" />
-            <circle cx="0" cy="0" r="16" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2" />
-            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="13.5" fontWeight="800" textAnchor="middle" dominantBaseline="central">e⁻</text>
+            <circle cx="0" cy="0" r="26" className="bead-ripple" fill="#38bdf8" />
+            <circle cx="0" cy="0" r="20" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="2.5" filter="url(#pco2ElectronGlow)" />
+            <circle cx="0" cy="0" r="20" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2.5" />
+            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="16.5" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
           </g>
 
           {/* Marker 3: Top-left framework corner */}
           <g transform="translate(426, 318)" className="electron-bead bead-3">
-            <circle cx="0" cy="0" r="22" className="bead-ripple" fill="#38bdf8" />
-            <circle cx="0" cy="0" r="16" className="bead-core-bg" fill="#0b1329" stroke="#ffffff" strokeWidth="2" filter="url(#pco2ElectronGlow)" />
-            <circle cx="0" cy="0" r="16" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2" />
-            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="13.5" fontWeight="800" textAnchor="middle" dominantBaseline="central">e⁻</text>
+            <circle cx="0" cy="0" r="26" className="bead-ripple" fill="#38bdf8" />
+            <circle cx="0" cy="0" r="20" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="2.5" filter="url(#pco2ElectronGlow)" />
+            <circle cx="0" cy="0" r="20" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2.5" />
+            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="16.5" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
           </g>
 
           {/* Marker 4: Top-right framework surface */}
           <g transform="translate(638, 304)" className="electron-bead bead-4">
-            <circle cx="0" cy="0" r="22" className="bead-ripple" fill="#38bdf8" />
-            <circle cx="0" cy="0" r="16" className="bead-core-bg" fill="#0b1329" stroke="#ffffff" strokeWidth="2" filter="url(#pco2ElectronGlow)" />
-            <circle cx="0" cy="0" r="16" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2" />
-            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="13.5" fontWeight="800" textAnchor="middle" dominantBaseline="central">e⁻</text>
+            <circle cx="0" cy="0" r="26" className="bead-ripple" fill="#38bdf8" />
+            <circle cx="0" cy="0" r="20" className="bead-core-bg" fill="#070e1e" stroke="#ffffff" strokeWidth="2.5" filter="url(#pco2ElectronGlow)" />
+            <circle cx="0" cy="0" r="20" className="bead-core" fill="#0284c7" stroke="#ffffff" strokeWidth="2.5" />
+            <text x="0" y="0.5" fill="#ffffff" fontFamily="'Space Mono', monospace" fontSize="16.5" fontWeight="900" letterSpacing="-0.04em" textAnchor="middle" dominantBaseline="central">e⁻</text>
           </g>
 
-          {/* CONCURRENT TRAVELING ELECTRONS (Active at same time as CO2 in Step 2 & 3!) */}
-          {isElectronFlowActive && (
+          {/* ELECTRONS MOVING (0.5 - 2 sec): Traveling Charge Packets with Large e⁻ */}
+          {phase.electronsMoving && (
             <g className="animated-electron-stream">
               <g className="traveling-electron-packet pkt-1">
-                <circle cx="0" cy="0" r="16" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
-                <circle cx="0" cy="0" r="12" fill="#ffffff" />
-                <text x="0" y="0.5" fill="#0284c7" fontFamily="'Space Mono', monospace" fontSize="11" fontWeight="800" textAnchor="middle" dominantBaseline="central">e⁻</text>
+                <circle cx="0" cy="0" r="18" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
+                <circle cx="0" cy="0" r="13.5" fill="#ffffff" />
+                <text x="0" y="0.5" fill="#0284c7" fontFamily="'Space Mono', monospace" fontSize="13.5" fontWeight="900" textAnchor="middle" dominantBaseline="central">e⁻</text>
               </g>
               <g className="traveling-electron-packet pkt-2">
-                <circle cx="0" cy="0" r="16" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
-                <circle cx="0" cy="0" r="12" fill="#ffffff" />
-                <text x="0" y="0.5" fill="#0284c7" fontFamily="'Space Mono', monospace" fontSize="11" fontWeight="800" textAnchor="middle" dominantBaseline="central">e⁻</text>
+                <circle cx="0" cy="0" r="18" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
+                <circle cx="0" cy="0" r="13.5" fill="#ffffff" />
+                <text x="0" y="0.5" fill="#0284c7" fontFamily="'Space Mono', monospace" fontSize="13.5" fontWeight="900" textAnchor="middle" dominantBaseline="central">e⁻</text>
               </g>
               <g className="traveling-electron-packet pkt-3">
-                <circle cx="0" cy="0" r="16" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
-                <circle cx="0" cy="0" r="12" fill="#ffffff" />
-                <text x="0" y="0.5" fill="#0284c7" fontFamily="'Space Mono', monospace" fontSize="11" fontWeight="800" textAnchor="middle" dominantBaseline="central">e⁻</text>
+                <circle cx="0" cy="0" r="18" fill="#38bdf8" filter="url(#pco2ElectronGlow)" />
+                <circle cx="0" cy="0" r="13.5" fill="#ffffff" />
+                <text x="0" y="0.5" fill="#0284c7" fontFamily="'Space Mono', monospace" fontSize="13.5" fontWeight="900" textAnchor="middle" dominantBaseline="central">e⁻</text>
               </g>
             </g>
           )}
         </g>
 
         {/* =================================================================== */}
-        {/* 4. FRAMEWORK CATALYTIC REACTION SPARKS */}
+        {/* 4. FRAMEWORK CATALYTIC REACTION SPARKS (Active during 0.5 - 2.5s) */}
         {/* =================================================================== */}
-        {(animState === 'running' && (currentStep === 2 || currentStep === 3)) && (
+        {(phase.electronsMoving || phase.fuelsMoving) && (
           <g id="framework-catalytic-reactions">
             <g transform="translate(380, 340)" className="catalytic-burst burst-1">
               <circle cx="0" cy="0" r="18" fill="#f59e0b" filter="url(#pco2SparkGlow)" opacity="0.85" />
@@ -522,10 +577,7 @@ export function InteractivePowerCo2() {
         )}
 
         {/* =================================================================== */}
-        {/* 5. SOLAR FUELS NARRATIVE:
-            - Steps 1-3: COMPLETELY HIDDEN (display: none), zero premature visibility!
-            - Step 4: Molecules synthesize from framework and travel to place
-            - Step 5: Circle forms and label "Solar fuels" appears! */}
+        {/* 5. SOLAR FUEL MOLECULES MOVING FROM FRAMEWORK (1 - 3 sec) */}
         {/* =================================================================== */}
         <g id="interactive-solar-fuels-group">
           {/* Green Trajectory Egress Arrow */}
@@ -536,10 +588,10 @@ export function InteractivePowerCo2() {
             strokeWidth="4.5"
             strokeLinecap="round"
             markerEnd="url(#greenFuelArrowhead)"
-            className={`green-egress-arrow ${currentStep >= 4 ? 'is-active' : ''}`}
+            className={`green-egress-arrow ${phase.fuelsMoving ? 'is-active' : ''}`}
           />
 
-          {/* Clean Glassmorphic Solar Fuel Circle Badge (Forms ONLY at Step 5 or Idle) */}
+          {/* Clean Glassmorphic Solar Fuel Circle Badge (Forms at t = 3 sec!) */}
           <g
             className={`solar-fuels-circle-envelope ${showCircleAndLabel ? 'is-visible' : 'is-hidden'}`}
             style={{ display: showCircleAndLabel ? 'block' : 'none' }}
@@ -584,11 +636,11 @@ export function InteractivePowerCo2() {
           </g>
 
           {/* SOLAR FUEL MOLECULES (CO, CH3COOH, CH3OH, C2H5OH):
-              - Rendered ONLY when showSolarFuels is true!
-              - During Steps 1, 2, 3: COMPLETELY HIDDEN via display: none
-              - During Step 4: Glide smoothly from framework to their places */}
+              - 0 to 1 sec: COMPLETELY HIDDEN via display: none
+              - 1 to 3 sec: Glide smoothly from framework towards outside to their places
+              - 3 sec+: In place inside the formed circle */}
           {showSolarFuels && (
-            <g className={`biofuel-molecules-zone ${currentStep === 4 ? 'is-traveling-to-place' : ''}`}>
+            <g className={`biofuel-molecules-zone ${phase.fuelsMoving ? 'is-traveling-1to3s' : ''}`}>
               
               {/* 1. CO (Carbon monoxide, top-left quadrant) */}
               <g transform="translate(830, 212)" className="biofuel-unit fuel-co">
@@ -657,8 +709,8 @@ export function InteractivePowerCo2() {
             </g>
           )}
 
-          {/* Emergence Sparkle Wave inside Circle when Formed */}
-          {currentStep >= 5 && (
+          {/* Emergence Sparkle Wave inside Circle when Formed at t = 3 sec */}
+          {phase.circleFormed && animStatus !== 'idle' && (
             <circle
               cx="885"
               cy="250"
@@ -674,7 +726,7 @@ export function InteractivePowerCo2() {
       {/* Interactive HUD / Status Control Pill */}
       <div className="powerco2-hud-bar">
         <div className="hud-badge">
-          <span className={`hud-dot ${animState === 'running' ? 'is-active' : ''}`} />
+          <span className={`hud-dot ${animStatus === 'running' ? 'is-active' : ''}`} />
           <span className="hud-text">{getStatusText()}</span>
         </div>
 
@@ -683,19 +735,19 @@ export function InteractivePowerCo2() {
           className="hud-action-btn"
           onClick={(e) => {
             e.stopPropagation()
-            if (animState === 'running') {
+            if (animStatus === 'running') {
               resetSimulation()
             } else {
               startSimulation()
             }
           }}
-          aria-label={animState === 'running' ? 'Reset Simulation' : 'Run Reaction Simulation'}
+          aria-label={animStatus === 'running' ? 'Reset Simulation' : 'Run Reaction Simulation'}
         >
-          {animState === 'running' ? (
+          {animStatus === 'running' ? (
             <>
               <span className="hud-btn-icon">⏹</span> Reset
             </>
-          ) : animState === 'completed' ? (
+          ) : animStatus === 'completed' ? (
             <>
               <span className="hud-btn-icon">↻</span> Replaying...
             </>
