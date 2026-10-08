@@ -52,12 +52,18 @@ export function Hero() {
                   <line x1="16" y1="11" x2="444" y2="11" stroke="var(--line)" strokeWidth="1.5" strokeDasharray="3 3" />
                   <line x1="68" y1="11" x2="230" y2="11" stroke="var(--accent)" strokeWidth="1.5" strokeOpacity="0.45" />
                   <line x1="230" y1="11" x2="392" y2="11" stroke="var(--accent)" strokeWidth="1.5" strokeOpacity="0.45" />
-                  <circle cx="68" cy="11" r="5" fill="var(--paper)" stroke="var(--accent)" strokeWidth="2" />
-                  <circle cx="68" cy="11" r="2" fill="var(--accent)" />
-                  <circle cx="230" cy="11" r="5.5" fill="var(--paper)" stroke="var(--ink)" strokeWidth="2" strokeOpacity="0.6" />
-                  <circle cx="230" cy="11" r="2.2" fill="var(--ink)" fillOpacity="0.6" />
-                  <circle cx="392" cy="11" r="5" fill="var(--paper)" stroke="var(--accent)" strokeWidth="2" />
-                  <circle cx="392" cy="11" r="2" fill="var(--accent)" />
+                  <g className={`pointer-node node-0 ${activePillarIndex === 0 ? 'is-active' : ''}`}>
+                    <circle cx="68" cy="11" r="5" fill="var(--paper)" stroke="var(--accent)" strokeWidth="2" />
+                    <circle cx="68" cy="11" r="2" fill="var(--accent)" />
+                  </g>
+                  <g className={`pointer-node node-1 ${activePillarIndex === 1 ? 'is-active' : ''}`}>
+                    <circle cx="230" cy="11" r="5.5" fill="var(--paper)" stroke="var(--ink)" strokeWidth="2" strokeOpacity="0.6" />
+                    <circle cx="230" cy="11" r="2.2" fill="var(--ink)" fillOpacity="0.6" />
+                  </g>
+                  <g className={`pointer-node node-2 ${activePillarIndex === 2 ? 'is-active' : ''}`}>
+                    <circle cx="392" cy="11" r="5" fill="var(--paper)" stroke="var(--accent)" strokeWidth="2" />
+                    <circle cx="392" cy="11" r="2" fill="var(--accent)" />
+                  </g>
                 </svg>
               </div>
             </div>
@@ -67,8 +73,7 @@ export function Hero() {
               aria-hidden={activePillar === null}
             >
               {activePillar && (
-                <p className="topic-sentence" key={activePillar.id}>
-                  <strong className="topic-sentence-label">{activePillar.title}:</strong>{' '}
+                <p className={`topic-sentence reveal-from-point-${activePillarIndex}`} key={activePillar.id}>
                   {activePillar.overview}
                 </p>
               )}

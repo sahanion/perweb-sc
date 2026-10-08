@@ -286,11 +286,10 @@ button {
   align-items: center;
   width: 100%;
   height: 100%;
-  padding: 0 14px;
-  border-left: 2.5px solid rgba(186, 156, 102, 0.30);
-  background: rgba(186, 156, 102, 0.035);
-  border-radius: 0 5px 5px 0;
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0;
+  border-left: none;
+  background: transparent;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1), transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
 }
 
@@ -301,7 +300,7 @@ button {
 
 .topic-placeholder-layer.is-hidden {
   opacity: 0;
-  transform: translateY(-5px);
+  transform: scale(0.98);
 }
 
 .reticular-lattice-graphic {
@@ -316,6 +315,20 @@ button {
   display: block;
 }
 
+.pointer-node {
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.pointer-node.is-active circle:first-child {
+  stroke: var(--accent);
+  stroke-width: 2.5;
+  filter: drop-shadow(0 0 5px rgba(186, 156, 102, 0.8));
+}
+
+.pointer-node.is-active circle:last-child {
+  fill: var(--accent);
+}
+
 .topic-sentence-layer {
   position: absolute;
   inset: 0;
@@ -323,53 +336,86 @@ button {
   align-items: center;
   width: 100%;
   height: 100%;
-  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 0;
   pointer-events: none;
 }
 
 .topic-sentence-layer.is-visible {
-  opacity: 1;
-  transform: translateY(0);
   pointer-events: auto;
 }
 
 .topic-sentence-layer.is-hidden {
-  opacity: 0;
-  transform: translateY(5px);
   pointer-events: none;
 }
 
 .topic-sentence {
   width: 100%;
   margin: 0;
-  font-size: clamp(14px, 1.15vw, 14.8px);
-  line-height: 1.5;
+  font-family: var(--font-sans);
+  font-size: clamp(14px, 1.15vw, 15px);
+  line-height: 1.55;
   color: var(--ink);
-  border-left: 2.5px solid var(--accent);
-  background: rgba(186, 156, 102, 0.08);
-  padding: 7px 14px;
-  border-radius: 0 5px 5px 0;
-  animation: topicSentenceSlide .25s cubic-bezier(0.16, 1, 0.3, 1);
+  letter-spacing: -0.01em;
+  background: transparent;
+  padding: 0;
+  border: none;
 }
 
-@keyframes topicSentenceSlide {
-  from {
+/* 1st topic reveals from 1st point (left, ~15% / 68px) */
+.topic-sentence.reveal-from-point-0 {
+  transform-origin: 15% 50%;
+  animation: revealFromPoint0 0.34s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 2nd topic reveals from 2nd point (center, 50% / 230px) */
+.topic-sentence.reveal-from-point-1 {
+  transform-origin: 50% 50%;
+  animation: revealFromPoint1 0.34s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* 3rd topic reveals from 3rd point (right, ~85% / 392px) */
+.topic-sentence.reveal-from-point-2 {
+  transform-origin: 85% 50%;
+  animation: revealFromPoint2 0.34s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes revealFromPoint0 {
+  0% {
     opacity: 0;
-    transform: translateX(4px);
+    transform: translateX(-14px) scale(0.97);
+    filter: blur(1.5px);
   }
-  to {
+  100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateX(0) scale(1);
+    filter: blur(0);
   }
 }
 
-.topic-sentence-label {
-  color: var(--accent);
-  font-weight: 700;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  margin-right: 6px;
+@keyframes revealFromPoint1 {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+    filter: blur(1.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes revealFromPoint2 {
+  0% {
+    opacity: 0;
+    transform: translateX(14px) scale(0.97);
+    filter: blur(1.5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: blur(0);
+  }
 }
 
 .hero-intro {
