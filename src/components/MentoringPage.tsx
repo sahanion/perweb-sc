@@ -264,6 +264,10 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
         <div className="mentoring-page-header reveal">
           <p className="eyebrow">RESEARCH NETWORK</p>
           <h1 className="mentoring-page-title">Collaborations</h1>
+          <p className="mentoring-page-desc">
+            International research alliances and academic partnerships advancing reticular frameworks,
+            sustainable solar fuels, and molecular materials chemistry across global institutions.
+          </p>
         </div>
 
         {/* Collaborator Cards Grid (Rectangular cards with 3D flip) */}

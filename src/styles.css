@@ -3338,6 +3338,14 @@ button {
   line-height: 1.15;
 }
 
+.mentoring-page-desc {
+  font-size: 14.5px;
+  color: var(--muted);
+  max-width: 680px;
+  line-height: 1.55;
+  margin: 10px 0 0;
+}
+
 .mentoring-pillars-section {
   padding: 48px 0 64px;
   border-bottom: 1px solid var(--line);
