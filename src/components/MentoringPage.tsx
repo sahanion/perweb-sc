@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { mentorshipColleagues, type MentorshipColleague } from '../data/mentoring'
 
 type MentoringPageProps = {
@@ -17,16 +18,158 @@ function formatPeriod(from?: string, till?: string): string {
 function getPublisherLabel(url: string, index: number): string {
   try {
     const hostname = new URL(url).hostname.toLowerCase()
-    if (hostname.includes('sciencedirect')) return `ScienceDirect Article`
-    if (hostname.includes('acs.org')) return `ACS Publications Article`
-    if (hostname.includes('rsc.org')) return `RSC Publishing Article`
-    if (hostname.includes('nature.com')) return `Nature Article`
-    if (hostname.includes('wiley.com')) return `Wiley Article`
-    if (hostname.includes('springer.com')) return `Springer Article`
+    if (hostname.includes('sciencedirect')) return 'ScienceDirect Article'
+    if (hostname.includes('acs.org')) return 'ACS Publications Article'
+    if (hostname.includes('rsc.org')) return 'RSC Publishing Article'
+    if (hostname.includes('nature.com')) return 'Nature Article'
+    if (hostname.includes('wiley.com')) return 'Wiley Article'
+    if (hostname.includes('springer.com')) return 'Springer Article'
     return `Publication ${index + 1}`
   } catch {
     return `Publication ${index + 1}`
   }
+}
+
+/**
+ * Individual Collaborator Card
+ * Default view: Photo, Name, Position, Department, Affiliation + "Click to expand" button
+ * Expanded view: Reveals Connection Period, Collaborative Projects, Joint Publications, and Google Scholar
+ */
+function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
+  const [isExpanded, setIsExpanded] = useState(false)
+  const period = formatPeriod(colleague.yearFrom, colleague.yearTill)
+  const hasProjects = colleague.projects && colleague.projects.length > 0
+  const hasPubs = colleague.publications && colleague.publications.length > 0
+  const hasExtraDetails = Boolean(period || hasProjects || hasPubs || colleague.googleScholar)
+
+  return (
+    <article className={`mentoring-card ${isExpanded ? 'is-expanded' : ''}`}>
+      {/* Colleague Profile Header: Photo, Name, Position, Department, Affiliation */}
+      <div className="mentoring-card-header">
+        <div className="colleague-photo-wrap">
+          <img
+            src={colleague.photo || DEFAULT_AVATAR}
+            alt={colleague.name}
+            className="colleague-photo"
+            onError={(e) => {
+              const target = e.currentTarget
+              target.src = DEFAULT_AVATAR
+            }}
+          />
+          <span className="colleague-status-indicator" title="Collaborative Partner" />
+        </div>
+
+        <div className="colleague-meta">
+          <h3 className="colleague-name">{colleague.name}</h3>
+          {colleague.position && <p className="colleague-role">{colleague.position}</p>}
+          {colleague.department && <p className="colleague-dept">{colleague.department}</p>}
+          {colleague.institute && <p className="colleague-institution">{colleague.institute}</p>}
+        </div>
+      </div>
+
+      {/* Button: Click to expand / collapse */}
+      <button
+        type="button"
+        className={`card-expand-btn ${isExpanded ? 'is-expanded' : ''}`}
+        onClick={() => setIsExpanded(!isExpanded)}
+        aria-expanded={isExpanded}
+      >
+        <span>{isExpanded ? 'Click to collapse' : 'Click to expand'}</span>
+        <span className="expand-arrow" aria-hidden="true">{isExpanded ? '▲' : '▼'}</span>
+      </button>
+
+      {/* Expanded details container */}
+      {isExpanded && (
+        <div className="mentoring-card-expanded">
+          <div className="mentoring-divider" />
+
+          {/* Connection Timeline / Years */}
+          {period && (
+            <div className="colleague-period-block">
+              <span className="period-label">Connected:</span>
+              <span className="period-value">{period}</span>
+            </div>
+          )}
+
+          {/* Collaborative Projects */}
+          {hasProjects && (
+            <div className="mentoring-project-body">
+              <div className="project-badge-line">
+                <span className="project-eyebrow">
+                  {colleague.projects!.length > 1 ? 'COLLABORATIVE PROJECTS' : 'COLLABORATIVE PROJECT'}
+                </span>
+              </div>
+
+              {colleague.projects!.length === 1 ? (
+                <h4 className="project-title">{colleague.projects![0]}</h4>
+              ) : (
+                <ul className="project-multi-list">
+                  {colleague.projects!.map((proj, idx) => (
+                    <li key={idx} className="project-multi-item">
+                      <span className="project-item-num">{idx + 1}.</span>
+                      <span>{proj.replace(/^\d+\.\s*/, '')}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
+
+          {/* Joint Publications */}
+          {hasPubs && (
+            <div className="joint-outcomes-box">
+              <div className="outcomes-header">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                </svg>
+                <span>Joint Publications</span>
+              </div>
+              <div className="publication-links-list">
+                {colleague.publications!.map((link, idx) => (
+                  <a
+                    key={link}
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="publication-link-item"
+                  >
+                    <span className="pub-link-title">{getPublisherLabel(link, idx)}</span>
+                    <span className="pub-link-arrow" aria-hidden="true">↗</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Google Scholar Link */}
+          {colleague.googleScholar && (
+            <div className="colleague-scholar-wrap">
+              <a
+                href={colleague.googleScholar}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="colleague-scholar-btn"
+                title={`Google Scholar profile of ${colleague.name}`}
+              >
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5z" />
+                </svg>
+                <span>Google Scholar</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          )}
+
+          {!hasExtraDetails && (
+            <p className="no-extra-details-note">
+              Active research collaborator. Additional project information and joint outputs will be updated soon.
+            </p>
+          )}
+        </div>
+      )}
+    </article>
+  )
 }
 
 export function MentoringPage({ onBackToHome }: MentoringPageProps) {
@@ -69,111 +212,11 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
             </p>
           </div>
 
-          {/* Collaborator Cards Grid (Sorting tags removed as requested) */}
+          {/* Collaborator Cards Grid (Compact cards with "Click to expand") */}
           <div className="mentoring-grid">
-            {mentorshipColleagues.map((colleague: MentorshipColleague) => {
-              const period = formatPeriod(colleague.yearFrom, colleague.yearTill)
-              const institutionLine = [colleague.department, colleague.institute].filter(Boolean).join(' · ')
-              const hasProjects = colleague.projects && colleague.projects.length > 0
-              const hasPubs = colleague.publications && colleague.publications.length > 0
-
-              return (
-                <article key={colleague.id} className="mentoring-card">
-                  {/* Colleague Profile Header */}
-                  <div className="mentoring-card-header">
-                    <div className="colleague-photo-wrap">
-                      <img
-                        src={colleague.photo || DEFAULT_AVATAR}
-                        alt={colleague.name}
-                        className="colleague-photo"
-                        onError={(e) => {
-                          const target = e.currentTarget
-                          target.src = DEFAULT_AVATAR
-                        }}
-                      />
-                      <span className="colleague-status-indicator" title="Collaborative Partner" />
-                    </div>
-
-                    <div className="colleague-meta">
-                      {period && <span className="colleague-period">{period}</span>}
-                      <h3 className="colleague-name">{colleague.name}</h3>
-                      {colleague.position && <p className="colleague-role">{colleague.position}</p>}
-                      {institutionLine && <p className="colleague-institution">{institutionLine}</p>}
-
-                      {/* Google Scholar Link (rendered if provided) */}
-                      {colleague.googleScholar && (
-                        <a
-                          href={colleague.googleScholar}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="colleague-scholar-btn"
-                          title={`Google Scholar profile of ${colleague.name}`}
-                        >
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                            <path d="M12 24a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm0-24L0 9.5l4.838 3.94A8 8 0 0 1 12 9a8 8 0 0 1 7.162 4.44L24 9.5z" />
-                          </svg>
-                          <span>Google Scholar</span>
-                          <span aria-hidden="true">↗</span>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Body: Projects & Joint Publications */}
-                  {(hasProjects || hasPubs) && <div className="mentoring-divider" />}
-
-                  {hasProjects && (
-                    <div className="mentoring-project-body">
-                      <div className="project-badge-line">
-                        <span className="project-eyebrow">
-                          {colleague.projects!.length > 1 ? 'COLLABORATIVE PROJECTS' : 'COLLABORATIVE PROJECT'}
-                        </span>
-                      </div>
-
-                      {colleague.projects!.length === 1 ? (
-                        <h4 className="project-title">{colleague.projects![0]}</h4>
-                      ) : (
-                        <ul className="project-multi-list">
-                          {colleague.projects!.map((proj, idx) => (
-                            <li key={idx} className="project-multi-item">
-                              <span className="project-item-num">{idx + 1}.</span>
-                              <span>{proj.replace(/^\d+\.\s*/, '')}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  )}
-
-                  {/* Joint Publications */}
-                  {hasPubs && (
-                    <div className="joint-outcomes-box">
-                      <div className="outcomes-header">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                        </svg>
-                        <span>Joint Publications</span>
-                      </div>
-                      <div className="publication-links-list">
-                        {colleague.publications!.map((link, idx) => (
-                          <a
-                            key={link}
-                            href={link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="publication-link-item"
-                          >
-                            <span className="pub-link-title">{getPublisherLabel(link, idx)}</span>
-                            <span className="pub-link-arrow" aria-hidden="true">↗</span>
-                          </a>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </article>
-              )
-            })}
+            {mentorshipColleagues.map((colleague: MentorshipColleague) => (
+              <ColleagueCard key={colleague.id} colleague={colleague} />
+            ))}
           </div>
         </div>
 
