@@ -2,6 +2,7 @@ import { Suspense, useRef, useState, useEffect, useMemo, useCallback } from 'rea
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+import { CrystalThrobber } from './CrystalThrobber'
 
 // ============================================================================
 // SEMANTIC OBJECT METADATA
@@ -605,8 +606,7 @@ function CrystalScene({
 function StructureLoadingFallback() {
   return (
     <div className="cof-structure-loader" role="status" aria-live="polite">
-      <div className="cof-loader-spinner" aria-hidden="true" />
-      <span>Loading structure…</span>
+      <CrystalThrobber size="sm" label="Loading framework structure…" />
     </div>
   )
 }

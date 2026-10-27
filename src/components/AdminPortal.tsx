@@ -8,6 +8,7 @@ import {
   reorderCollaborators,
 } from '../lib/supabase'
 import { MentorshipColleague, mentorshipColleagues as fallbackColleagues } from '../data/mentoring'
+import { CrystalThrobber } from './CrystalThrobber'
 
 interface AdminPortalProps {
   onBackToSite: () => void
@@ -404,8 +405,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
   if (authLoading) {
     return (
       <div className="admin-loading-screen">
-        <div className="admin-spinner" />
-        <p>Loading Admin Portal...</p>
+        <CrystalThrobber size="lg" label="Loading Admin Portal..." />
       </div>
     )
   }
@@ -801,7 +801,16 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
                   className="button button-primary"
                   disabled={isSaving}
                 >
-                  {isSaving ? 'Saving...' : editingId ? 'Update Collaborator Profile' : 'Add Collaborator to Network'}
+                  {isSaving ? (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                      <CrystalThrobber size="xs" glow={false} />
+                      <span>Saving Profile…</span>
+                    </span>
+                  ) : editingId ? (
+                    'Update Collaborator Profile'
+                  ) : (
+                    'Add Collaborator to Network'
+                  )}
                 </button>
 
                 {editingId && (
@@ -831,8 +840,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
 
             {loadingData ? (
               <div className="roster-loading">
-                <div className="admin-spinner" />
-                <p>Loading collaborator data...</p>
+                <CrystalThrobber size="md" label="Loading collaborator roster…" />
               </div>
             ) : (
               <div className="collaborators-roster-list">

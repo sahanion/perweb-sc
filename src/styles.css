@@ -721,18 +721,40 @@ button {
 }
 
 .cof-loader-spinner {
-  width: 22px;
-  height: 22px;
-  border: 2px solid rgba(34, 45, 71, 0.12);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: cofSpin 0.9s linear infinite;
+  width: 26px;
+  height: 26px;
+  position: relative;
+  display: inline-block;
+  border: none;
+  background: transparent;
 }
 
-@keyframes cofSpin {
-  to {
-    transform: rotate(360deg);
-  }
+.cof-loader-spinner::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border: 1.8px solid var(--accent);
+  box-shadow: 0 0 10px rgba(186, 156, 102, 0.45);
+  animation: crystalSpinnerRotate 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.cof-loader-spinner::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: radial-gradient(circle, #ffffff 0%, #ba9c66 100%);
+  box-shadow: 0 0 6px var(--accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes crystalSpinnerRotate {
+  0% { transform: rotate(45deg); }
+  50% { transform: rotate(225deg) scale(0.85); }
+  100% { transform: rotate(405deg); }
 }
 
 .cof-error-fallback {
@@ -5236,16 +5258,34 @@ button {
 }
 
 .admin-spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid var(--line);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: adminSpin 0.8s linear infinite;
+  width: 36px;
+  height: 36px;
+  position: relative;
+  display: inline-block;
+  border: none;
+  background: transparent;
 }
 
-@keyframes adminSpin {
-  to { transform: rotate(360deg); }
+.admin-spinner::before {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 12px rgba(186, 156, 102, 0.5);
+  animation: crystalSpinnerRotate 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.admin-spinner::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  background: radial-gradient(circle, #ffffff 0%, #ba9c66 100%);
+  box-shadow: 0 0 8px var(--accent);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
 }
 
 
@@ -5439,4 +5479,211 @@ button {
   0% { transform: rotate(45deg); }
   50% { transform: rotate(225deg) scale(0.9); }
   100% { transform: rotate(405deg); }
+}
+
+
+/* ==============================================================================
+   UNIVERSAL ROTATING CRYSTAL STRUCTURE THROBBER
+   ============================================================================== */
+
+.crystal-throbber-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  vertical-align: middle;
+}
+
+/* Size Variants */
+.crystal-throbber-wrapper.size-xs {
+  --throbber-size: 18px;
+  --node-size: 4px;
+  --strut-thickness: 1px;
+  gap: 6px;
+}
+
+.crystal-throbber-wrapper.size-sm {
+  --throbber-size: 28px;
+  --node-size: 5px;
+  --strut-thickness: 1.2px;
+  gap: 8px;
+}
+
+.crystal-throbber-wrapper.size-md {
+  --throbber-size: 46px;
+  --node-size: 7.5px;
+  --strut-thickness: 1.5px;
+  gap: 12px;
+}
+
+.crystal-throbber-wrapper.size-lg {
+  --throbber-size: 72px;
+  --node-size: 11px;
+  --strut-thickness: 2px;
+  gap: 16px;
+}
+
+.crystal-throbber-wrapper.size-xl {
+  --throbber-size: 110px;
+  --node-size: 16px;
+  --strut-thickness: 2.5px;
+  gap: 20px;
+}
+
+.crystal-throbber-viewport {
+  width: var(--throbber-size);
+  height: var(--throbber-size);
+  position: relative;
+  perspective: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ambient glow beneath the crystal */
+.crystal-throbber-ambient-glow {
+  position: absolute;
+  width: 140%;
+  height: 140%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(186, 156, 102, 0.28) 0%, rgba(186, 156, 102, 0) 70%);
+  filter: blur(4px);
+  pointer-events: none;
+  animation: crystalAmbientGlow 2.4s ease-in-out infinite alternate;
+}
+
+@keyframes crystalAmbientGlow {
+  0% { transform: scale(0.85); opacity: 0.45; }
+  100% { transform: scale(1.15); opacity: 0.9; }
+}
+
+.crystal-throbber-scene {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+}
+
+.crystal-throbber-pivot {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: rotateCrystalStructure 4s linear infinite;
+}
+
+@keyframes rotateCrystalStructure {
+  0% {
+    transform: rotateX(24deg) rotateY(0deg) rotateZ(6deg);
+  }
+  50% {
+    transform: rotateX(-20deg) rotateY(180deg) rotateZ(-6deg);
+  }
+  100% {
+    transform: rotateX(24deg) rotateY(360deg) rotateZ(6deg);
+  }
+}
+
+/* Framework Struts (Lattice coordinate rings) */
+.crystal-strut {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--throbber-size) * 0.72);
+  height: calc(var(--throbber-size) * 0.72);
+  border: var(--strut-thickness) solid rgba(186, 156, 102, 0.78);
+  border-radius: 2px;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.crystal-strut.strut-xy {
+  transform: translate(-50%, -50%) rotateZ(45deg);
+  border-color: rgba(186, 156, 102, 0.85);
+  box-shadow: 0 0 6px rgba(186, 156, 102, 0.2);
+}
+
+.crystal-strut.strut-xz {
+  transform: translate(-50%, -50%) rotateX(90deg) rotateZ(45deg);
+  border-color: rgba(74, 91, 120, 0.65); /* Mineral slate coordination ring */
+}
+
+.crystal-strut.strut-yz {
+  transform: translate(-50%, -50%) rotateY(90deg) rotateZ(45deg);
+  border-color: rgba(168, 141, 89, 0.7); /* Antique bronze ring */
+}
+
+/* Inner diagonal framework braces */
+.crystal-diagonal-brace {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--throbber-size) * 0.9);
+  height: 0;
+  border-top: var(--strut-thickness) dashed rgba(186, 156, 102, 0.45);
+  pointer-events: none;
+}
+
+.crystal-diagonal-brace.brace-1 {
+  transform: translate(-50%, -50%) rotateX(45deg) rotateY(45deg);
+}
+
+.crystal-diagonal-brace.brace-2 {
+  transform: translate(-50%, -50%) rotateX(-45deg) rotateY(-45deg);
+}
+
+/* Coordination Nodes (Zr/C Centers) */
+.crystal-node {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--node-size);
+  height: var(--node-size);
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff5df 0%, #ba9c66 60%, #7d6438 100%);
+  box-shadow: 0 0 calc(var(--node-size) * 0.75) rgba(186, 156, 102, 0.65);
+  pointer-events: none;
+}
+
+.crystal-node.node-top {
+  transform: translate3d(-50%, -50%, 0) translateY(calc(var(--throbber-size) * -0.5));
+}
+
+.crystal-node.node-bottom {
+  transform: translate3d(-50%, -50%, 0) translateY(calc(var(--throbber-size) * 0.5));
+}
+
+.crystal-node.node-left {
+  transform: translate3d(-50%, -50%, 0) translateX(calc(var(--throbber-size) * -0.5));
+}
+
+.crystal-node.node-right {
+  transform: translate3d(-50%, -50%, 0) translateX(calc(var(--throbber-size) * 0.5));
+}
+
+.crystal-node.node-front {
+  transform: translate3d(-50%, -50%, 0) translateZ(calc(var(--throbber-size) * 0.5));
+}
+
+.crystal-node.node-back {
+  transform: translate3d(-50%, -50%, 0) translateZ(calc(var(--throbber-size) * -0.5));
+}
+
+.crystal-node.node-center {
+  width: calc(var(--node-size) * 0.9);
+  height: calc(var(--node-size) * 0.9);
+  transform: translate3d(-50%, -50%, 0);
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #d8c5a2 50%, #ba9c66 100%);
+  box-shadow: 0 0 calc(var(--node-size) * 1.2) rgba(186, 156, 102, 0.85);
+}
+
+.crystal-throbber-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: center;
 }

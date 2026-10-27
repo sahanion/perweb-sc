@@ -4,6 +4,7 @@ import {
   MentorshipColleague,
 } from '../data/mentoring'
 import { fetchAllCollaborators } from '../lib/supabase'
+import { CrystalThrobber } from './CrystalThrobber'
 
 interface MentoringPageProps {
   onBackToHome: (target?: string) => void
@@ -271,11 +272,17 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
         </div>
 
         {/* Collaborator Cards Grid (Rectangular cards with 3D flip) */}
-        <div className="mentoring-grid reveal reveal-delay-1">
-          {colleagues.map((colleague: MentorshipColleague) => (
-            <ColleagueCard key={colleague.id} colleague={colleague} />
-          ))}
-        </div>
+        {colleagues.length === 0 ? (
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
+            <CrystalThrobber size="lg" label="Loading Collaborations Network…" />
+          </div>
+        ) : (
+          <div className="mentoring-grid reveal reveal-delay-1">
+            {colleagues.map((colleague: MentorshipColleague) => (
+              <ColleagueCard key={colleague.id} colleague={colleague} />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   )

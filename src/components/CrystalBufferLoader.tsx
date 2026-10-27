@@ -3,6 +3,7 @@ import { Canvas, useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { themeMaterials } from './COFCrystal'
+import { CrystalThrobber } from './CrystalThrobber'
 
 interface CrystalBufferLoaderProps {
   target: 'home' | 'gallery' | 'mentoring'
@@ -185,9 +186,7 @@ export function CrystalBufferLoader({ target, isFadingOut = false }: CrystalBuff
         {/* 3D Rotating Crystal Model Canvas */}
         <div className="crystal-loader-canvas-wrap">
           {hasWebGLError ? (
-            <div className="crystal-css-spinner" aria-hidden="true">
-              <div className="crystal-css-poly" />
-            </div>
+            <CrystalThrobber size="xl" glow={true} />
           ) : (
             <Canvas
               className="crystal-loader-canvas"
@@ -233,3 +232,4 @@ export function CrystalBufferLoader({ target, isFadingOut = false }: CrystalBuff
     </div>
   )
 }
+
