@@ -28,7 +28,6 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
   const [password, setPassword] = useState('')
   const [authError, setAuthError] = useState<string | null>(null)
   const [isSubmittingAuth, setIsSubmittingAuth] = useState(false)
-  const [demoMode, setDemoMode] = useState(false)
 
   // Collaborators management state
   const [collaborators, setCollaborators] = useState<MentorshipColleague[]>([])
@@ -91,10 +90,10 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
 
   // Load collaborators when logged in
   useEffect(() => {
-    if (sessionUser || demoMode) {
+    if (sessionUser) {
       loadCollaborators()
     }
-  }, [sessionUser, demoMode])
+  }, [sessionUser])
 
   async function loadCollaborators() {
     setLoadingData(true)
@@ -115,7 +114,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
     setAuthError(null)
 
     if (!isSupabaseConfigured || !supabase) {
-      setAuthError('Supabase is not configured yet. You can click "Enter Local Demo Mode" below to test the form immediately.')
+      setAuthError('Supabase is not configured yet. Please check your .env file.')
       return
     }
 
@@ -143,7 +142,6 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
       await supabase.auth.signOut()
     }
     setSessionUser(null)
-    setDemoMode(false)
   }
 
   // Populate form for editing
@@ -411,7 +409,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
   }
 
   // ================= VIEW 1: LOGIN FORM =================
-  if (!sessionUser && !demoMode) {
+  if (!sessionUser) {
     return (
       <div className="admin-auth-page">
         <div className="admin-auth-card">
@@ -468,15 +466,6 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
 
               <button
                 type="button"
-                className="button button-quiet"
-                onClick={() => setDemoMode(true)}
-                title="Test the collaborator form locally without credentials"
-              >
-                Enter Local Demo Mode (No Login)
-              </button>
-
-              <button
-                type="button"
                 className="admin-back-link"
                 onClick={onBackToSite}
               >
@@ -499,7 +488,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
             <span className="admin-indicator-dot" />
             <span className="admin-brand-title">Portfolio CMS</span>
             <span className="admin-user-pill">
-              {demoMode ? 'Local Demo Mode' : `Supabase: ${sessionUser}`}
+              {sessionUser}
             </span>
           </div>
 
