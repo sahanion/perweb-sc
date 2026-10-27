@@ -1950,12 +1950,16 @@ button {
   color: var(--paper);
 }
 
-.current-content p {
+.current-content p:not(.current-program) {
   max-width: 495px;
   margin: 20px 0 24px;
   line-height: 1.68;
   font-size: 15px;
   color: #d8deeb;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  -webkit-hyphens: auto;
 }
 
 .current-affiliations {
