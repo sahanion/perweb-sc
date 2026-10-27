@@ -6,8 +6,14 @@ import {
   saveCollaborator,
   removeCollaborator,
   reorderCollaborators,
+  fetchAllGalleryPosts,
+  saveGalleryPost,
+  removeGalleryPost,
+  reorderGalleryPosts,
 } from '../lib/supabase'
 import { MentorshipColleague, mentorshipColleagues as fallbackColleagues } from '../data/mentoring'
+import { GalleryPost, defaultGalleryPosts } from '../data/gallery'
+import { GalleryPostForm } from './GalleryPostForm'
 import { CrystalThrobber } from './CrystalThrobber'
 
 interface AdminPortalProps {
@@ -37,6 +43,12 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
   const [draggedIdx, setDraggedIdx] = useState<number | null>(null)
   const [dragOverIdx, setDragOverIdx] = useState<number | null>(null)
   const [isReordering, setIsReordering] = useState(false)
+
+  // Tab state & Gallery CMS state
+  const [activeTab, setActiveTab] = useState<'collaborators' | 'gallery'>('collaborators')
+  const [galleryPosts, setGalleryPosts] = useState<GalleryPost[]>([])
+  const [loadingGallery, setLoadingGallery] = useState(false)
+  const [editingGalleryPost, setEditingGalleryPost] = useState<GalleryPost | null>(null)
 
   // Form Fields
   const [name, setName] = useState('')
@@ -88,12 +100,69 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
     }
   }, [])
 
-  // Load collaborators when logged in
+  // Load data when logged in
   useEffect(() => {
     if (sessionUser) {
       loadCollaborators()
+      loadGalleryPosts()
     }
   }, [sessionUser])
+
+  async function loadGalleryPosts() {
+    setLoadingGallery(true)
+    try {
+      const data = await fetchAllGalleryPosts()
+      setGalleryPosts(data)
+    } catch (err) {
+      console.error(err)
+      setGalleryPosts(defaultGalleryPosts)
+    } finally {
+      setLoadingGallery(false)
+    }
+  }
+
+  async function handleSaveGalleryPost(post: GalleryPost, isEdit: boolean) {
+    const res = await saveGalleryPost(post, isEdit)
+    if (res.success) {
+      setFeedbackMsg({
+        type: 'success',
+        text: isEdit ? 'Gallery post updated successfully.' : 'New gallery post published successfully!',
+      })
+      await loadGalleryPosts()
+      setEditingGalleryPost(null)
+    } else {
+      setFeedbackMsg({
+        type: 'error',
+        text: res.error || 'Failed to save gallery post.',
+      })
+    }
+    return res
+  }
+
+  async function handleDeleteGalleryPost(id: string, title: string) {
+    if (!window.confirm(`Are you sure you want to delete post "${title}"?`)) return
+    const res = await removeGalleryPost(id)
+    if (res.success) {
+      setFeedbackMsg({ type: 'success', text: `Deleted "${title}".` })
+      await loadGalleryPosts()
+      if (editingGalleryPost?.id === id) setEditingGalleryPost(null)
+    } else {
+      setFeedbackMsg({ type: 'error', text: res.error || 'Failed to delete post.' })
+    }
+  }
+
+  async function handleMoveGallery(index: number, direction: 'up' | 'down') {
+    const targetIdx = direction === 'up' ? index - 1 : index + 1
+    if (targetIdx < 0 || targetIdx >= galleryPosts.length) return
+
+    const reordered = [...galleryPosts]
+    const [moved] = reordered.splice(index, 1)
+    reordered.splice(targetIdx, 0, moved)
+    setGalleryPosts(reordered)
+
+    await reorderGalleryPosts(reordered)
+    setFeedbackMsg({ type: 'success', text: 'Gallery display order updated.' })
+  }
 
   async function loadCollaborators() {
     setLoadingData(true)
@@ -515,13 +584,21 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
       <main className="container admin-main-content">
         {/* Navigation Tabs */}
         <div className="admin-nav-tabs">
-          <button type="button" className="admin-tab is-active">
+          <button
+            type="button"
+            className={`admin-tab ${activeTab === 'collaborators' ? 'is-active' : ''}`}
+            onClick={() => setActiveTab('collaborators')}
+          >
             <span>Collaborations</span>
             <span className="admin-tab-count">{collaborators.length}</span>
           </button>
-          <button type="button" className="admin-tab is-disabled" title="Gallery CMS coming soon">
-            <span>Gallery</span>
-            <span className="admin-tab-tag">Coming Soon</span>
+          <button
+            type="button"
+            className={`admin-tab ${activeTab === 'gallery' ? 'is-active' : ''}`}
+            onClick={() => setActiveTab('gallery')}
+          >
+            <span>Gallery Stories</span>
+            <span className="admin-tab-count">{galleryPosts.length}</span>
           </button>
         </div>
 
@@ -533,6 +610,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
           </div>
         )}
 
+        {activeTab === 'collaborators' ? (
         <div className="admin-grid-layout">
           {/* LEFT: EDITABLE COLLABORATOR FORM */}
           <div className="admin-form-panel">
@@ -947,6 +1025,121 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
             )}
           </div>
         </div>
+        ) : (
+        /* ================= TAB 2: GALLERY CMS ================= */
+        <div className="admin-grid-layout">
+          {/* LEFT: GALLERY POST FORM */}
+          <div className="admin-form-panel">
+            <div className="panel-header">
+              <h3>{editingGalleryPost ? 'Edit Gallery Post' : 'Add New Gallery Post'}</h3>
+              <p>Fields marked with <span className="req-star">*</span> are mandatory (Title & Photo 1 Link).</p>
+            </div>
+
+            <GalleryPostForm
+              initialPost={editingGalleryPost}
+              onSave={handleSaveGalleryPost}
+              onCancel={() => setEditingGalleryPost(null)}
+              onSuccess={() => setEditingGalleryPost(null)}
+            />
+          </div>
+
+          {/* RIGHT: GALLERY STORIES ROSTER */}
+          <div className="admin-roster-panel">
+            <div className="panel-header">
+              <div className="panel-header-with-badge">
+                <h3>Published Stories ({galleryPosts.length})</h3>
+                <span className="reorder-badge">▲ / ▼ Reorder</span>
+              </div>
+              <p>Use the arrow controls to rearrange stories or edit/delete existing cards.</p>
+            </div>
+
+            {loadingGallery ? (
+              <div className="roster-loading">
+                <CrystalThrobber size="md" label="Loading gallery posts..." />
+              </div>
+            ) : (
+              <div className="collaborators-roster-list">
+                {galleryPosts.map((post, index) => {
+                  const photoCount = [post.photo1, post.photo2, post.photo3, post.photo4].filter(Boolean).length
+
+                  return (
+                    <div
+                      key={post.id}
+                      className={`roster-item ${editingGalleryPost?.id === post.id ? 'is-selected' : ''}`}
+                    >
+                      {/* Quick Move Up/Down */}
+                      <div className="roster-item-reorder-ctrls">
+                        <button
+                          type="button"
+                          className="reorder-arrow-btn"
+                          disabled={index === 0}
+                          onClick={() => handleMoveGallery(index, 'up')}
+                          title="Move up"
+                        >
+                          ▲
+                        </button>
+                        <button
+                          type="button"
+                          className="reorder-arrow-btn"
+                          disabled={index === galleryPosts.length - 1}
+                          onClick={() => handleMoveGallery(index, 'down')}
+                          title="Move down"
+                        >
+                          ▼
+                        </button>
+                      </div>
+
+                      <div className="roster-item-avatar">
+                        <img
+                          src={post.photo1 || 'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=400&q=80'}
+                          alt={post.title}
+                        />
+                      </div>
+
+                      <div className="roster-item-info">
+                        <div className="roster-item-primary">
+                          <h4>{post.title}</h4>
+                          {post.date && (
+                            <span className="roster-years-badge">
+                              {post.date}
+                            </span>
+                          )}
+                        </div>
+                        <p className="roster-item-meta">
+                          {post.location || 'Curated Story'}
+                        </p>
+                        <div className="roster-tags">
+                          <span className="roster-tag">📷 {photoCount} Photo{photoCount > 1 ? 's' : ''}</span>
+                          {post.readTime && <span className="roster-tag">{post.readTime}</span>}
+                        </div>
+                      </div>
+
+                      <div className="roster-item-actions">
+                        <button
+                          type="button"
+                          className="roster-btn is-edit"
+                          onClick={() => setEditingGalleryPost(post)}
+                          title={`Edit ${post.title}`}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="roster-btn is-delete"
+                          onClick={() => handleDeleteGalleryPost(post.id, post.title)}
+                          title={`Delete ${post.title}`}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+        )}
       </main>
     </div>
   )

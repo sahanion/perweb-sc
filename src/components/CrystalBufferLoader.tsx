@@ -221,7 +221,7 @@ export function CrystalBufferLoader({ target, isFadingOut = false }: CrystalBuff
               style={{ width: `${progress}%` }}
             />
           </div>
-          <div className="crystal-loader-timer">
+          <div className="crystal-loader-timer">  
             <span className="loader-pct">{progress}%</span>
             <span className="loader-dots">
               {progress < 33 ? '●○○' : progress < 66 ? '●●○' : '●●●'}

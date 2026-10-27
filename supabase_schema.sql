@@ -146,3 +146,68 @@ insert into public.collaborators (
 )
 on conflict (id) do nothing;
 
+-- ==============================================================================
+-- 6. GALLERY POSTS TABLE SETUP
+-- ==============================================================================
+
+create table if not exists public.gallery_posts (
+  id text primary key,
+  title text not null,
+  description text,
+  post_date text,
+  location text,
+  read_time text default '3 min read',
+  photo_1 text not null,
+  caption_1 text,
+  photo_2 text,
+  caption_2 text,
+  photo_3 text,
+  caption_3 text,
+  photo_4 text,
+  caption_4 text,
+  order_index integer default 0,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  updated_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
+
+-- Enable RLS for gallery_posts
+alter table public.gallery_posts enable row level security;
+
+-- Policy: Public can view gallery posts
+create policy "Allow public read access on gallery_posts"
+  on public.gallery_posts
+  for select
+  using (true);
+
+-- Policy: Only authenticated admin users can Insert, Update, and Delete gallery posts
+create policy "Allow authenticated admin full access on gallery_posts"
+  on public.gallery_posts
+  for all
+  to authenticated
+  using (true)
+  with check (true);
+
+-- Seed initial gallery posts
+insert into public.gallery_posts (
+  id, title, description, post_date, location, read_time,
+  photo_1, caption_1, photo_2, caption_2, photo_3, caption_3, photo_4, caption_4,
+  order_index
+) values (
+  'ichhe-gaon-hills',
+  'Into the Quiet Hills, A Place Called Ichhe Gaon',
+  'Some places you visit, and some quietly stay with you. Ichhe Gaon (ইচ্ছেগাঁও) was one of those places for me that lingers in my memory. Tucked away in the hills of North Bengal, Ichhe Gaon feels wonderfully removed from everyday life. There were no crowds, no rush, just pine forests, mist rolling over the valleys, and warm mountain hospitality.',
+  'Jan 29, 2019',
+  'Ichhe Gaon, Kalimpong, West Bengal',
+  '3 min read',
+  'https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?auto=format&fit=crop&w=1200&q=80',
+  'Sunlight filtering through the dense pine canopies of North Bengal',
+  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80',
+  'Clear skies and mountain cottages overlooking the Kalimpong ridge',
+  'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80',
+  'Distant snow-capped Himalayan peaks catching the first morning light',
+  'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=1200&q=80',
+  'Evening mist descending through the village trails and valleys',
+  0
+) on conflict (id) do nothing;
+
+

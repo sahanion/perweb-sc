@@ -1,5 +1,7 @@
 import { createClient, SupabaseClient, User, Session } from '@supabase/supabase-js'
 import { MentorshipColleague, mentorshipColleagues as defaultColleagues } from '../data/mentoring'
+import { GalleryPost, defaultGalleryPosts } from '../data/gallery'
+export type { GalleryPost }
 
 function sanitizeSupabaseUrl(rawUrl: string): string {
   let url = rawUrl.trim()
@@ -22,7 +24,8 @@ export const isSupabaseConfigured = Boolean(
 )
 
 export const supabase: SupabaseClient | null = isSupabaseConfigured
-  ? createClient(supabaseUrl, supabaseAnonKey)
+  ? ((globalThis as any).__supabaseInstance ||
+      ((globalThis as any).__supabaseInstance = createClient(supabaseUrl, supabaseAnonKey)))
   : null
 
 export interface CollaboratorRecord {
@@ -257,6 +260,240 @@ export async function removeCollaborator(id: string): Promise<{ success: boolean
   const current = getLocalCollaborators()
   const updated = current.filter((c) => c.id !== id)
   setLocalCollaborators(updated)
+  return { success: true }
+}
+
+// ==============================================================================
+// GALLERY POSTS MANAGEMENT (CMS & SUPABASE)
+// ==============================================================================
+
+export interface GalleryPostRecord {
+  id: string
+  title: string
+  description?: string | null
+  post_date?: string | null
+  location?: string | null
+  read_time?: string | null
+  photo_1: string
+  caption_1?: string | null
+  photo_2?: string | null
+  caption_2?: string | null
+  photo_3?: string | null
+  caption_3?: string | null
+  photo_4?: string | null
+  caption_4?: string | null
+  order_index?: number | null
+  created_at?: string
+  updated_at?: string
+}
+
+export function recordToGalleryPost(record: GalleryPostRecord): GalleryPost {
+  return {
+    id: record.id,
+    title: record.title,
+    description: record.description || '',
+    date: record.post_date || '',
+    location: record.location || '',
+    readTime: record.read_time || '3 min read',
+    photo1: record.photo_1,
+    caption1: record.caption_1 || '',
+    photo2: record.photo_2 || '',
+    caption2: record.caption_2 || '',
+    photo3: record.photo_3 || '',
+    caption3: record.caption_3 || '',
+    photo4: record.photo_4 || '',
+    caption4: record.caption_4 || '',
+    orderIndex: typeof record.order_index === 'number' ? record.order_index : 0,
+    createdAt: record.created_at,
+  }
+}
+
+export function galleryPostToRecord(post: GalleryPost): Partial<GalleryPostRecord> {
+  return {
+    id: post.id,
+    title: post.title,
+    description: post.description || null,
+    post_date: post.date || null,
+    location: post.location || null,
+    read_time: post.readTime || null,
+    photo_1: post.photo1,
+    caption_1: post.caption1 || null,
+    photo_2: post.photo2 || null,
+    caption_2: post.caption2 || null,
+    photo_3: post.photo3 || null,
+    caption_3: post.caption3 || null,
+    photo_4: post.photo4 || null,
+    caption_4: post.caption4 || null,
+    order_index: typeof post.orderIndex === 'number' ? post.orderIndex : 0,
+  }
+}
+
+const LOCAL_GALLERY_KEY = 'sc_custom_gallery_posts'
+
+export function getLocalGalleryPosts(): GalleryPost[] {
+  if (typeof window === 'undefined') return defaultGalleryPosts
+  try {
+    const raw = localStorage.getItem(LOCAL_GALLERY_KEY)
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed
+      }
+    }
+  } catch (err) {
+    console.error('Failed to read local gallery posts:', err)
+  }
+  return defaultGalleryPosts
+}
+
+export function setLocalGalleryPosts(list: GalleryPost[]) {
+  if (typeof window === 'undefined') return
+  try {
+    localStorage.setItem(LOCAL_GALLERY_KEY, JSON.stringify(list))
+  } catch (err) {
+    console.error('Failed to save local gallery posts:', err)
+  }
+}
+
+/**
+ * Fetch all gallery posts (from Supabase if table exists, otherwise from local storage & seeds)
+ */
+export async function fetchAllGalleryPosts(): Promise<GalleryPost[]> {
+  if (!supabase) {
+    return getLocalGalleryPosts()
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('gallery_posts')
+      .select('*')
+      .order('order_index', { ascending: true, nullsFirst: false })
+
+    if (error) {
+      console.warn('Supabase fetch gallery posts error, using local data:', error.message)
+      return getLocalGalleryPosts()
+    }
+
+    if (data && data.length > 0) {
+      return data.map(recordToGalleryPost)
+    }
+
+    return getLocalGalleryPosts()
+  } catch (err) {
+    console.error('Error fetching gallery posts:', err)
+    return getLocalGalleryPosts()
+  }
+}
+
+/**
+ * Save (insert or update) a gallery post
+ */
+export async function saveGalleryPost(
+  post: GalleryPost,
+  isEdit = false
+): Promise<{ success: boolean; error?: string }> {
+  if (supabase) {
+    try {
+      const record = galleryPostToRecord(post)
+      if (isEdit) {
+        const { error } = await supabase
+          .from('gallery_posts')
+          .update({
+            ...record,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', post.id)
+
+        if (error) {
+          console.warn('Supabase update gallery error, saving locally:', error.message)
+          const current = getLocalGalleryPosts()
+          setLocalGalleryPosts(current.map((p) => (p.id === post.id ? post : p)))
+          return { success: true }
+        }
+      } else {
+        const { error } = await supabase
+          .from('gallery_posts')
+          .insert([record])
+
+        if (error) {
+          console.warn('Supabase insert gallery error, saving locally:', error.message)
+          const current = getLocalGalleryPosts()
+          setLocalGalleryPosts([post, ...current])
+          return { success: true }
+        }
+      }
+
+      const current = getLocalGalleryPosts()
+      const updated = isEdit ? current.map((p) => (p.id === post.id ? post : p)) : [post, ...current]
+      setLocalGalleryPosts(updated)
+      return { success: true }
+    } catch (err: any) {
+      const current = getLocalGalleryPosts()
+      const updated = isEdit ? current.map((p) => (p.id === post.id ? post : p)) : [post, ...current]
+      setLocalGalleryPosts(updated)
+      return { success: true }
+    }
+  }
+
+  const current = getLocalGalleryPosts()
+  const updated = isEdit ? current.map((p) => (p.id === post.id ? post : p)) : [post, ...current]
+  setLocalGalleryPosts(updated)
+  return { success: true }
+}
+
+/**
+ * Delete a gallery post
+ */
+export async function removeGalleryPost(id: string): Promise<{ success: boolean; error?: string }> {
+  if (supabase) {
+    try {
+      const { error } = await supabase.from('gallery_posts').delete().eq('id', id)
+      if (error) {
+        console.warn('Supabase delete gallery error:', error.message)
+      }
+    } catch (err: any) {
+      console.warn('Supabase delete gallery error:', err)
+    }
+  }
+
+  const current = getLocalGalleryPosts()
+  const updated = current.filter((p) => p.id !== id)
+  setLocalGalleryPosts(updated)
+  return { success: true }
+}
+
+/**
+ * Reorder gallery posts
+ */
+export async function reorderGalleryPosts(
+  orderedList: GalleryPost[]
+): Promise<{ success: boolean; error?: string }> {
+  const indexedList = orderedList.map((item, idx) => ({
+    ...item,
+    orderIndex: idx,
+  }))
+
+  setLocalGalleryPosts(indexedList)
+
+  if (supabase) {
+    try {
+      const updates = indexedList.map((item, idx) =>
+        supabase!
+          .from('gallery_posts')
+          .update({
+            order_index: idx,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', item.id)
+      )
+
+      await Promise.all(updates)
+      return { success: true }
+    } catch (err: any) {
+      console.error('Error reordering gallery posts in Supabase:', err)
+    }
+  }
+
   return { success: true }
 }
 

@@ -771,4 +771,3 @@ export function COFCrystal({ className = '' }: COFCrystalProps) {
 
 // Preload the crystal model for instant rendering
 useGLTF.preload(`${import.meta.env.BASE_URL}models/cof-crystal.glb`)
-
