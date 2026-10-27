@@ -39,8 +39,8 @@ function getPublisherLabel(url: string, index: number): string {
 
 /**
  * Rectangular 3D Flip Collaborator Card
- * - Front: Prominent portrait photo, Name, Position, Department, Affiliation,
- *          Connection period badge, Collaborative focus / project highlights preview,
+ * - Front: Big portrait photo occupying at least half the length of the card,
+ *          Name, Position, Department, Affiliation, Connection timeline badge,
  *          and bottom bar with publication/project count & 3-dots button
  * - Back: Full connection details, all collaborative projects, clickable publication
  *         links, Google Scholar link, and back button
@@ -52,18 +52,12 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
   const hasPubs = Boolean(colleague.publications && colleague.publications.length > 0)
   const hasExtraDetails = Boolean(period || hasProjects || hasPubs || colleague.googleScholar)
 
-  const primaryProject = hasProjects
-    ? colleague.projects![0].replace(/^\d+\.\s*/, '')
-    : null
-
-  const extraProjectsCount = hasProjects ? colleague.projects!.length - 1 : 0
-
   return (
     <div className={`mentoring-card-wrapper ${isFlipped ? 'is-flipped' : ''}`}>
       <div className="mentoring-card-inner">
         {/* ================= FRONT FACE ================= */}
         <div className="mentoring-card-front">
-          {/* Prominent Profile Photo */}
+          {/* Big Profile Photo: At least half length of card */}
           <div className="colleague-photo-wrap-large">
             <img
               src={colleague.photo || DEFAULT_AVATAR}
@@ -94,27 +88,9 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
           ) : (
             <div className="colleague-front-period is-network" title="Collaborative Network">
               <span className="period-dot" aria-hidden="true" />
-              <span>Research Network</span>
+              <span>Research Partner</span>
             </div>
           )}
-
-          {/* Collaborative Focus / Highlights Box */}
-          <div className="colleague-front-focus">
-            <div className="front-focus-header">
-              <span className="front-focus-eyebrow">
-                {hasProjects ? 'COLLABORATIVE FOCUS' : hasPubs ? 'JOINT RESEARCH' : 'RESEARCH COLLABORATION'}
-              </span>
-              {extraProjectsCount > 0 && (
-                <span className="front-focus-count">+{extraProjectsCount} more</span>
-              )}
-            </div>
-            <p className="front-focus-title">
-              {primaryProject ||
-                (hasPubs
-                  ? 'Joint research publications in peer-reviewed international scientific journals'
-                  : 'Reticular framework materials, molecular chemistry & advanced characterization')}
-            </p>
-          </div>
 
           {/* Bottom Bar: Stats Pill (left) + 3-Dots Button (right) */}
           <div className="card-front-bottom-bar">
