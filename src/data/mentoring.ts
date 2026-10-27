@@ -1,15 +1,18 @@
 export interface MentorshipColleague {
   id: string
   name: string
-  role: string
-  institution: string
-  period: string
-  photo: string
-  projectTitle: string
-  projectScope: string
-  frameworkTags: string[]
-  jointOutputs?: string[]
+  position?: string
+  department?: string
+  institute?: string
+  yearFrom?: string
+  yearTill?: string
+  projects?: string[]
+  publications?: string[]
+  photo: string // Placeholder photo URL — replace with actual image link later
+  googleScholar: string // Google Scholar profile link — add URL here later
 }
+
+export type Colleague = MentorshipColleague
 
 export interface MentoringPillar {
   title: string
@@ -39,97 +42,258 @@ export const mentoringPillars: MentoringPillar[] = [
   },
 ]
 
+// Collaborators and Mentorship Network
 export const mentorshipColleagues: MentorshipColleague[] = [
   {
-    id: 'pooja-rathi',
-    name: 'Dr. Pooja Rathi',
-    role: 'Doctoral Researcher / Research Scholar',
-    institution: 'School of Chemical Science · IIT Mandi',
-    period: '2021 — 2025',
-    photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
-    projectTitle: 'NanoCOFs for Targeted Drug Delivery & Precision Cancer Therapy',
-    projectScope: 'Collaborative development of imine- and triazine-linked nanoscale covalent organic frameworks tailored for high-capacity doxorubicin loading, biocompatible surface engineering, and stimuli-responsive intracellular drug release.',
-    frameworkTags: ['NanoCOF Drug Delivery', 'Doxorubicin Loading', 'Triazine COFs', 'TEM & Cell Uptake'],
-    jointOutputs: [
-      'Small · 2025 · Review on COF Nanocarriers (e05835)',
-      'Materials Advances · 2024 · Pore-Interface Engineering (5, 136)',
-      'Inorganic Chemistry · 2023 · Systematic Thiol Decoration in UiO-66 (62, 3875)',
+    id: 'prem-felix-siril',
+    name: 'Prem Felix Siril',
+    position: 'Professor',
+    department: 'School of Chemical Science',
+    institute: 'IIT Mandi',
+    yearFrom: '2018',
+    yearTill: 'Lifetime',
+    projects: [
+      'Development of Pristine Graphene as a Catalyst Support',
+      'Investigating Structure-Activity Relationships in Reticular Framework Materials through a Multiscale Isoreticular Chemistry Approach',
+      'Sustainable Green Hydrogen Production from Glycerol using Continuous Flow Photoreforming: Process and Catalyst Development',
     ],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
   },
   {
-    id: 'abul-hasnat',
-    name: 'Abul Hasnat',
-    role: 'Research Colleague & Nanomaterials Specialist',
-    institution: 'IIT Mandi / Collaborating Labs',
-    period: '2022 — 2024',
-    photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-    projectTitle: 'Electrospun Nanofiber–COF Composites for Volatile Radioiodine Capture',
-    projectScope: 'Engineering flexible, continuous electrospun polymeric nanofiber scaffolds integrated with nano/mesoscale covalent organic frameworks for high-efficiency capture and storage of volatile radioactive iodine.',
-    frameworkTags: ['Electrospun Nanofibers', 'Volatile Iodine Sorption', 'Porous Sorbents', 'FESEM Analysis'],
-    jointOutputs: [
-      'Small · 2024 · Electrospun Nanofiber Supported COFs (21, 2409495)',
-      'French MOFs 2025 · Invited Oral Presentation',
-    ],
+    id: 'jaspreet-kaur-randhawa',
+    name: 'Jaspreet Kaur Randhawa',
+    position: 'Professor',
+    department: 'School of Mechanical and Materials Engineering',
+    institute: 'IIT Mandi',
+    yearFrom: '',
+    yearTill: '',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
   },
   {
-    id: 'ankita-sharma',
-    name: 'Ankita Sharma',
-    role: 'Graduate Researcher & Materials Chemist',
-    institution: 'School of Chemical Science · IIT Mandi',
-    period: '2022 — 2024',
-    photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80',
-    projectTitle: 'Pore-Microenvironment Tuning for Structure–Activity Correlation in Catalysis',
-    projectScope: 'Investigating post-synthetic microenvironment modifications in isoreticular frameworks to establish fundamental structure-property relationships across gas adsorption and catalytic conversions.',
-    frameworkTags: ['Pore Functionalization', 'Structure–Activity Correlation', 'Heterogeneous Catalysis', 'Gas Adsorption'],
-    jointOutputs: [
-      'Journal of Colloid and Interface Science · 2024 (665, 988)',
-      'EuroMOF2025 · Poster Presentation',
+    id: 'aditi-halder',
+    name: 'Aditi Halder',
+    position: 'Professor',
+    department: 'School of Chemical Science',
+    institute: 'IIT Mandi',
+    yearFrom: '2018',
+    yearTill: '2024',
+    projects: [],
+    publications: [
+      'https://www.sciencedirect.com/science/article/abs/pii/S2213343722005474?via%3Dihub',
+      'https://pubs.acs.org/aaemcq/article-abstract/5/11/13480/412252/Graphene-Supported-Palladium-Nanostructures-as?redirectedFrom=fulltext',
     ],
+    photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
   },
   {
-    id: 'manoj-kumar',
-    name: 'Manoj Kumar',
-    role: 'Research Associate & Membrane Technologist',
-    institution: 'IIT Mandi',
-    period: '2021 — 2024',
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-    projectTitle: 'Reticular Porous Membranes for Wastewater Decontamination',
-    projectScope: 'Designing advanced separation membranes combining electrospun matrices and reticular porous adsorbents for hazardous industrial dye rejection, heavy metal separation, and environmental water remediation.',
-    frameworkTags: ['Membrane Separation', 'Wastewater Treatment', 'Reticular Adsorbents', 'Inside Cover Art'],
-    jointOutputs: [
-      'Environ. Sci.: Water Res. Technol. · 2024 (10, 29) — Featured Inside Cover Art',
-      'Journal of Cleaner Production · 2022 (345, 131180)',
+    id: 'abhishek-sharma',
+    name: 'Abhishek Sharma',
+    position: '',
+    department: '',
+    institute: '',
+    yearFrom: '2022',
+    yearTill: '2024',
+    projects: [
+      'Structural simulation of betaketoenamine linked Covalent Organic Frameworks',
     ],
+    publications: [
+      'https://www.sciencedirect.com/science/article/abs/pii/S0021979724005617',
+    ],
+    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
   },
   {
-    id: 'rupjyoti-gogoi',
-    name: 'Dr. Rupjyoti Gogoi',
-    role: 'Doctoral Researcher in Environmental Nanomaterials',
-    institution: 'IIT Mandi',
-    period: '2022 — 2024',
-    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
-    projectTitle: 'Mechanochemically Activated COFs for Organic Pollutant Degradation',
-    projectScope: 'Developing solvent-free mechanical pulverization routes for metal-free covalent organic frameworks serving as robust heterogeneous photocatalysts for Fenton-like oxidative degradation and chromium reduction.',
-    frameworkTags: ['Fenton-Like Catalysis', 'Metal-Free COFs', 'Chromium Reduction', 'Green Synthesis'],
-    jointOutputs: [
-      'Journal of Environmental Chemical Engineering · 2024 (12, 112006)',
-      'ACS Applied Energy Materials · 2021 (4, 6082)',
+    id: 'fabrice-odobel',
+    name: 'Fabrice Odobel',
+    position: 'Professor, CNRS Research Director',
+    department: 'Département Chimie',
+    institute: 'CEISAM, Nantes University',
+    yearFrom: '2025',
+    yearTill: 'Ongoing',
+    projects: [
+      'POWER-CO2 [COF and MOF based molecular materials for solar driven photocatalytic carbon dioxide reduction]',
     ],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
   },
   {
-    id: 'kavita-sharma',
-    name: 'Dr. Kavita Sharma',
-    role: 'Postdoctoral Fellow & Photochemistry Specialist',
-    institution: 'CEISAM · University of Nantes',
-    period: '2024 — Present',
-    photo: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80',
-    projectTitle: 'Solar-Driven CO₂ Reduction with Conjugated MOF & COF Hybrids',
-    projectScope: 'Co-investigating light-harvesting porphyrinic frameworks and charge-transfer pathways under the PEPR-SPLEEN POWER-CO₂ project to achieve selective photocatalytic conversion of carbon dioxide to solar fuels.',
-    frameworkTags: ['CO₂ Conversion', 'Solar Photocatalysis', 'POWER-CO₂ Project', 'Porphyrin Hybrids'],
-    jointOutputs: [
-      'PEPR-SPLEEN POWER-CO₂ Days · 2025 · Invited Oral Talk',
-      'EuroMOF2025 · Research Poster',
+    id: 'stefan-haacke',
+    name: 'Stefan Haacke',
+    position: 'Professor',
+    department: 'PCMS & Télécom Physique Strasbourg',
+    institute: 'Strasbourg University',
+    yearFrom: '2026',
+    yearTill: '2027',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'partha-pratim-das',
+    name: 'Partha Pratim Das',
+    position: 'Assistant Professor',
+    department: 'Department of Chemistry',
+    institute: 'MAHE, Manipal University',
+    yearFrom: '2021',
+    yearTill: 'Ongoing',
+    projects: [
+      'Rietveld refinement and structural information of MOFs and COFs',
     ],
+    publications: [
+      'https://pubs.acs.org/inocaj/article-abstract/62/9/3875/323128/Systematic-Thiol-Decoration-in-a-Redox-Active-UiO?redirectedFrom=fulltext',
+      'https://pubs.rsc.org/ma/article/5/1/136/812525/Pore-interface-engineering-improves-doxorubicin',
+    ],
+    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'stephane-diring',
+    name: 'Stephane Diring',
+    position: 'CNRS Researcher',
+    department: 'Département Chimie',
+    institute: 'CEISAM, Nantes University',
+    yearFrom: '2025',
+    yearTill: 'Ongoing',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'simon-pascal',
+    name: 'Simon Pascal',
+    position: 'CNRS Research Director',
+    department: 'Département Chimie',
+    institute: 'CEISAM, Nantes University',
+    yearFrom: '2025',
+    yearTill: 'Ongoing',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'marc-robert',
+    name: 'Marc Robert',
+    position: 'Professor, CNRS Research Director',
+    department: '',
+    institute: 'Sorbonne University',
+    yearFrom: '2025',
+    yearTill: 'Ongoing',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'pierre-emannuel-petit',
+    name: 'Pierre Emannuel Petit',
+    position: "Personnel d'un organisme de recherche",
+    department: 'X-ray Diffraction',
+    institute: 'Institut des Matériaux Jean Rouxel (IMN)',
+    yearFrom: '2025',
+    yearTill: 'Ongoing',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'vasilis-nikolaou',
+    name: 'Vasilis Nikolaou',
+    position: 'Associate Editor at Springer Nature',
+    department: '',
+    institute: '',
+    yearFrom: '2025',
+    yearTill: 'Ongoing',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'emmanouil-nikoloudakis',
+    name: 'Emmanouil Nikoloudakis',
+    position: 'Researcher',
+    department: 'Chemistry department',
+    institute: 'University of Crete, Greece',
+    yearFrom: '2025',
+    yearTill: 'Ongoing',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'georgios-charalambidis',
+    name: 'Georgios Charalambidis',
+    position: 'Associate Researcher',
+    department: 'Chemistry department',
+    institute: 'Theoretical and Physical Chemistry Institute, National Hellenic Research Foundation, Athens, Greece',
+    yearFrom: '2026',
+    yearTill: 'Ongoing',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'raja-rathinam',
+    name: 'Raja Rathinam',
+    position: 'Researcher',
+    department: 'Département Chimie',
+    institute: 'CEISAM, Nantes University',
+    yearFrom: '2025',
+    yearTill: 'Ongoing',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'mohammed-boujtita',
+    name: 'Mohammed Boujtita',
+    position: 'Enseignant-Chercheur',
+    department: 'Département Chimie',
+    institute: 'CEISAM, Nantes University',
+    yearFrom: '2025',
+    yearTill: 'Ongoing',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'felix-zamora',
+    name: 'Felix Zamora',
+    position: 'Professor, Vice Rector',
+    department: 'Department of Inorganic Chemistry',
+    institute: 'Universidad Autonoma Madrid',
+    yearFrom: '2024',
+    yearTill: '2029',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
+  },
+  {
+    id: 'javier-troyano-prieto',
+    name: 'Javier Troyano Prieto',
+    position: 'Raman y carvajal fellow',
+    department: 'Department of Inorganic Chemistry',
+    institute: 'Universidad Autonoma Madrid',
+    yearFrom: '2024',
+    yearTill: '2029',
+    projects: [],
+    publications: [],
+    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    googleScholar: '', // Add Google Scholar link here
   },
 ]
-

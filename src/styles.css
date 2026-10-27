@@ -3568,6 +3568,97 @@ button {
   margin: 0 0 16px;
 }
 
+/* Multi-project and publication links */
+.colleague-scholar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 3px 8px;
+  border-radius: 6px;
+  text-decoration: none;
+  margin-top: 6px;
+  transition: all .2s ease;
+}
+
+.colleague-scholar-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: #fff;
+}
+
+.project-multi-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.project-multi-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+
+.project-item-num {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent);
+  flex-shrink: 0;
+  font-size: 11.5px;
+  padding-top: 2px;
+}
+
+.publication-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.publication-link-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 11px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 11.5px;
+  color: var(--ink);
+  text-decoration: none;
+  transition: all .2s ease;
+}
+
+.publication-link-item:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateX(2px);
+  background: #fff;
+}
+
+.pub-link-title {
+  font-weight: 500;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.pub-link-arrow {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 12px;
+}
+
 .colleague-tags {
   display: flex;
   flex-wrap: wrap;
