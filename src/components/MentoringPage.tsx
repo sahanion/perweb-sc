@@ -262,19 +262,8 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
   return (
     <div className="mentoring-page">
       <div className="container">
-        {/* Navigation & Header */}
-        <div className="mentoring-header-nav reveal">
-          <button
-            type="button"
-            className="mentoring-back-btn"
-            onClick={() => onBackToHome('#top')}
-          >
-            <span aria-hidden="true">←</span> Back to Portfolio
-          </button>
-        </div>
-
         {/* Hero Section */}
-        <div className="mentoring-hero reveal reveal-delay-1">
+        <div className="mentoring-hero reveal">
           <p className="eyebrow">RESEARCH NETWORK & MENTORSHIP</p>
           <h1 className="mentoring-title">
             Collaborations &<br /><em>Academic Mentorship</em>
