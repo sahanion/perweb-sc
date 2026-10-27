@@ -32,8 +32,9 @@ function getPublisherLabel(url: string, index: number): string {
 
 /**
  * Individual Collaborator Card
- * Default view: Photo, Name, Position, Department, Affiliation + "Click to expand" button
- * Expanded view: Reveals Connection Period, Collaborative Projects, Joint Publications, and Google Scholar
+ * - Default state: Exact square card displaying only Photo, Name, Position, Department, Affiliation
+ * - Bottom-right button: Compact down arrowhead (▼) that expands on hover to show "Click to expand"
+ * - Expanded state: Smoothly reveals Connection Timeline, Collaborative Projects, Publications, Google Scholar
  */
 function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -66,17 +67,6 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
           {colleague.institute && <p className="colleague-institution">{colleague.institute}</p>}
         </div>
       </div>
-
-      {/* Button: Click to expand / collapse */}
-      <button
-        type="button"
-        className={`card-expand-btn ${isExpanded ? 'is-expanded' : ''}`}
-        onClick={() => setIsExpanded(!isExpanded)}
-        aria-expanded={isExpanded}
-      >
-        <span>{isExpanded ? 'Click to collapse' : 'Click to expand'}</span>
-        <span className="expand-arrow" aria-hidden="true">{isExpanded ? '▲' : '▼'}</span>
-      </button>
 
       {/* Expanded details container */}
       {isExpanded && (
@@ -168,6 +158,32 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
           )}
         </div>
       )}
+
+      {/* Bottom-right expand button: Down arrowhead that expands on hover */}
+      <div className="card-expand-btn-wrap">
+        <button
+          type="button"
+          className={`card-expand-btn ${isExpanded ? 'is-expanded' : ''}`}
+          onClick={() => setIsExpanded(!isExpanded)}
+          aria-expanded={isExpanded}
+          aria-label={isExpanded ? `Collapse details for ${colleague.name}` : `Expand details for ${colleague.name}`}
+        >
+          <span className="expand-btn-text">
+            {isExpanded ? 'Click to collapse' : 'Click to expand'}
+          </span>
+          <span className="expand-arrow" aria-hidden="true">
+            {isExpanded ? (
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="18 15 12 9 6 15" />
+              </svg>
+            ) : (
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            )}
+          </span>
+        </button>
+      </div>
     </article>
   )
 }
@@ -212,7 +228,7 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
             </p>
           </div>
 
-          {/* Collaborator Cards Grid (Compact cards with "Click to expand") */}
+          {/* Collaborator Cards Grid (Square Cards with Hover-Expanding Bottom-Right Button) */}
           <div className="mentoring-grid">
             {mentorshipColleagues.map((colleague: MentorshipColleague) => (
               <ColleagueCard key={colleague.id} colleague={colleague} />
