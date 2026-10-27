@@ -114,7 +114,7 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
               </span>
             )}
 
-            {/* 3-dots button: expands on hover, flips on click */}
+            {/* Right arrowhead button: expands on hover, flips on click */}
             <button
               type="button"
               className="card-dots-btn"
@@ -123,10 +123,8 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
             >
               <span className="dots-btn-text">More details</span>
               <span className="dots-icon" aria-hidden="true">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                  <circle cx="5" cy="12" r="2.2" />
-                  <circle cx="12" cy="12" r="2.2" />
-                  <circle cx="19" cy="12" r="2.2" />
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="9 18 15 12 9 6" />
                 </svg>
               </span>
             </button>

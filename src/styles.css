@@ -3692,6 +3692,15 @@ button {
   width: 16px;
   height: 16px;
   flex-shrink: 0;
+  transition: transform 0.22s ease;
+}
+
+.card-dots-btn:hover .dots-icon {
+  transform: translateX(1.5px);
+}
+
+.card-dots-btn.is-back-btn:hover .dots-icon {
+  transform: translateX(-1.5px);
 }
 
 .card-dots-btn:hover,
