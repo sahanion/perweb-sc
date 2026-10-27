@@ -47,24 +47,19 @@ export function GalleryPage({ onBackToHome }: GalleryPageProps) {
               <span aria-hidden="true">←</span> Back to Portfolio
             </button>
             <span className="gallery-breadcrumb-sep">/</span>
-            <span>Gallery & Visual Stories</span>
+            <span>Visual Stories and Chronicles</span>
           </div>
         </div>
 
         {/* Hero Section */}
         <div className="gallery-hero">
-          <div className="gallery-badge-wrap">
-            <span className="gallery-live-pulse" />
-            <span className="gallery-badge">Visual Archive · Field Notes & Visual Stories</span>
-          </div>
-
           <h1 className="gallery-title">
-            Visual Stories &<br />
-            <em>Fieldwork Chronicles</em>
+            Visual Stories and<br />
+            <em>Chronicles</em>
           </h1>
 
           <p className="gallery-intro">
-            A visual repository celebrating quiet mountain escapes, field research travels, and scientific cover designs. Each post features curated photographic records, journal narratives, and candid moments.
+            A curated visual archive dedicated to scientific photography, reticular framework illustrations, cover art designs, and research chronicles. Exploring the intersection of molecular architecture, laboratory breakthroughs, and scientific storytelling.
           </p>
 
           <div className="gallery-actions">
