@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
-const leftLinks = [
-  { label: 'Home', href: '#top' },
-  { label: 'Research', href: '#research' },
-  { label: 'CV', href: '#cv' },
-  { label: 'Contact', href: '#contact' },
+type ActiveSection = 'top' | 'research' | 'cv' | 'contact'
+
+const leftLinks: { label: string; href: string; section: ActiveSection }[] = [
+  { label: 'Home', href: '#top', section: 'top' },
+  { label: 'Research', href: '#research', section: 'research' },
+  { label: 'CV', href: '#cv', section: 'cv' },
+  { label: 'Contact', href: '#contact', section: 'contact' },
 ]
 
 const rightLinks = [
@@ -20,11 +22,66 @@ type NavbarProps = {
 
 export function Navbar({ compact, currentPage = 'home', onNavigate }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [activeSection, setActiveSection] = useState<ActiveSection>('top')
 
   const closeMenu = () => setIsOpen(false)
 
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+  // Scrollspy: detect active section when scrolling the main single page
+  useEffect(() => {
+    if (currentPage !== 'home') return
+
+    const sections = [
+      { id: 'top', section: 'top' as const },
+      { id: 'research', section: 'research' as const },
+      { id: 'current-research', section: 'research' as const },
+      { id: 'cv', section: 'cv' as const },
+      { id: 'contact', section: 'contact' as const },
+    ]
+
+    const handleScroll = () => {
+      const scrollPos = window.scrollY
+      const windowHeight = window.innerHeight
+      const docHeight = document.documentElement.scrollHeight
+
+      // If scrolled near the bottom of the page, highlight Contact
+      if (scrollPos + windowHeight >= docHeight - 80) {
+        setActiveSection('contact')
+        return
+      }
+
+      // If near the top, highlight Home
+      if (scrollPos < 150) {
+        setActiveSection('top')
+        return
+      }
+
+      // Check section bounding rects against top offset
+      const navOffset = 180
+      let current: ActiveSection = 'top'
+
+      for (const s of sections) {
+        const el = document.getElementById(s.id)
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          if (rect.top <= navOffset) {
+            current = s.section
+          }
+        }
+      }
+
+      setActiveSection(current)
+    }
+
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [currentPage])
+
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string, section?: ActiveSection) => {
     closeMenu()
+    if (section && currentPage === 'home') {
+      setActiveSection(section)
+    }
     if (href === '#gallery') {
       e.preventDefault()
       if (onNavigate) {
@@ -52,16 +109,16 @@ export function Navbar({ compact, currentPage = 'home', onNavigate }: NavbarProp
   return (
     <header className={`nav-wrap ${compact ? 'is-compact' : ''}`}>
       <nav className="navbar container" aria-label="Main navigation">
-        {/* Left Side Links: Home, Research, CV, Contact */}
+        {/* Left Side Links: Home, Research, CV, Contact with scrollspy active highlight */}
         <div className="nav-links nav-links-left">
           {leftLinks.map((link) => {
-            const isHomeActive = link.href === '#top' && currentPage === 'home'
+            const isActive = currentPage === 'home' && activeSection === link.section
             return (
               <a
                 href={link.href}
                 key={link.label}
-                className={isHomeActive ? 'is-active-nav' : ''}
-                onClick={(e) => handleLinkClick(e, link.href)}
+                className={isActive ? 'is-active-nav' : ''}
+                onClick={(e) => handleLinkClick(e, link.href, link.section)}
               >
                 {link.label}
               </a>
@@ -105,16 +162,19 @@ export function Navbar({ compact, currentPage = 'home', onNavigate }: NavbarProp
           <div className="mobile-menu-inner">
             <div className="mobile-links-section">
               <span className="mobile-section-label">Main Page</span>
-              {leftLinks.map((link) => (
-                <a
-                  href={link.href}
-                  key={link.label}
-                  className={link.href === '#top' && currentPage === 'home' ? 'is-active-nav' : ''}
-                  onClick={(e) => handleLinkClick(e, link.href)}
-                >
-                  {link.label}
-                </a>
-              ))}
+              {leftLinks.map((link) => {
+                const isActive = currentPage === 'home' && activeSection === link.section
+                return (
+                  <a
+                    href={link.href}
+                    key={link.label}
+                    className={isActive ? 'is-active-nav' : ''}
+                    onClick={(e) => handleLinkClick(e, link.href, link.section)}
+                  >
+                    {link.label}
+                  </a>
+                )
+              })}
             </div>
 
             <div className="mobile-menu-divider" />
