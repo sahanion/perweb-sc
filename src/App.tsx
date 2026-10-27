@@ -8,12 +8,14 @@ import { ResearchSnapshot } from './components/ResearchSnapshot'
 import { Contact } from './components/Contact'
 import { GalleryPage } from './components/GalleryPage'
 import { MentoringPage } from './components/MentoringPage'
+import { AdminPortal } from './components/AdminPortal'
 
 export default function App() {
   const [scrolled, setScrolled] = useState(false)
-  const [currentPage, setCurrentPage] = useState<'home' | 'gallery' | 'mentoring'>(() => {
+  const [currentPage, setCurrentPage] = useState<'home' | 'gallery' | 'mentoring' | 'admin'>(() => {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase()
+      if (hash === '#admin') return 'admin'
       if (hash === '#gallery') return 'gallery'
       if (hash === '#mentoring' || hash === '#collaborations') return 'mentoring'
     }
@@ -30,7 +32,10 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.toLowerCase()
-      if (hash === '#gallery') {
+      if (hash === '#admin') {
+        setCurrentPage('admin')
+        window.scrollTo(0, 0)
+      } else if (hash === '#gallery') {
         setCurrentPage('gallery')
         window.scrollTo(0, 0)
       } else if (hash === '#mentoring' || hash === '#collaborations') {
@@ -45,8 +50,12 @@ export default function App() {
     return () => window.removeEventListener('hashchange', handleHashChange)
   }, [])
 
-  const handleNavigate = useCallback((page: 'home' | 'gallery' | 'mentoring', targetHash?: string) => {
-    if (page === 'gallery') {
+  const handleNavigate = useCallback((page: 'home' | 'gallery' | 'mentoring' | 'admin', targetHash?: string) => {
+    if (page === 'admin') {
+      window.location.hash = '#admin'
+      setCurrentPage('admin')
+      window.scrollTo(0, 0)
+    } else if (page === 'gallery') {
       window.location.hash = '#gallery'
       setCurrentPage('gallery')
       window.scrollTo(0, 0)
@@ -75,9 +84,17 @@ export default function App() {
 
   return (
     <div className="site-shell">
-      <Navbar compact={scrolled} currentPage={currentPage} onNavigate={handleNavigate} />
+      {currentPage !== 'admin' && (
+        <Navbar
+          compact={scrolled}
+          currentPage={currentPage}
+          onNavigate={handleNavigate}
+        />
+      )}
       <main>
-        {currentPage === 'gallery' ? (
+        {currentPage === 'admin' ? (
+          <AdminPortal onBackToSite={() => handleNavigate('home', '#top')} />
+        ) : currentPage === 'gallery' ? (
           <GalleryPage onBackToHome={() => handleNavigate('home', '#top')} />
         ) : currentPage === 'mentoring' ? (
           <MentoringPage onBackToHome={(target) => handleNavigate('home', target || '#top')} />
@@ -91,7 +108,7 @@ export default function App() {
           </>
         )}
       </main>
-      <Footer />
+      {currentPage !== 'admin' && <Footer />}
     </div>
   )
 }

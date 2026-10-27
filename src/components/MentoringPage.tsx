@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   mentorshipColleagues,
   mentoringPillars,
   MentorshipColleague,
   MentoringPillar,
 } from '../data/mentoring'
+import { fetchAllCollaborators } from '../lib/supabase'
 
 interface MentoringPageProps {
   onBackToHome: (target?: string) => void
@@ -248,6 +249,16 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
 }
 
 export function MentoringPage({ onBackToHome }: MentoringPageProps) {
+  const [colleagues, setColleagues] = useState<MentorshipColleague[]>(mentorshipColleagues)
+
+  useEffect(() => {
+    fetchAllCollaborators().then((data) => {
+      if (data && data.length > 0) {
+        setColleagues(data)
+      }
+    })
+  }, [])
+
   return (
     <div className="mentoring-page">
       <div className="container">
@@ -333,7 +344,7 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
 
           {/* Collaborator Cards Grid (Rectangular cards with 3D flip) */}
           <div className="mentoring-grid">
-            {mentorshipColleagues.map((colleague: MentorshipColleague) => (
+            {colleagues.map((colleague: MentorshipColleague) => (
               <ColleagueCard key={colleague.id} colleague={colleague} />
             ))}
           </div>

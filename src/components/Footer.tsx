@@ -10,7 +10,10 @@ export function Footer() {
         </div>
         <div className="footer-col">
           <p>Research portfolio</p>
-          <small>{researcher.location}</small>
+          <small>
+            {researcher.location}
+            <a href="#admin" className="admin-discrete-trigger" title="Admin CMS Portal"> · 🔒</a>
+          </small>
         </div>
       </div>
     </footer>

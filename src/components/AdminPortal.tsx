@@ -1,0 +1,778 @@
+import { useState, useEffect } from 'react'
+import {
+  supabase,
+  isSupabaseConfigured,
+  fetchAllCollaborators,
+  saveCollaborator,
+  removeCollaborator,
+} from '../lib/supabase'
+import { MentorshipColleague, mentorshipColleagues as fallbackColleagues } from '../data/mentoring'
+
+interface AdminPortalProps {
+  onBackToSite: () => void
+  onDataUpdated?: () => void
+}
+
+const DEFAULT_AVATAR = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
+
+// Generate year options from 2000 to 2035
+const YEARS = Array.from({ length: 36 }, (_, i) => String(2000 + i)).reverse()
+
+export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
+  // Auth state
+  const [sessionUser, setSessionUser] = useState<string | null>(null)
+  const [authLoading, setAuthLoading] = useState(true)
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [authError, setAuthError] = useState<string | null>(null)
+  const [isSubmittingAuth, setIsSubmittingAuth] = useState(false)
+  const [demoMode, setDemoMode] = useState(false)
+
+  // Collaborators management state
+  const [collaborators, setCollaborators] = useState<MentorshipColleague[]>([])
+  const [loadingData, setLoadingData] = useState(false)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [feedbackMsg, setFeedbackMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+
+  // Form Fields
+  const [name, setName] = useState('')
+  const [position, setPosition] = useState('')
+  const [department, setDepartment] = useState('')
+  const [institute, setInstitute] = useState('')
+  const [yearFrom, setYearFrom] = useState('2024')
+  const [yearTill, setYearTill] = useState('Ongoing')
+  const [isCurrent, setIsCurrent] = useState(true)
+  const [isLifetime, setIsLifetime] = useState(false)
+  const [project1, setProject1] = useState('')
+  const [project2, setProject2] = useState('')
+  const [project3, setProject3] = useState('')
+  const [pub1, setPub1] = useState('')
+  const [pub2, setPub2] = useState('')
+  const [photo, setPhoto] = useState('')
+  const [googleScholar, setGoogleScholar] = useState('')
+  const [isSaving, setIsSaving] = useState(false)
+
+  // Check initial auth session
+  useEffect(() => {
+    async function checkAuth() {
+      if (supabase) {
+        try {
+          const { data } = await supabase.auth.getSession()
+          if (data?.session?.user) {
+            setSessionUser(data.session.user.email || 'Admin')
+          }
+        } catch (err) {
+          console.error('Auth session error:', err)
+        }
+      }
+      setAuthLoading(false)
+    }
+
+    checkAuth()
+
+    if (supabase) {
+      const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (session?.user) {
+          setSessionUser(session.user.email || 'Admin')
+        } else {
+          setSessionUser(null)
+        }
+      })
+      return () => {
+        authListener.subscription.unsubscribe()
+      }
+    }
+  }, [])
+
+  // Load collaborators when logged in
+  useEffect(() => {
+    if (sessionUser || demoMode) {
+      loadCollaborators()
+    }
+  }, [sessionUser, demoMode])
+
+  async function loadCollaborators() {
+    setLoadingData(true)
+    try {
+      const data = await fetchAllCollaborators()
+      setCollaborators(data)
+    } catch (err) {
+      console.error(err)
+      setCollaborators(fallbackColleagues)
+    } finally {
+      setLoadingData(false)
+    }
+  }
+
+  // Handle Login
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setAuthError(null)
+
+    if (!isSupabaseConfigured || !supabase) {
+      setAuthError('Supabase is not configured yet. You can click "Enter Local Demo Mode" below to test the form immediately.')
+      return
+    }
+
+    setIsSubmittingAuth(true)
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
+      if (error) {
+        setAuthError(error.message)
+      } else if (data.user) {
+        setSessionUser(data.user.email || 'Admin')
+      }
+    } catch (err: any) {
+      setAuthError(err.message || 'Login failed')
+    } finally {
+      setIsSubmittingAuth(false)
+    }
+  }
+
+  // Handle Logout
+  async function handleLogout() {
+    if (supabase) {
+      await supabase.auth.signOut()
+    }
+    setSessionUser(null)
+    setDemoMode(false)
+  }
+
+  // Populate form for editing
+  function handleEdit(colleague: MentorshipColleague) {
+    setEditingId(colleague.id)
+    setName(colleague.name)
+    setPosition(colleague.position || '')
+    setDepartment(colleague.department || '')
+    setInstitute(colleague.institute || '')
+    setYearFrom(colleague.yearFrom || '2024')
+
+    const till = colleague.yearTill || ''
+    if (till.toLowerCase() === 'ongoing' || till.toLowerCase() === 'current') {
+      setIsCurrent(true)
+      setIsLifetime(false)
+      setYearTill('Ongoing')
+    } else if (till.toLowerCase() === 'lifetime') {
+      setIsLifetime(true)
+      setIsCurrent(false)
+      setYearTill('Lifetime')
+    } else {
+      setIsCurrent(false)
+      setIsLifetime(false)
+      setYearTill(till || '2025')
+    }
+
+    setProject1(colleague.projects?.[0] || '')
+    setProject2(colleague.projects?.[1] || '')
+    setProject3(colleague.projects?.[2] || '')
+    setPub1(colleague.publications?.[0] || '')
+    setPub2(colleague.publications?.[1] || '')
+    setPhoto(colleague.photo || '')
+    setGoogleScholar(colleague.googleScholar || '')
+
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // Reset form
+  function resetForm() {
+    setEditingId(null)
+    setName('')
+    setPosition('')
+    setDepartment('')
+    setInstitute('')
+    setYearFrom('2024')
+    setYearTill('Ongoing')
+    setIsCurrent(true)
+    setIsLifetime(false)
+    setProject1('')
+    setProject2('')
+    setProject3('')
+    setPub1('')
+    setPub2('')
+    setPhoto('')
+    setGoogleScholar('')
+  }
+
+  // Handle Form Save (Insert or Update)
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setFeedbackMsg(null)
+
+    if (!name.trim()) {
+      setFeedbackMsg({ type: 'error', text: 'Name is a mandatory field.' })
+      return
+    }
+
+    if (!yearFrom.trim()) {
+      setFeedbackMsg({ type: 'error', text: 'Timeline From Year is mandatory.' })
+      return
+    }
+
+    let resolvedTill = yearTill
+    if (isCurrent) resolvedTill = 'Ongoing'
+    if (isLifetime) resolvedTill = 'Lifetime'
+
+    if (!resolvedTill.trim()) {
+      setFeedbackMsg({ type: 'error', text: 'Timeline Till Year is mandatory.' })
+      return
+    }
+
+    setIsSaving(true)
+
+    const projects: string[] = []
+    if (project1.trim()) projects.push(project1.trim())
+    if (project2.trim()) projects.push(project2.trim())
+    if (project3.trim()) projects.push(project3.trim())
+
+    const publications: string[] = []
+    if (pub1.trim()) publications.push(pub1.trim())
+    if (pub2.trim()) publications.push(pub2.trim())
+
+    const id = editingId || name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `colleague-${Date.now()}`
+
+    const colleague: MentorshipColleague = {
+      id,
+      name: name.trim(),
+      position: position.trim() || undefined,
+      department: department.trim() || undefined,
+      institute: institute.trim() || undefined,
+      yearFrom: yearFrom.trim(),
+      yearTill: resolvedTill.trim(),
+      projects,
+      publications,
+      photo: photo.trim() || DEFAULT_AVATAR,
+      googleScholar: googleScholar.trim(),
+    }
+
+    const res = await saveCollaborator(colleague, Boolean(editingId))
+
+    setIsSaving(false)
+
+    if (res.success) {
+      setFeedbackMsg({
+        type: 'success',
+        text: editingId ? 'Collaborator updated successfully!' : 'New collaborator added successfully!',
+      })
+      resetForm()
+      await loadCollaborators()
+      if (onDataUpdated) onDataUpdated()
+    } else {
+      setFeedbackMsg({
+        type: 'error',
+        text: res.error || 'Failed to save collaborator.',
+      })
+    }
+  }
+
+  // Handle Delete
+  async function handleDelete(id: string, colleagueName: string) {
+    if (!window.confirm(`Are you sure you want to remove "${colleagueName}"?`)) {
+      return
+    }
+
+    const res = await removeCollaborator(id)
+    if (res.success) {
+      setFeedbackMsg({ type: 'success', text: `Removed "${colleagueName}".` })
+      await loadCollaborators()
+      if (onDataUpdated) onDataUpdated()
+    } else {
+      setFeedbackMsg({ type: 'error', text: res.error || 'Failed to delete.' })
+    }
+  }
+
+  if (authLoading) {
+    return (
+      <div className="admin-loading-screen">
+        <div className="admin-spinner" />
+        <p>Loading Admin Portal...</p>
+      </div>
+    )
+  }
+
+  // ================= VIEW 1: LOGIN FORM =================
+  if (!sessionUser && !demoMode) {
+    return (
+      <div className="admin-auth-page">
+        <div className="admin-auth-card">
+          <div className="admin-auth-header">
+            <span className="admin-badge">PORTFOLIO CMS</span>
+            <h2>Admin Authentication</h2>
+            <p>Sign in with your Supabase credentials to manage collaborator profiles and website content.</p>
+          </div>
+
+          {!isSupabaseConfigured && (
+            <div className="admin-notice-box">
+              <strong>Supabase Setup Required:</strong>
+              <p>
+                Add <code>VITE_SUPABASE_URL</code> and <code>VITE_SUPABASE_ANON_KEY</code> to your <code>.env</code> file.
+              </p>
+            </div>
+          )}
+
+          {authError && <div className="admin-error-box">{authError}</div>}
+
+          <form onSubmit={handleLogin} className="admin-auth-form">
+            <div className="admin-field">
+              <label htmlFor="admin-email">Admin Email</label>
+              <input
+                id="admin-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@univ-nantes.fr"
+                required
+              />
+            </div>
+
+            <div className="admin-field">
+              <label htmlFor="admin-password">Password</label>
+              <input
+                id="admin-password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••••"
+                required
+              />
+            </div>
+
+            <div className="admin-actions">
+              <button
+                type="submit"
+                className="button button-primary admin-submit-btn"
+                disabled={isSubmittingAuth}
+              >
+                {isSubmittingAuth ? 'Signing in...' : 'Sign In with Supabase →'}
+              </button>
+
+              <button
+                type="button"
+                className="button button-quiet"
+                onClick={() => setDemoMode(true)}
+                title="Test the collaborator form locally without credentials"
+              >
+                Enter Local Demo Mode (No Login)
+              </button>
+
+              <button
+                type="button"
+                className="admin-back-link"
+                onClick={onBackToSite}
+              >
+                ← Return to Website
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    )
+  }
+
+  // ================= VIEW 2: COLLABORATIONS CMS DASHBOARD =================
+  return (
+    <div className="admin-dashboard-page">
+      {/* Top Navbar */}
+      <header className="admin-topbar">
+        <div className="container admin-topbar-inner">
+          <div className="admin-branding">
+            <span className="admin-indicator-dot" />
+            <span className="admin-brand-title">Portfolio CMS</span>
+            <span className="admin-user-pill">
+              {demoMode ? 'Local Demo Mode' : `Supabase: ${sessionUser}`}
+            </span>
+          </div>
+
+          <div className="admin-topbar-actions">
+            <button
+              type="button"
+              className="admin-action-btn"
+              onClick={onBackToSite}
+            >
+              <span>View Live Website</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+            <button
+              type="button"
+              className="admin-action-btn is-logout"
+              onClick={handleLogout}
+            >
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <main className="container admin-main-content">
+        {/* Navigation Tabs */}
+        <div className="admin-nav-tabs">
+          <button type="button" className="admin-tab is-active">
+            <span>Collaborations</span>
+            <span className="admin-tab-count">{collaborators.length}</span>
+          </button>
+          <button type="button" className="admin-tab is-disabled" title="Gallery CMS coming soon">
+            <span>Gallery</span>
+            <span className="admin-tab-tag">Coming Soon</span>
+          </button>
+        </div>
+
+        {/* Feedback Alert */}
+        {feedbackMsg && (
+          <div className={`admin-feedback-banner ${feedbackMsg.type === 'success' ? 'is-success' : 'is-error'}`}>
+            <span>{feedbackMsg.text}</span>
+            <button type="button" onClick={() => setFeedbackMsg(null)} aria-label="Close notification">×</button>
+          </div>
+        )}
+
+        <div className="admin-grid-layout">
+          {/* LEFT: EDITABLE COLLABORATOR FORM */}
+          <div className="admin-form-panel">
+            <div className="panel-header">
+              <h3>{editingId ? 'Edit Collaborator Profile' : 'Add New Collaborator'}</h3>
+              <p>Fields marked with <span className="req-star">*</span> are mandatory.</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="collaborator-cms-form">
+              {/* Full Name */}
+              <div className="form-group">
+                <label htmlFor="collab-name">
+                  Full Name <span className="req-star">*</span>
+                </label>
+                <input
+                  id="collab-name"
+                  type="text"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="e.g. Prof. Prem Felix Siril"
+                  required
+                />
+              </div>
+
+              {/* Position & Department (2-col) */}
+              <div className="form-row-2">
+                <div className="form-group">
+                  <label htmlFor="collab-pos">Position / Academic Rank</label>
+                  <input
+                    id="collab-pos"
+                    type="text"
+                    value={position}
+                    onChange={(e) => setPosition(e.target.value)}
+                    placeholder="e.g. Professor, CNRS Research Director"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="collab-dept">Affiliated Department</label>
+                  <input
+                    id="collab-dept"
+                    type="text"
+                    value={department}
+                    onChange={(e) => setDepartment(e.target.value)}
+                    placeholder="e.g. Département Chimie, School of Chemical Science"
+                  />
+                </div>
+              </div>
+
+              {/* Institute */}
+              <div className="form-group">
+                <label htmlFor="collab-inst">Institute / University</label>
+                <input
+                  id="collab-inst"
+                  type="text"
+                  value={institute}
+                  onChange={(e) => setInstitute(e.target.value)}
+                  placeholder="e.g. CEISAM, Nantes University"
+                />
+              </div>
+
+              {/* Timeline with Year Picker & Current Toggle (MANDATORY) */}
+              <div className="form-group timeline-field-group">
+                <label>
+                  Connection Timeline <span className="req-star">*</span>
+                </label>
+                <div className="timeline-inputs-row">
+                  {/* From Year */}
+                  <div className="timeline-col">
+                    <span className="sub-label">Connected From (Year):</span>
+                    <select
+                      value={yearFrom}
+                      onChange={(e) => setYearFrom(e.target.value)}
+                      className="year-dropdown"
+                      required
+                    >
+                      {YEARS.map((y) => (
+                        <option key={y} value={y}>{y}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  {/* Till Year */}
+                  <div className="timeline-col">
+                    <span className="sub-label">Connected Till:</span>
+                    {isCurrent ? (
+                      <div className="timeline-status-badge is-current">
+                        <span>Current / Ongoing</span>
+                      </div>
+                    ) : isLifetime ? (
+                      <div className="timeline-status-badge is-lifetime">
+                        <span>Lifetime Collaboration</span>
+                      </div>
+                    ) : (
+                      <select
+                        value={yearTill}
+                        onChange={(e) => setYearTill(e.target.value)}
+                        className="year-dropdown"
+                      >
+                        {YEARS.map((y) => (
+                          <option key={y} value={y}>{y}</option>
+                        ))}
+                      </select>
+                    )}
+                  </div>
+                </div>
+
+                {/* Checkbox Options for Ongoing and Lifetime */}
+                <div className="timeline-checkboxes">
+                  <label className="checkbox-item">
+                    <input
+                      type="checkbox"
+                      checked={isCurrent}
+                      onChange={(e) => {
+                        const checked = e.target.checked
+                        setIsCurrent(checked)
+                        if (checked) {
+                          setIsLifetime(false)
+                          setYearTill('Ongoing')
+                        } else {
+                          setYearTill(yearFrom)
+                        }
+                      }}
+                    />
+                    <span>Active / Current (Ongoing)</span>
+                  </label>
+
+                  <label className="checkbox-item">
+                    <input
+                      type="checkbox"
+                      checked={isLifetime}
+                      onChange={(e) => {
+                        const checked = e.target.checked
+                        setIsLifetime(checked)
+                        if (checked) {
+                          setIsCurrent(false)
+                          setYearTill('Lifetime')
+                        } else {
+                          setYearTill(yearFrom)
+                        }
+                      }}
+                    />
+                    <span>Lifetime Partnership</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Collaborative Projects (1, 2, 3) */}
+              <div className="form-section-divider">
+                <span>Collaborative Project Titles</span>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="collab-p1">Project Title 1</label>
+                <input
+                  id="collab-p1"
+                  type="text"
+                  value={project1}
+                  onChange={(e) => setProject1(e.target.value)}
+                  placeholder="e.g. POWER-CO2 [COF and MOF molecular materials]"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="collab-p2">Project Title 2</label>
+                <input
+                  id="collab-p2"
+                  type="text"
+                  value={project2}
+                  onChange={(e) => setProject2(e.target.value)}
+                  placeholder="e.g. Sustainable Green Hydrogen Production from Glycerol"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="collab-p3">Project Title 3</label>
+                <input
+                  id="collab-p3"
+                  type="text"
+                  value={project3}
+                  onChange={(e) => setProject3(e.target.value)}
+                  placeholder="e.g. Investigating Structure-Activity Relationships in Reticular Materials"
+                />
+              </div>
+
+              {/* Joint Publications (1, 2) */}
+              <div className="form-section-divider">
+                <span>Joint Publications (Links Only)</span>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="collab-pub1">Publication Link 1</label>
+                <input
+                  id="collab-pub1"
+                  type="url"
+                  value={pub1}
+                  onChange={(e) => setPub1(e.target.value)}
+                  placeholder="https://pubs.acs.org/doi/10.1021/..."
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="collab-pub2">Publication Link 2</label>
+                <input
+                  id="collab-pub2"
+                  type="url"
+                  value={pub2}
+                  onChange={(e) => setPub2(e.target.value)}
+                  placeholder="https://www.sciencedirect.com/science/article/..."
+                />
+              </div>
+
+              {/* Profile Photo & Google Scholar */}
+              <div className="form-section-divider">
+                <span>Profile Photo & Scholar Link</span>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="collab-photo">Profile Picture Link (URL)</label>
+                <div className="photo-input-preview-wrap">
+                  <input
+                    id="collab-photo"
+                    type="url"
+                    value={photo}
+                    onChange={(e) => setPhoto(e.target.value)}
+                    placeholder="https://... (direct image link)"
+                  />
+                  <div className="photo-mini-thumb">
+                    <img
+                      src={photo || DEFAULT_AVATAR}
+                      alt="Thumbnail preview"
+                      onError={(e) => {
+                        e.currentTarget.src = DEFAULT_AVATAR
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="collab-scholar">Google Scholar Profile Link</label>
+                <input
+                  id="collab-scholar"
+                  type="url"
+                  value={googleScholar}
+                  onChange={(e) => setGoogleScholar(e.target.value)}
+                  placeholder="https://scholar.google.com/citations?user=..."
+                />
+              </div>
+
+              {/* Form Action Buttons */}
+              <div className="form-action-buttons">
+                <button
+                  type="submit"
+                  className="button button-primary"
+                  disabled={isSaving}
+                >
+                  {isSaving ? 'Saving...' : editingId ? 'Update Collaborator Profile' : 'Add Collaborator to Network'}
+                </button>
+
+                {editingId && (
+                  <button
+                    type="button"
+                    className="button button-quiet"
+                    onClick={resetForm}
+                  >
+                    Cancel Editing
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+
+          {/* RIGHT: LIVE PREVIEW & EXISTING COLLABORATORS */}
+          <div className="admin-roster-panel">
+            <div className="panel-header">
+              <h3>Collaborations Roster ({collaborators.length})</h3>
+              <p>Manage, edit, or delete existing collaborator profiles in real time.</p>
+            </div>
+
+            {loadingData ? (
+              <div className="roster-loading">
+                <div className="admin-spinner" />
+                <p>Loading collaborator data...</p>
+              </div>
+            ) : (
+              <div className="collaborators-roster-list">
+                {collaborators.map((c) => (
+                  <div key={c.id} className={`roster-item ${editingId === c.id ? 'is-selected' : ''}`}>
+                    <div className="roster-item-photo">
+                      <img
+                        src={c.photo || DEFAULT_AVATAR}
+                        alt={c.name}
+                        onError={(e) => {
+                          e.currentTarget.src = DEFAULT_AVATAR
+                        }}
+                      />
+                    </div>
+
+                    <div className="roster-item-info">
+                      <div className="roster-item-top">
+                        <h4 className="roster-name">{c.name}</h4>
+                        <span className="roster-timeline">
+                          {c.yearFrom ? `${c.yearFrom} – ${c.yearTill || 'Ongoing'}` : 'Network'}
+                        </span>
+                      </div>
+                      <p className="roster-pos-inst">
+                        {c.position || 'Collaborator'} {c.institute ? `· ${c.institute}` : ''}
+                      </p>
+                      <div className="roster-tags">
+                        {c.projects && c.projects.length > 0 && (
+                          <span className="roster-tag">{c.projects.length} Project{c.projects.length > 1 ? 's' : ''}</span>
+                        )}
+                        {c.publications && c.publications.length > 0 && (
+                          <span className="roster-tag">{c.publications.length} Pub{c.publications.length > 1 ? 's' : ''}</span>
+                        )}
+                        {c.googleScholar && (
+                          <span className="roster-tag is-scholar">Scholar</span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="roster-item-actions">
+                      <button
+                        type="button"
+                        className="roster-btn is-edit"
+                        onClick={() => handleEdit(c)}
+                        title={`Edit ${c.name}`}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="roster-btn is-delete"
+                        onClick={() => handleDelete(c.id, c.name)}
+                        title={`Delete ${c.name}`}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </main>
+    </div>
+  )
+}
