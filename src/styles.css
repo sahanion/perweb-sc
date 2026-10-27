@@ -3321,13 +3321,21 @@ button {
    ========================================================================== */
 
 .mentoring-page {
-  padding: 140px 0 100px;
+  padding: 100px 0 80px;
   min-height: 80svh;
 }
 
-.mentoring-hero {
-  max-width: 860px;
-  margin-bottom: 72px;
+.mentoring-page-header {
+  margin-bottom: 32px;
+}
+
+.mentoring-page-title {
+  font-family: var(--font-serif);
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 600;
+  color: var(--ink);
+  margin: 6px 0 0;
+  line-height: 1.15;
 }
 
 .mentoring-pillars-section {

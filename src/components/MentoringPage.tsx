@@ -260,37 +260,18 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
   return (
     <div className="mentoring-page">
       <div className="container">
-        {/* Hero Section */}
-        <div className="mentoring-hero reveal">
-          <p className="eyebrow">RESEARCH NETWORK & MENTORSHIP</p>
-          <h1 className="mentoring-title">
-            Collaborations &<br /><em>Academic Mentorship</em>
-          </h1>
-          <p className="mentoring-subtitle">
-            Advancing reticular chemistry, functional frameworks, and solar conversion through
-            rigorous international partnerships, multidisciplinary scholarship, and dedicated researcher guidance.
-          </p>
+        {/* Clean Header */}
+        <div className="mentoring-page-header reveal">
+          <p className="eyebrow">RESEARCH NETWORK</p>
+          <h1 className="mentoring-page-title">Collaborations</h1>
         </div>
 
-        {/* Collaborators & Mentorship Grid */}
-        <section className="mentoring-colleagues-section reveal reveal-delay-1" aria-labelledby="colleagues-heading">
-          <div className="section-header-compact">
-            <span className="section-label">GLOBAL SCIENTIFIC ALLIANCES</span>
-            <h2 id="colleagues-heading" className="section-subheading">
-              Collaborators & Research Partners
-            </h2>
-            <p className="section-intro-text">
-              Key faculty, senior research directors, and postdoctoral fellows partnered across international research centers on reticular framework design, clean solar fuels, and molecular materials.
-            </p>
-          </div>
-
-          {/* Collaborator Cards Grid (Rectangular cards with 3D flip) */}
-          <div className="mentoring-grid">
-            {colleagues.map((colleague: MentorshipColleague) => (
-              <ColleagueCard key={colleague.id} colleague={colleague} />
-            ))}
-          </div>
-        </section>
+        {/* Collaborator Cards Grid (Rectangular cards with 3D flip) */}
+        <div className="mentoring-grid reveal reveal-delay-1">
+          {colleagues.map((colleague: MentorshipColleague) => (
+            <ColleagueCard key={colleague.id} colleague={colleague} />
+          ))}
+        </div>
       </div>
     </div>
   )
