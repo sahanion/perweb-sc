@@ -15,7 +15,7 @@ export default function App() {
     if (typeof window !== 'undefined') {
       const hash = window.location.hash.toLowerCase()
       if (hash === '#gallery') return 'gallery'
-      if (hash === '#mentoring') return 'mentoring'
+      if (hash === '#mentoring' || hash === '#collaborations') return 'mentoring'
     }
     return 'home'
   })
@@ -33,7 +33,7 @@ export default function App() {
       if (hash === '#gallery') {
         setCurrentPage('gallery')
         window.scrollTo(0, 0)
-      } else if (hash === '#mentoring') {
+      } else if (hash === '#mentoring' || hash === '#collaborations') {
         setCurrentPage('mentoring')
         window.scrollTo(0, 0)
       } else {
@@ -51,7 +51,7 @@ export default function App() {
       setCurrentPage('gallery')
       window.scrollTo(0, 0)
     } else if (page === 'mentoring') {
-      window.location.hash = '#mentoring'
+      window.location.hash = '#collaborations'
       setCurrentPage('mentoring')
       window.scrollTo(0, 0)
     } else {
