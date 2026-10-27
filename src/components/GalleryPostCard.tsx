@@ -198,9 +198,14 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
 
         {/* Post Description Paragraph */}
         {post.description && (
-          <div className={`gallery-post-desc ${isExpanded ? 'is-expanded' : ''}`}>
-            <p>{post.description}</p>
-          </div>
+          <div
+            className={`gallery-post-desc ${isExpanded ? 'is-expanded' : ''}`}
+            dangerouslySetInnerHTML={{
+              __html: post.description.includes('<')
+                ? post.description
+                : post.description.replace(/\n\n/g, '<br/><br/>')
+            }}
+          />
         )}
 
         {/* EXPANDABLE FULL STORY SECTION */}

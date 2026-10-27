@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { GalleryPost } from '../data/gallery'
 import { CrystalThrobber } from './CrystalThrobber'
+import { RichTextEditor } from './RichTextEditor'
 
 interface GalleryPostFormProps {
   initialPost?: GalleryPost | null
@@ -327,17 +328,14 @@ export function GalleryPostForm({ initialPost, onSave, onCancel, onSuccess }: Ga
         )}
       </div>
 
-      {/* Post Description */}
+      {/* Post Description & Story Rich Text Editor */}
       <div className="form-group">
-        <label htmlFor="post-desc">
-          Post Description & Story <span className="opt-tag">(Markdown or Plain Text)</span>
-        </label>
-        <textarea
-          id="post-desc"
-          rows={5}
+        <RichTextEditor
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Share the story, scientific notes, or narrative for this gallery post..."
+          onChange={setDescription}
+          label="TRAVEL STORY / BLOG TEXT"
+          placeholder="Write your travelogue, reflections, notes on culture, environment, or personal anecdotes..."
+          minHeight={220}
         />
       </div>
 

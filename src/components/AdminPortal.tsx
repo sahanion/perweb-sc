@@ -552,7 +552,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
     <div className="admin-dashboard-page">
       {/* Top Navbar */}
       <header className="admin-topbar">
-        <div className="container admin-topbar-inner">
+        <div className="admin-topbar-inner admin-wide-inner">
           <div className="admin-branding">
             <span className="admin-indicator-dot" />
             <span className="admin-brand-title">Portfolio CMS</span>
@@ -581,7 +581,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
         </div>
       </header>
 
-      <main className="container admin-main-content">
+      <main className="admin-main-content">
         {/* Navigation Tabs */}
         <div className="admin-nav-tabs">
           <button
