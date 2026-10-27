@@ -31,9 +31,7 @@ export function Contact() {
                     }
                   }}
                 />
-                <span className="contact-photo-status" title="Active Researcher">
-                  <span className="contact-photo-status-dot" />
-                </span>
+
               </div>
 
               <div className="contact-identity-block">

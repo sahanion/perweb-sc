@@ -4708,15 +4708,7 @@ button {
 }
 
 .colleague-status-indicator-large {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #2ea043;
-  border: 2.5px solid var(--paper-deep);
-  box-shadow: 0 0 0 1px rgba(46, 160, 67, 0.35);
+  display: none !important;
 }
 
 /* Front Text: Name, Position, Department, Affiliation */

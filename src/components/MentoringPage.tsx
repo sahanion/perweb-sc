@@ -68,7 +68,6 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
                 target.src = DEFAULT_AVATAR
               }}
             />
-            <span className="colleague-status-indicator-large" title="Active Collaborator" />
           </div>
 
           {/* Primary Profile Details: Name, Position, Department, Institution */}
