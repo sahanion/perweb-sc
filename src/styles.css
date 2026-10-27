@@ -3387,20 +3387,53 @@ button {
   color: var(--ink);
 }
 
+.gallery-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .gallery-nav-add-btn {
   background: var(--ink);
   color: var(--paper);
   border: 0;
   border-radius: 9999px;
-  padding: 4px 12px;
-  font: 700 11px var(--font-mono);
+  padding: 8px 18px;
+  font: 700 12px var(--font-mono);
   cursor: pointer;
-  letter-spacing: 0.04em;
-  transition: opacity .2s, transform .15s;
+  letter-spacing: 0.05em;
+  transition: opacity .2s, transform .15s, box-shadow .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .gallery-nav-add-btn:hover {
-  opacity: 0.9;
+  opacity: 0.92;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stream-right-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.stream-inline-add-btn {
+  background: #1f4534;
+  color: #ffffff;
+  border: 0;
+  border-radius: 9999px;
+  padding: 6px 14px;
+  font: 700 11px var(--font-mono);
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: background .2s, transform .15s;
+}
+
+.stream-inline-add-btn:hover {
+  background: #143225;
   transform: translateY(-1px);
 }
 

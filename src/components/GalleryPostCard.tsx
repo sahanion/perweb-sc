@@ -55,7 +55,7 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
       {/* Admin Action Bar (if authenticated) */}
       {isAdmin && (
         <div className="gallery-card-admin-bar">
-          <span className="admin-status-badge">Admin Controls</span>
+          <span className="admin-status-badge">Story Options</span>
           <div className="admin-btn-group">
             {onEdit && (
               <button
@@ -306,3 +306,4 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
     </article>
   )
 }
+

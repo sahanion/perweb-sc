@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { supabase, isSupabaseConfigured, fetchAllGalleryPosts, saveGalleryPost, removeGalleryPost } from '../lib/supabase'
+import { fetchAllGalleryPosts, saveGalleryPost, removeGalleryPost } from '../lib/supabase'
 import { GalleryPost, defaultGalleryPosts } from '../data/gallery'
 import { GalleryPostCard } from './GalleryPostCard'
 import { GalleryPostForm } from './GalleryPostForm'
@@ -12,38 +12,13 @@ type GalleryPageProps = {
 export function GalleryPage({ onBackToHome }: GalleryPageProps) {
   const [posts, setPosts] = useState<GalleryPost[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [adminUser, setAdminUser] = useState<string | null>(null)
 
   // Form modal/drawer state
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingPost, setEditingPost] = useState<GalleryPost | null>(null)
 
-  // Supabase Auth Modal state
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
-  const [authEmail, setAuthEmail] = useState('')
-  const [authPassword, setAuthPassword] = useState('')
-  const [authError, setAuthError] = useState<string | null>(null)
-  const [isAuthenticating, setIsAuthenticating] = useState(false)
-
   // Notification message
   const [notification, setNotification] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
-
-  // Check Supabase session on mount & subscribe to auth changes
-  useEffect(() => {
-    if (supabase) {
-      supabase.auth.getSession().then(({ data }) => {
-        setAdminUser(data.session?.user?.email || null)
-      })
-
-      const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-        setAdminUser(session?.user?.email || null)
-      })
-
-      return () => {
-        authListener.subscription.unsubscribe()
-      }
-    }
-  }, [])
 
   // Load posts on mount
   useEffect(() => {
@@ -63,69 +38,28 @@ export function GalleryPage({ onBackToHome }: GalleryPageProps) {
     }
   }
 
-  // Handle Admin Login via Supabase
-  async function handleLogin(e: React.FormEvent) {
-    e.preventDefault()
-    setAuthError(null)
-
-    if (!supabase || !isSupabaseConfigured) {
-      setAuthError('Supabase is not configured. Please check your credentials in .env')
-      return
-    }
-
-    setIsAuthenticating(true)
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: authEmail,
-        password: authPassword,
-      })
-
-      if (error) {
-        setAuthError(error.message)
-      } else if (data.user) {
-        setAdminUser(data.user.email || 'Admin')
-        setIsAuthModalOpen(false)
-        setAuthEmail('')
-        setAuthPassword('')
-        setNotification({ type: 'success', text: `Welcome back, ${data.user.email}!` })
-        setTimeout(() => setNotification(null), 4000)
-      }
-    } catch (err: any) {
-      setAuthError(err.message || 'Login failed')
-    } finally {
-      setIsAuthenticating(false)
-    }
-  }
-
-  // Handle Logout
-  async function handleLogout() {
-    if (supabase) {
-      await supabase.auth.signOut()
-    }
-    setAdminUser(null)
-    setNotification({ type: 'success', text: 'You have been signed out.' })
-    setTimeout(() => setNotification(null), 3000)
-  }
-
   // Open Form for Adding New Post
   function handleOpenCreateForm() {
-    if (!adminUser) {
-      setIsAuthModalOpen(true)
-      return
-    }
     setEditingPost(null)
     setIsFormOpen(true)
+    setTimeout(() => {
+      const formEl = document.querySelector('.gallery-form-drawer-section')
+      if (formEl) {
+        formEl.scrollIntoView({ behavior: 'smooth' })
+      }
+    }, 50)
   }
 
   // Open Form for Editing an Existing Post
   function handleOpenEditForm(post: GalleryPost) {
-    if (!adminUser) {
-      setIsAuthModalOpen(true)
-      return
-    }
     setEditingPost(post)
     setIsFormOpen(true)
-    window.scrollTo({ top: 300, behavior: 'smooth' })
+    setTimeout(() => {
+      const formEl = document.querySelector('.gallery-form-drawer-section')
+      if (formEl) {
+        formEl.scrollIntoView({ behavior: 'smooth' })
+      }
+    }, 50)
   }
 
   // Handle Save Post
@@ -146,11 +80,6 @@ export function GalleryPage({ onBackToHome }: GalleryPageProps) {
 
   // Handle Delete Post
   async function handleDeletePost(postId: string) {
-    if (!adminUser) {
-      setIsAuthModalOpen(true)
-      return
-    }
-
     const confirmDelete = window.confirm('Are you sure you want to delete this gallery post?')
     if (!confirmDelete) return
 
@@ -177,42 +106,15 @@ export function GalleryPage({ onBackToHome }: GalleryPageProps) {
             <span>Gallery & Visual Stories</span>
           </div>
 
-          {/* Admin Status & Controls */}
-          <div className="gallery-admin-meta">
-            {adminUser ? (
-              <div className="admin-signed-in-pill">
-                <span className="admin-live-dot" />
-                <span className="admin-email-text">{adminUser}</span>
-                <button
-                  type="button"
-                  className="gallery-nav-add-btn"
-                  onClick={handleOpenCreateForm}
-                  title="Add new post"
-                >
-                  ＋ Add Post
-                </button>
-                <button
-                  type="button"
-                  className="gallery-nav-logout-btn"
-                  onClick={handleLogout}
-                  title="Sign out of Supabase"
-                >
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <button
-                type="button"
-                className="gallery-nav-login-btn"
-                onClick={() => setIsAuthModalOpen(true)}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-                Admin Sign In
-              </button>
-            )}
+          <div className="gallery-top-actions">
+            <button
+              type="button"
+              className="gallery-nav-add-btn"
+              onClick={handleOpenCreateForm}
+              title="Add new gallery post"
+            >
+              ＋ Add Story Post
+            </button>
           </div>
         </div>
 
@@ -252,7 +154,7 @@ export function GalleryPage({ onBackToHome }: GalleryPageProps) {
               className="button button-primary"
               onClick={handleOpenCreateForm}
             >
-              {adminUser ? '＋ Add New Story Post' : 'Sign In to Add Post →'}
+              ＋ Add New Story Post
             </button>
             <button type="button" className="button button-quiet" onClick={onBackToHome}>
               Return to Research <span aria-hidden="true">↘</span>
@@ -260,7 +162,7 @@ export function GalleryPage({ onBackToHome }: GalleryPageProps) {
           </div>
         </div>
 
-        {/* INLINE / COLLAPSIBLE POST FORM (Shown when editing or adding) */}
+        {/* INLINE / COLLAPSIBLE POST FORM (Shown when adding or editing) */}
         {isFormOpen && (
           <section className="gallery-form-drawer-section">
             <div className="form-drawer-card">
@@ -310,9 +212,18 @@ export function GalleryPage({ onBackToHome }: GalleryPageProps) {
               <p className="stream-eyebrow">POSTS ARCHIVE</p>
               <h3 className="stream-headline">Recent Photo Stories</h3>
             </div>
-            <span className="stream-post-count">
-              {posts.length} {posts.length === 1 ? 'Story' : 'Stories'} Published
-            </span>
+            <div className="stream-right-meta">
+              <span className="stream-post-count">
+                {posts.length} {posts.length === 1 ? 'Story' : 'Stories'} Published
+              </span>
+              <button
+                type="button"
+                className="stream-inline-add-btn"
+                onClick={handleOpenCreateForm}
+              >
+                ＋ New Post
+              </button>
+            </div>
           </div>
 
           {isLoading ? (
@@ -337,7 +248,7 @@ export function GalleryPage({ onBackToHome }: GalleryPageProps) {
                 <GalleryPostCard
                   key={post.id}
                   post={post}
-                  isAdmin={Boolean(adminUser)}
+                  isAdmin={true}
                   onEdit={handleOpenEditForm}
                   onDelete={handleDeletePost}
                 />
@@ -346,77 +257,6 @@ export function GalleryPage({ onBackToHome }: GalleryPageProps) {
           )}
         </section>
       </div>
-
-      {/* SUPABASE AUTH MODAL */}
-      {isAuthModalOpen && (
-        <div className="gallery-auth-modal" onClick={() => setIsAuthModalOpen(false)}>
-          <div className="auth-modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="auth-modal-header">
-              <div className="auth-icon-wrap">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-              </div>
-              <h3>Admin Authentication</h3>
-              <p>Sign in with your Supabase credentials to publish, edit, or delete gallery stories.</p>
-              <button
-                type="button"
-                className="auth-modal-close"
-                onClick={() => setIsAuthModalOpen(false)}
-                aria-label="Close authentication modal"
-              >
-                ✕
-              </button>
-            </div>
-
-            {authError && <div className="admin-error-box">{authError}</div>}
-
-            <form onSubmit={handleLogin} className="auth-modal-form">
-              <div className="form-group">
-                <label htmlFor="gallery-auth-email">Admin Email</label>
-                <input
-                  id="gallery-auth-email"
-                  type="email"
-                  value={authEmail}
-                  onChange={(e) => setAuthEmail(e.target.value)}
-                  placeholder="forever.saha007@gmail.com"
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="gallery-auth-password">Password</label>
-                <input
-                  id="gallery-auth-password"
-                  type="password"
-                  value={authPassword}
-                  onChange={(e) => setAuthPassword(e.target.value)}
-                  placeholder="••••••••••••"
-                  required
-                />
-              </div>
-
-              <div className="auth-modal-actions">
-                <button
-                  type="submit"
-                  className="button button-primary auth-submit-btn"
-                  disabled={isAuthenticating}
-                >
-                  {isAuthenticating ? 'Signing in...' : 'Sign In with Supabase →'}
-                </button>
-                <button
-                  type="button"
-                  className="auth-cancel-btn"
-                  onClick={() => setIsAuthModalOpen(false)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

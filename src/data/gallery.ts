@@ -64,3 +64,4 @@ export const defaultGalleryPosts: GalleryPost[] = [
     createdAt: '2024-10-14T15:30:00Z',
   },
 ]
+
