@@ -90,7 +90,7 @@ export function Hero() {
 
         <div className="actions reveal reveal-delay-4">
           <a className="button button-primary" href="#research">Explore research <span aria-hidden="true">↘</span></a>
-          <a className="button button-quiet" href="#cv">View CV <span aria-hidden="true">↗</span></a>
+          <a className="button button-quiet" href="#cv">View CV <span aria-hidden="true">↘</span></a>
         </div>
       </div>
       <div className="hero-art reveal reveal-delay-2">
