@@ -5,6 +5,7 @@ import {
   fetchAllCollaborators,
   saveCollaborator,
   removeCollaborator,
+  reorderCollaborators,
 } from '../lib/supabase'
 import { MentorshipColleague, mentorshipColleagues as fallbackColleagues } from '../data/mentoring'
 
@@ -33,6 +34,9 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
   const [loadingData, setLoadingData] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [feedbackMsg, setFeedbackMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null)
+  const [draggedIdx, setDraggedIdx] = useState<number | null>(null)
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null)
+  const [isReordering, setIsReordering] = useState(false)
 
   // Form Fields
   const [name, setName] = useState('')
@@ -233,6 +237,9 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
 
     const id = editingId || name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || `colleague-${Date.now()}`
 
+    const existingColleague = editingId ? collaborators.find((c) => c.id === editingId) : undefined
+    const orderIndex = existingColleague?.orderIndex !== undefined ? existingColleague.orderIndex : 0
+
     const colleague: MentorshipColleague = {
       id,
       name: name.trim(),
@@ -245,6 +252,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
       publications,
       photo: photo.trim() || DEFAULT_AVATAR,
       googleScholar: googleScholar.trim(),
+      orderIndex,
     }
 
     const res = await saveCollaborator(colleague, Boolean(editingId))
@@ -280,6 +288,116 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
       if (onDataUpdated) onDataUpdated()
     } else {
       setFeedbackMsg({ type: 'error', text: res.error || 'Failed to delete.' })
+    }
+  }
+
+  // ================= DRAG & REARRANGE HANDLERS =================
+  function handleDragStart(e: React.DragEvent<HTMLDivElement>, index: number) {
+    setDraggedIdx(index)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', String(index))
+  }
+
+  function handleDragOver(e: React.DragEvent<HTMLDivElement>, index: number) {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    if (dragOverIdx !== index) {
+      setDragOverIdx(index)
+    }
+  }
+
+  function handleDragEnd() {
+    setDraggedIdx(null)
+    setDragOverIdx(null)
+  }
+
+  async function handleDrop(e: React.DragEvent<HTMLDivElement>, targetIdx: number) {
+    e.preventDefault()
+    if (draggedIdx === null || draggedIdx === targetIdx) {
+      setDraggedIdx(null)
+      setDragOverIdx(null)
+      return
+    }
+
+    const updated = [...collaborators]
+    const [movedItem] = updated.splice(draggedIdx, 1)
+    updated.splice(targetIdx, 0, movedItem)
+
+    setCollaborators(updated)
+    setDraggedIdx(null)
+    setDragOverIdx(null)
+
+    setIsReordering(true)
+    const res = await reorderCollaborators(updated)
+    setIsReordering(false)
+
+    if (res.success) {
+      setFeedbackMsg({
+        type: 'success',
+        text: `Rearranged: "${movedItem.name}" moved to position #${targetIdx + 1}.`,
+      })
+      if (onDataUpdated) onDataUpdated()
+    } else {
+      setFeedbackMsg({
+        type: 'error',
+        text: res.error || 'Failed to save new card order.',
+      })
+    }
+  }
+
+  // Quick arrow move up
+  async function handleMoveUp(index: number, e: React.MouseEvent) {
+    e.stopPropagation()
+    if (index <= 0 || isReordering) return
+    const updated = [...collaborators]
+    const temp = updated[index]
+    updated[index] = updated[index - 1]
+    updated[index - 1] = temp
+
+    setCollaborators(updated)
+    setIsReordering(true)
+    const res = await reorderCollaborators(updated)
+    setIsReordering(false)
+
+    if (res.success) {
+      setFeedbackMsg({
+        type: 'success',
+        text: `Moved "${temp.name}" up to position #${index}.`,
+      })
+      if (onDataUpdated) onDataUpdated()
+    } else {
+      setFeedbackMsg({
+        type: 'error',
+        text: res.error || 'Failed to reorder cards.',
+      })
+    }
+  }
+
+  // Quick arrow move down
+  async function handleMoveDown(index: number, e: React.MouseEvent) {
+    e.stopPropagation()
+    if (index >= collaborators.length - 1 || isReordering) return
+    const updated = [...collaborators]
+    const temp = updated[index]
+    updated[index] = updated[index + 1]
+    updated[index + 1] = temp
+
+    setCollaborators(updated)
+    setIsReordering(true)
+    const res = await reorderCollaborators(updated)
+    setIsReordering(false)
+
+    if (res.success) {
+      setFeedbackMsg({
+        type: 'success',
+        text: `Moved "${temp.name}" down to position #${index + 2}.`,
+      })
+      if (onDataUpdated) onDataUpdated()
+    } else {
+      setFeedbackMsg({
+        type: 'error',
+        text: res.error || 'Failed to reorder cards.',
+      })
     }
   }
 
@@ -702,8 +820,13 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
           {/* RIGHT: LIVE PREVIEW & EXISTING COLLABORATORS */}
           <div className="admin-roster-panel">
             <div className="panel-header">
-              <h3>Collaborations Roster ({collaborators.length})</h3>
-              <p>Manage, edit, or delete existing collaborator profiles in real time.</p>
+              <div className="panel-header-with-badge">
+                <h3>Collaborations Roster ({collaborators.length})</h3>
+                <span className="reorder-badge" title="Drag cards to rearrange order">
+                  ⠿ Drag to Rearrange
+                </span>
+              </div>
+              <p>Drag using the <strong>⠿ grip handle</strong> or click <strong>▲ / ▼</strong> to reorder cards on the live website.</p>
             </div>
 
             {loadingData ? (
@@ -713,61 +836,116 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
               </div>
             ) : (
               <div className="collaborators-roster-list">
-                {collaborators.map((c) => (
-                  <div key={c.id} className={`roster-item ${editingId === c.id ? 'is-selected' : ''}`}>
-                    <div className="roster-item-photo">
-                      <img
-                        src={c.photo || DEFAULT_AVATAR}
-                        alt={c.name}
-                        onError={(e) => {
-                          e.currentTarget.src = DEFAULT_AVATAR
-                        }}
-                      />
-                    </div>
+                {collaborators.map((c, index) => {
+                  const isDragging = draggedIdx === index
+                  const isOver = dragOverIdx === index && draggedIdx !== index
 
-                    <div className="roster-item-info">
-                      <div className="roster-item-top">
-                        <h4 className="roster-name">{c.name}</h4>
-                        <span className="roster-timeline">
-                          {c.yearFrom ? `${c.yearFrom} – ${c.yearTill || 'Ongoing'}` : 'Network'}
-                        </span>
-                      </div>
-                      <p className="roster-pos-inst">
-                        {c.position || 'Collaborator'} {c.institute ? `· ${c.institute}` : ''}
-                      </p>
-                      <div className="roster-tags">
-                        {c.projects && c.projects.length > 0 && (
-                          <span className="roster-tag">{c.projects.length} Project{c.projects.length > 1 ? 's' : ''}</span>
-                        )}
-                        {c.publications && c.publications.length > 0 && (
-                          <span className="roster-tag">{c.publications.length} Pub{c.publications.length > 1 ? 's' : ''}</span>
-                        )}
-                        {c.googleScholar && (
-                          <span className="roster-tag is-scholar">Scholar</span>
-                        )}
-                      </div>
-                    </div>
+                  return (
+                    <div
+                      key={c.id}
+                      className={`roster-item ${editingId === c.id ? 'is-selected' : ''} ${isDragging ? 'is-dragging' : ''} ${isOver ? 'drag-over' : ''}`}
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, index)}
+                      onDragOver={(e) => handleDragOver(e, index)}
+                      onDrop={(e) => handleDrop(e, index)}
+                      onDragEnd={handleDragEnd}
+                    >
+                      {/* Drag Grip & Quick Arrow Controls */}
+                      <div className="roster-drag-column">
+                        <div
+                          className="roster-drag-handle"
+                          title="Click and drag to rearrange card"
+                          aria-label={`Drag handle for ${c.name}`}
+                        >
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <circle cx="8" cy="6" r="2.2" />
+                            <circle cx="16" cy="6" r="2.2" />
+                            <circle cx="8" cy="12" r="2.2" />
+                            <circle cx="16" cy="12" r="2.2" />
+                            <circle cx="8" cy="18" r="2.2" />
+                            <circle cx="16" cy="18" r="2.2" />
+                          </svg>
+                          <span className="roster-card-index">#{index + 1}</span>
+                        </div>
 
-                    <div className="roster-item-actions">
-                      <button
-                        type="button"
-                        className="roster-btn is-edit"
-                        onClick={() => handleEdit(c)}
-                        title={`Edit ${c.name}`}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        type="button"
-                        className="roster-btn is-delete"
-                        onClick={() => handleDelete(c.id, c.name)}
-                        title={`Delete ${c.name}`}
-                      >
-                        Delete
-                      </button>
+                        <div className="roster-arrow-pair">
+                          <button
+                            type="button"
+                            className="roster-arrow-btn"
+                            onClick={(e) => handleMoveUp(index, e)}
+                            disabled={index === 0 || isReordering}
+                            title="Move card up"
+                            aria-label={`Move ${c.name} up`}
+                          >
+                            ▲
+                          </button>
+                          <button
+                            type="button"
+                            className="roster-arrow-btn"
+                            onClick={(e) => handleMoveDown(index, e)}
+                            disabled={index === collaborators.length - 1 || isReordering}
+                            title="Move card down"
+                            aria-label={`Move ${c.name} down`}
+                          >
+                            ▼
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="roster-item-photo">
+                        <img
+                          src={c.photo || DEFAULT_AVATAR}
+                          alt={c.name}
+                          onError={(e) => {
+                            e.currentTarget.src = DEFAULT_AVATAR
+                          }}
+                        />
+                      </div>
+
+                      <div className="roster-item-info">
+                        <div className="roster-item-top">
+                          <h4 className="roster-name">{c.name}</h4>
+                          <span className="roster-timeline">
+                            {c.yearFrom ? `${c.yearFrom} – ${c.yearTill || 'Ongoing'}` : 'Network'}
+                          </span>
+                        </div>
+                        <p className="roster-pos-inst">
+                          {c.position || 'Collaborator'} {c.institute ? `· ${c.institute}` : ''}
+                        </p>
+                        <div className="roster-tags">
+                          {c.projects && c.projects.length > 0 && (
+                            <span className="roster-tag">{c.projects.length} Project{c.projects.length > 1 ? 's' : ''}</span>
+                          )}
+                          {c.publications && c.publications.length > 0 && (
+                            <span className="roster-tag">{c.publications.length} Pub{c.publications.length > 1 ? 's' : ''}</span>
+                          )}
+                          {c.googleScholar && (
+                            <span className="roster-tag is-scholar">Scholar</span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="roster-item-actions">
+                        <button
+                          type="button"
+                          className="roster-btn is-edit"
+                          onClick={() => handleEdit(c)}
+                          title={`Edit ${c.name}`}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          type="button"
+                          className="roster-btn is-delete"
+                          onClick={() => handleDelete(c.id, c.name)}
+                          title={`Delete ${c.name}`}
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  )
+                })}
               </div>
             )}
           </div>
@@ -776,3 +954,4 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
     </div>
   )
 }
+

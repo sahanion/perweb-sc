@@ -10,6 +10,7 @@ export interface MentorshipColleague {
   publications?: string[]
   photo: string // Placeholder photo URL — replace with actual image link later
   googleScholar: string // Google Scholar profile link — add URL here later
+  orderIndex?: number
 }
 
 export type Colleague = MentorshipColleague

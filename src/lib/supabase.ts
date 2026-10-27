@@ -30,6 +30,7 @@ export interface CollaboratorRecord {
   publication_link_2?: string | null
   photo?: string | null
   google_scholar?: string | null
+  order_index?: number | null
   created_at?: string
   updated_at?: string
 }
@@ -56,6 +57,7 @@ export function recordToColleague(record: CollaboratorRecord): MentorshipColleag
     publications,
     photo: record.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
     googleScholar: record.google_scholar || '',
+    orderIndex: typeof record.order_index === 'number' ? record.order_index : 0,
   }
 }
 
@@ -75,6 +77,7 @@ export function colleagueToRecord(colleague: MentorshipColleague): Partial<Colla
     publication_link_2: colleague.publications?.[1] || null,
     photo: colleague.photo || null,
     google_scholar: colleague.googleScholar || null,
+    order_index: typeof colleague.orderIndex === 'number' ? colleague.orderIndex : 0,
   }
 }
 
@@ -118,7 +121,7 @@ export async function fetchAllCollaborators(): Promise<MentorshipColleague[]> {
     const { data, error } = await supabase
       .from('collaborators')
       .select('*')
-      .order('created_at', { ascending: true })
+      .order('order_index', { ascending: true, nullsFirst: false })
 
     if (error) {
       console.warn('Supabase fetch error, falling back to local data:', error.message)
@@ -135,6 +138,49 @@ export async function fetchAllCollaborators(): Promise<MentorshipColleague[]> {
     console.error('Error fetching collaborators from Supabase:', err)
     return getLocalCollaborators()
   }
+}
+
+/**
+ * Reorder collaborators: updates local storage and syncs order_index to Supabase
+ */
+export async function reorderCollaborators(
+  orderedList: MentorshipColleague[]
+): Promise<{ success: boolean; error?: string }> {
+  // Update orderIndex on each colleague
+  const indexedList = orderedList.map((item, idx) => ({
+    ...item,
+    orderIndex: idx,
+  }))
+
+  // Save to local storage for instant reactivity
+  setLocalCollaborators(indexedList)
+
+  if (supabase) {
+    try {
+      // Update each item in Supabase with its new order_index
+      const updates = indexedList.map((item, idx) =>
+        supabase!
+          .from('collaborators')
+          .update({
+            order_index: idx,
+            updated_at: new Date().toISOString(),
+          })
+          .eq('id', item.id)
+      )
+
+      const results = await Promise.all(updates)
+      const failed = results.find((r) => r.error)
+      if (failed && failed.error) {
+        return { success: false, error: failed.error.message }
+      }
+      return { success: true }
+    } catch (err: any) {
+      console.error('Error updating order in Supabase:', err)
+      return { success: false, error: err.message || 'Database error occurred while reordering' }
+    }
+  }
+
+  return { success: true }
 }
 
 /**
@@ -203,3 +249,4 @@ export async function removeCollaborator(id: string): Promise<{ success: boolean
   setLocalCollaborators(updated)
   return { success: true }
 }
+

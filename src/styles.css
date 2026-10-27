@@ -4945,15 +4945,121 @@ button {
   padding-right: 4px;
 }
 
+/* Panel header with badge */
+.panel-header-with-badge {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.panel-header-with-badge h3 {
+  margin: 0;
+}
+
+.reorder-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--accent);
+  background: rgba(186, 156, 102, 0.12);
+  border: 1px solid rgba(186, 156, 102, 0.3);
+  padding: 3px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* Drag & Drop controls column in each roster item */
+.roster-drag-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.roster-drag-handle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 4px;
+  border-radius: 6px;
+  cursor: grab;
+  color: var(--muted);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  user-select: none;
+  transition: all 0.2s ease;
+  min-width: 28px;
+}
+
+.roster-drag-handle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(186, 156, 102, 0.08);
+}
+
+.roster-drag-handle:active {
+  cursor: grabbing;
+}
+
+.roster-card-index {
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.roster-arrow-pair {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+}
+
+.roster-arrow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 16px;
+  padding: 0;
+  font-size: 8px;
+  line-height: 1;
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.roster-arrow-btn:hover:not(:disabled) {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+
+.roster-arrow-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
 .roster-item {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   padding: 12px 14px;
   background: #ffffff;
   border: 1px solid var(--line);
   border-radius: 12px;
   transition: all 0.2s ease;
+  position: relative;
 }
 
 .roster-item:hover {
@@ -4964,6 +5070,20 @@ button {
 .roster-item.is-selected {
   border-color: var(--accent);
   background: rgba(186, 156, 102, 0.06);
+}
+
+.roster-item.is-dragging {
+  opacity: 0.45;
+  border: 2px dashed var(--accent);
+  background: rgba(186, 156, 102, 0.05);
+  transform: scale(0.98);
+}
+
+.roster-item.drag-over {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent), 0 8px 20px rgba(186, 156, 102, 0.2);
+  background: rgba(186, 156, 102, 0.1);
+  transform: translateY(-2px);
 }
 
 .roster-item-photo {

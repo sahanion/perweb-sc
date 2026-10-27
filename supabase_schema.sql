@@ -19,6 +19,7 @@ create table if not exists public.collaborators (
   publication_link_2 text,
   photo text,
   google_scholar text,
+  order_index integer default 0,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   updated_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
@@ -144,3 +145,4 @@ insert into public.collaborators (
   'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', ''
 )
 on conflict (id) do nothing;
+
