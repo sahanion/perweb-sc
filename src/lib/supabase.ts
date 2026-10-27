@@ -1,8 +1,18 @@
 import { createClient, SupabaseClient, User, Session } from '@supabase/supabase-js'
 import { MentorshipColleague, mentorshipColleagues as defaultColleagues } from '../data/mentoring'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || ''
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
+function sanitizeSupabaseUrl(rawUrl: string): string {
+  let url = rawUrl.trim()
+  // Remove /rest/v1 or any subpath if the REST endpoint was copied
+  url = url.replace(/\/rest\/v1\/?.*$/, '')
+  // Strip trailing slashes
+  url = url.replace(/\/+$/, '')
+  return url
+}
+
+const rawUrl = (import.meta.env.VITE_SUPABASE_URL || '').trim()
+const supabaseUrl = sanitizeSupabaseUrl(rawUrl)
+const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || '').trim()
 
 export const isSupabaseConfigured = Boolean(
   supabaseUrl &&
