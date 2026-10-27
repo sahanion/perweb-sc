@@ -47,7 +47,7 @@ export const heroPillars: HeroPillar[] = [
 ]
 
 export const researcher = {
-  name: 'Dr. Sumanta Chowdhury',
+  name: 'Sumanta Chowdhury, PhD',
   shortName: 'Sumanta Chowdhury',
   role: 'Postdoctoral Researcher, Marie Curie Fellow',
   affiliation: 'CEISAM, University of Nantes',
@@ -335,7 +335,7 @@ export const presentations = [
 ]
 
 export const contactData = {
-  name: 'Dr. Sumanta Chowdhury',
+  name: 'Sumanta Chowdhury, PhD',
   role: 'Postdoctoral Researcher · CNRS Fellow',
   affiliation: 'CEISAM (UMR CNRS 6230) · University of Nantes',
   place: 'Nantes, France',

@@ -162,7 +162,7 @@ export function CrystalBufferLoader({ target, isFadingOut = false }: CrystalBuff
       case 'home':
       default:
         return {
-          tag: 'DR. SUMANTA CHOWDHURY · CEISAM',
+          tag: 'SUMANTA CHOWDHURY, PHD · CEISAM',
           title: 'Initializing Portfolio',
           subtitle: 'Reticular Chemistry · Solar Fuels · Molecular Materials…',
         }
