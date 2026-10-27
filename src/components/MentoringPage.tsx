@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
 import {
   mentorshipColleagues,
-  mentoringPillars,
   MentorshipColleague,
-  MentoringPillar,
 } from '../data/mentoring'
 import { fetchAllCollaborators } from '../lib/supabase'
 
@@ -274,53 +272,8 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
           </p>
         </div>
 
-        {/* Mentorship Pillars */}
-        <section className="mentoring-pillars-section reveal reveal-delay-2" aria-labelledby="mentoring-pillars-heading">
-          <div className="section-header-compact">
-            <span className="section-label">CORE METHODOLOGY</span>
-            <h2 id="mentoring-pillars-heading" className="section-subheading">
-              Pillars of Collaborative Excellence
-            </h2>
-          </div>
-
-          <div className="mentoring-pillars-grid">
-            {mentoringPillars.map((pillar: MentoringPillar) => (
-              <div key={pillar.title} className="mentoring-pillar-card">
-                <div className="pillar-icon-box">
-                  {pillar.iconType === 'flask' && (
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M10 2v7.31L4.36 20.3A2 2 0 0 0 6.1 23h11.8a2 2 0 0 0 1.74-2.7L14 9.31V2" />
-                      <line x1="8.5" y1="2" x2="15.5" y2="2" />
-                      <line x1="14" y1="9" x2="10" y2="9" />
-                    </svg>
-                  )}
-                  {pillar.iconType === 'microscope' && (
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M6 18h8" />
-                      <path d="M3 22h18" />
-                      <path d="M14 22a7 7 0 1 0-14 0" />
-                      <path d="M9 14h2" />
-                      <path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z" />
-                      <path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3" />
-                    </svg>
-                  )}
-                  {pillar.iconType === 'book' && (
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                    </svg>
-                  )}
-                </div>
-                <span className="pillar-badge">{pillar.subtitle}</span>
-                <h3 className="pillar-title">{pillar.title}</h3>
-                <p className="pillar-desc">{pillar.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* Collaborators & Mentorship Grid */}
-        <section className="mentoring-colleagues-section reveal reveal-delay-3" aria-labelledby="colleagues-heading">
+        <section className="mentoring-colleagues-section reveal reveal-delay-1" aria-labelledby="colleagues-heading">
           <div className="section-header-compact">
             <span className="section-label">GLOBAL SCIENTIFIC ALLIANCES</span>
             <h2 id="colleagues-heading" className="section-subheading">
