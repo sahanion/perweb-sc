@@ -1,17 +1,34 @@
-import { researcher } from '../data/researcher'
-
 export function Footer() {
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   return (
     <footer className="footer">
       <div className="container footer-inner">
-        <div className="footer-col">
-          <p>{researcher.name}</p>
-          <small>{researcher.affiliation}</small>
+        {/* Left column */}
+        <div className="footer-col footer-col-left">
+          <p>Sumanta Chowdhury, PhD</p>
+          <small>copyright 2026</small>
         </div>
-        <div className="footer-col">
-          <p>Research portfolio</p>
+
+        {/* Mid column: Back to top */}
+        <div className="footer-col footer-col-mid">
+          <button
+            type="button"
+            className="footer-back-to-top"
+            onClick={scrollToTop}
+            aria-label="Scroll back to top of page"
+          >
+            Back to top <span className="back-to-top-arrow" aria-hidden="true">↑</span>
+          </button>
+        </div>
+
+        {/* Right column */}
+        <div className="footer-col footer-col-right">
+          <p>Research Portfolio</p>
           <small>
-            {researcher.location}
+            CEISAM, University of Nantes, Nantes France
             <a href="#admin" className="admin-discrete-trigger" title="Admin CMS Portal"> · 🔒</a>
           </small>
         </div>
