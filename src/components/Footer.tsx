@@ -1,16 +1,17 @@
+import { researcher } from '../data/researcher'
+
 export function Footer() {
   return (
     <footer className="footer">
       <div className="container footer-inner">
         <div className="footer-col">
-          <p>Sumanta Chowdhury</p>
-          <small>Copyright 2026</small>
+          <p>{researcher.name}</p>
+          <small>{researcher.affiliation}</small>
         </div>
         <div className="footer-col">
-          <p>Research Portfolio</p>
-          <small>University of Nantes, Nantes, France</small>
+          <p>Research portfolio</p>
+          <small>{researcher.location}</small>
         </div>
-        <a className="footer-contact" href="#top">Back to top <span>↑</span></a>
       </div>
     </footer>
   )
