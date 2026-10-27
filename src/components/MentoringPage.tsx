@@ -1,55 +1,69 @@
 import { useState } from 'react'
-import { mentorshipColleagues, type MentorshipColleague } from '../data/mentoring'
+import {
+  mentorshipColleagues,
+  mentoringPillars,
+  MentorshipColleague,
+  MentoringPillar,
+} from '../data/mentoring'
 
-type MentoringPageProps = {
-  onBackToHome: (targetHash?: string) => void
+interface MentoringPageProps {
+  onBackToHome: (target?: string) => void
 }
 
-// Fallback avatar placeholder
 const DEFAULT_AVATAR = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
 
 function formatPeriod(from?: string, till?: string): string {
-  if (from && till) return `${from} — ${till}`
-  if (from) return `Since ${from}`
-  if (till) return `Until ${till}`
-  return ''
+  if (!from && !till) return ''
+  const tillLower = till?.toLowerCase()
+  if (from && (!till || tillLower === 'ongoing')) return `${from} – Ongoing`
+  if (from && tillLower === 'lifetime') return `${from} – Lifetime`
+  if (from && till) return `${from} – ${till}`
+  return from || till || ''
 }
 
 function getPublisherLabel(url: string, index: number): string {
   try {
-    const hostname = new URL(url).hostname.toLowerCase()
-    if (hostname.includes('sciencedirect')) return 'ScienceDirect Article'
-    if (hostname.includes('acs.org')) return 'ACS Publications Article'
-    if (hostname.includes('rsc.org')) return 'RSC Publishing Article'
-    if (hostname.includes('nature.com')) return 'Nature Article'
-    if (hostname.includes('wiley.com')) return 'Wiley Article'
-    if (hostname.includes('springer.com')) return 'Springer Article'
-    return `Publication ${index + 1}`
+    const parsed = new URL(url)
+    const host = parsed.hostname.toLowerCase()
+    if (host.includes('sciencedirect')) return 'ScienceDirect Article'
+    if (host.includes('acs.org')) return 'ACS Publications Article'
+    if (host.includes('rsc.org')) return 'RSC Publishing Article'
+    if (host.includes('wiley')) return 'Wiley Online Library'
+    if (host.includes('nature')) return 'Nature Research'
+    if (host.includes('springer')) return 'Springer Link'
+    return `Publication #${index + 1}`
   } catch {
-    return `Publication ${index + 1}`
+    return `Publication #${index + 1}`
   }
 }
 
 /**
  * Rectangular 3D Flip Collaborator Card
- * - Front: Bigger profile photo, Name, Position, Department, Affiliation,
- *          plus 3-dots button at bottom-right that expands to "More Details" on hover
- * - Back: Flips on click to show connection timeline, collaborative projects,
- *         joint publications, and Google Scholar link
+ * - Front: Prominent portrait photo, Name, Position, Department, Affiliation,
+ *          Connection period badge, Collaborative focus / project highlights preview,
+ *          and bottom bar with publication/project count & 3-dots button
+ * - Back: Full connection details, all collaborative projects, clickable publication
+ *         links, Google Scholar link, and back button
  */
 function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
   const [isFlipped, setIsFlipped] = useState(false)
   const period = formatPeriod(colleague.yearFrom, colleague.yearTill)
-  const hasProjects = colleague.projects && colleague.projects.length > 0
-  const hasPubs = colleague.publications && colleague.publications.length > 0
+  const hasProjects = Boolean(colleague.projects && colleague.projects.length > 0)
+  const hasPubs = Boolean(colleague.publications && colleague.publications.length > 0)
   const hasExtraDetails = Boolean(period || hasProjects || hasPubs || colleague.googleScholar)
+
+  const primaryProject = hasProjects
+    ? colleague.projects![0].replace(/^\d+\.\s*/, '')
+    : null
+
+  const extraProjectsCount = hasProjects ? colleague.projects!.length - 1 : 0
 
   return (
     <div className={`mentoring-card-wrapper ${isFlipped ? 'is-flipped' : ''}`}>
       <div className="mentoring-card-inner">
         {/* ================= FRONT FACE ================= */}
         <div className="mentoring-card-front">
-          {/* Bigger Profile Photo */}
+          {/* Prominent Profile Photo */}
           <div className="colleague-photo-wrap-large">
             <img
               src={colleague.photo || DEFAULT_AVATAR}
@@ -60,10 +74,10 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
                 target.src = DEFAULT_AVATAR
               }}
             />
-            <span className="colleague-status-indicator-large" title="Collaborative Partner" />
+            <span className="colleague-status-indicator-large" title="Active Collaborator" />
           </div>
 
-          {/* Text Below Profile Photo: Name, Position, Department, Affiliation */}
+          {/* Primary Profile Details: Name, Position, Department, Institution */}
           <div className="colleague-front-meta">
             <h3 className="colleague-name">{colleague.name}</h3>
             {colleague.position && <p className="colleague-role">{colleague.position}</p>}
@@ -71,8 +85,60 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
             {colleague.institute && <p className="colleague-institution">{colleague.institute}</p>}
           </div>
 
-          {/* Bottom-right 3-dots button: expands to "More Details" on hover, flips on click */}
-          <div className="card-expand-btn-wrap">
+          {/* Connection Period Badge */}
+          {period ? (
+            <div className="colleague-front-period" title={`Connected: ${period}`}>
+              <span className="period-dot" aria-hidden="true" />
+              <span>{period}</span>
+            </div>
+          ) : (
+            <div className="colleague-front-period is-network" title="Collaborative Network">
+              <span className="period-dot" aria-hidden="true" />
+              <span>Research Network</span>
+            </div>
+          )}
+
+          {/* Collaborative Focus / Highlights Box */}
+          <div className="colleague-front-focus">
+            <div className="front-focus-header">
+              <span className="front-focus-eyebrow">
+                {hasProjects ? 'COLLABORATIVE FOCUS' : hasPubs ? 'JOINT RESEARCH' : 'RESEARCH COLLABORATION'}
+              </span>
+              {extraProjectsCount > 0 && (
+                <span className="front-focus-count">+{extraProjectsCount} more</span>
+              )}
+            </div>
+            <p className="front-focus-title">
+              {primaryProject ||
+                (hasPubs
+                  ? 'Joint research publications in peer-reviewed international scientific journals'
+                  : 'Reticular framework materials, molecular chemistry & advanced characterization')}
+            </p>
+          </div>
+
+          {/* Bottom Bar: Stats Pill (left) + 3-Dots Button (right) */}
+          <div className="card-front-bottom-bar">
+            {hasPubs ? (
+              <span className="front-meta-pill" title={`${colleague.publications!.length} joint publications`}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                </svg>
+                <span>{colleague.publications!.length} {colleague.publications!.length === 1 ? 'Publication' : 'Publications'}</span>
+              </span>
+            ) : hasProjects ? (
+              <span className="front-meta-pill" title={`${colleague.projects!.length} collaborative projects`}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <span>{colleague.projects!.length} {colleague.projects!.length === 1 ? 'Project' : 'Projects'}</span>
+              </span>
+            ) : (
+              <span className="front-meta-pill is-subtle">
+                <span>Active Partner</span>
+              </span>
+            )}
+
+            {/* 3-dots button: expands on hover, flips on click */}
             <button
               type="button"
               className="card-dots-btn"
@@ -211,39 +277,83 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
   return (
     <div className="mentoring-page">
       <div className="container">
-        {/* Navigation Breadcrumb */}
-        <div className="gallery-breadcrumb">
-          <button type="button" className="gallery-back-btn" onClick={() => onBackToHome('#top')}>
+        {/* Navigation & Header */}
+        <div className="mentoring-header-nav reveal">
+          <button
+            type="button"
+            className="mentoring-back-btn"
+            onClick={() => onBackToHome('#top')}
+          >
             <span aria-hidden="true">←</span> Back to Portfolio
           </button>
-          <span className="gallery-breadcrumb-sep">/</span>
-          <span>Mentoring &amp; Collaborations</span>
         </div>
 
         {/* Hero Section */}
-        <div className="mentoring-hero">
-          <div className="gallery-badge-wrap">
-            <span className="gallery-live-pulse" />
-            <span className="gallery-badge">Collaborative Research &amp; Mentorship</span>
-          </div>
-
-          <h1 className="gallery-title">
-            Fostering Discovery &amp;<br />
-            <em>Empowering Researchers</em>
+        <div className="mentoring-hero reveal reveal-delay-1">
+          <p className="eyebrow">RESEARCH NETWORK & MENTORSHIP</p>
+          <h1 className="mentoring-title">
+            Collaborations &<br /><em>Academic Mentorship</em>
           </h1>
-
-          <p className="gallery-intro">
-            Mentoring and collaborative partnerships are at the core of advancing reticular chemistry. Over the years, I have had the privilege to work alongside talented faculty members, research directors, and colleagues across international institutions—collaborating on precision framework synthesis, advanced characterization, and impactful scientific publications.
+          <p className="mentoring-subtitle">
+            Advancing reticular chemistry, functional frameworks, and solar conversion through
+            rigorous international partnerships, multidisciplinary scholarship, and dedicated researcher guidance.
           </p>
         </div>
 
-        {/* Colleagues & Related Projects Section */}
-        <div className="mentoring-colleagues-section">
-          <div className="section-heading">
-            <p className="eyebrow">Colleagues &amp; Collaborators</p>
-            <h2>Research colleagues &amp; collaborative network</h2>
-            <p className="colleagues-subheading">
-              Select professors, research directors, and scientists I collaborate with across interdisciplinary porous materials and catalysis research.
+        {/* Mentorship Pillars */}
+        <section className="mentoring-pillars-section reveal reveal-delay-2" aria-labelledby="mentoring-pillars-heading">
+          <div className="section-header-compact">
+            <span className="section-label">CORE METHODOLOGY</span>
+            <h2 id="mentoring-pillars-heading" className="section-subheading">
+              Pillars of Collaborative Excellence
+            </h2>
+          </div>
+
+          <div className="mentoring-pillars-grid">
+            {mentoringPillars.map((pillar: MentoringPillar) => (
+              <div key={pillar.title} className="mentoring-pillar-card">
+                <div className="pillar-icon-box">
+                  {pillar.iconType === 'flask' && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M10 2v7.31L4.36 20.3A2 2 0 0 0 6.1 23h11.8a2 2 0 0 0 1.74-2.7L14 9.31V2" />
+                      <line x1="8.5" y1="2" x2="15.5" y2="2" />
+                      <line x1="14" y1="9" x2="10" y2="9" />
+                    </svg>
+                  )}
+                  {pillar.iconType === 'microscope' && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M6 18h8" />
+                      <path d="M3 22h18" />
+                      <path d="M14 22a7 7 0 1 0-14 0" />
+                      <path d="M9 14h2" />
+                      <path d="M9 12a2 2 0 0 1-2-2V6h6v4a2 2 0 0 1-2 2Z" />
+                      <path d="M12 6V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3" />
+                    </svg>
+                  )}
+                  {pillar.iconType === 'book' && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                      <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                    </svg>
+                  )}
+                </div>
+                <span className="pillar-badge">{pillar.subtitle}</span>
+                <h3 className="pillar-title">{pillar.title}</h3>
+                <p className="pillar-desc">{pillar.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Collaborators & Mentorship Grid */}
+        <section className="mentoring-colleagues-section reveal reveal-delay-3" aria-labelledby="colleagues-heading">
+          <div className="section-header-compact">
+            <span className="section-label">GLOBAL SCIENTIFIC ALLIANCES</span>
+            <h2 id="colleagues-heading" className="section-subheading">
+              Collaborators & Research Partners
+            </h2>
+            <p className="section-intro-text">
+              Key faculty, senior research directors, and postdoctoral fellows partnered across international research centers on reticular framework design, clean solar fuels, and molecular materials.
             </p>
           </div>
 
@@ -253,27 +363,7 @@ export function MentoringPage({ onBackToHome }: MentoringPageProps) {
               <ColleagueCard key={colleague.id} colleague={colleague} />
             ))}
           </div>
-        </div>
-
-        {/* Bottom Contact & Collaboration Banner */}
-        <div className="gallery-footer-banner">
-          <div>
-            <h3 style={{ margin: '0 0 8px', fontSize: '1.5rem', fontFamily: 'var(--font-serif)' }}>
-              Looking for a Research Mentor or Collaboration?
-            </h3>
-            <p style={{ margin: 0, color: 'var(--muted)', fontSize: '14px' }}>
-              I welcome inquiries from motivated graduate students, prospective postdoctoral fellows, and academic collaborators interested in reticular chemistry, MOFs/COFs, and photocatalytic systems.
-            </p>
-          </div>
-          <button
-            type="button"
-            className="gallery-banner-link"
-            style={{ border: 'none', background: 'transparent', cursor: 'pointer', font: 'inherit' }}
-            onClick={() => onBackToHome('#contact')}
-          >
-            Get in touch with Dr. Chowdhury <span>→</span>
-          </button>
-        </div>
+        </section>
       </div>
     </div>
   )
