@@ -497,3 +497,18 @@ export async function reorderGalleryPosts(
   return { success: true }
 }
 
+
+/**
+ * Ping Supabase to register inbound activity and prevent 7-day inactivity pause
+ */
+export async function pingSupabase(): Promise<{ ok: boolean; latencyMs?: number; error?: string }> {
+  if (!supabase) return { ok: false, error: 'Supabase not configured' }
+  const start = Date.now()
+  try {
+    const { error } = await supabase.from('collaborators').select('id').limit(1)
+    if (error) throw error
+    return { ok: true, latencyMs: Date.now() - start }
+  } catch (err: any) {
+    return { ok: false, error: err?.message || 'Ping failed' }
+  }
+}

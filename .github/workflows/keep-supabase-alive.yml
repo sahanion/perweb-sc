@@ -1,0 +1,30 @@
+name: Keep Supabase Alive (Auto-Ping)
+
+on:
+  schedule:
+    # Runs every 3 days at 06:00 AM UTC (well within Supabase's 7-day inactivity pause limit)
+    - cron: '0 6 */3 * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions dashboard anytime
+
+concurrency:
+  group: 'supabase-keep-alive'
+  cancel-in-progress: false
+
+jobs:
+  ping-supabase:
+    name: Ping Supabase Database
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Execute Supabase Keep-Alive Ping
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://rkfoduchimoydfqvqofw.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrZm9kdWNoaW1veWRmcXZxb2Z3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMTM3MDAsImV4cCI6MjEwODY4OTcwMH0.UdVg9MAzFTY1rXjV1t1z3-bALWpJGix5tDtntXwAfwg' }}
+        run: node scripts/ping-supabase.js
