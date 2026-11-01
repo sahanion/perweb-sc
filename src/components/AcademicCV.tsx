@@ -75,7 +75,20 @@ export function AcademicCV() {
                       )
                     })}
                   </div>
-                  <h4>{publication.title}</h4>
+                  <h4>
+                    {publication.url || publication.doi ? (
+                      <a
+                        href={publication.url || `https://doi.org/${publication.doi}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="publication-title-link"
+                      >
+                        {publication.title} <span className="link-arrow-icon" aria-hidden="true">↗</span>
+                      </a>
+                    ) : (
+                      publication.title
+                    )}
+                  </h4>
                   <p className="publication-authors">
                     {publication.authors.split(/(Chowdhury,\s*S\.[*‡]*)/g).map((part, idx) =>
                       part.startsWith('Chowdhury, S.') ? (

@@ -231,6 +231,8 @@ export interface PublicationItem {
   citation: string
   authors: string
   badges?: string[]
+  doi?: string
+  url?: string
 }
 
 export const publications: PublicationItem[] = [

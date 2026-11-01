@@ -64,7 +64,18 @@ export function ResearchSnapshot() {
                 <li key={idx} className="theme-pub-item">
                   <span className="theme-pub-index">[{idx + 1}]</span>
                   <div className="theme-pub-info">
-                    <span className="theme-pub-title">{pub.title}</span>
+                    {pub.link || pub.doi ? (
+                      <a
+                        href={pub.link || `https://doi.org/${pub.doi}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="theme-pub-title-link"
+                      >
+                        {pub.title} <span className="theme-pub-arrow" aria-hidden="true">↗</span>
+                      </a>
+                    ) : (
+                      <span className="theme-pub-title">{pub.title}</span>
+                    )}
                     <span className="theme-pub-meta">
                       <em>{pub.journal}</em> ({pub.year}) {pub.doi && <>· <span className="theme-pub-doi">DOI: {pub.doi}</span></>}
                     </span>
