@@ -44,42 +44,33 @@ export function ResearchSnapshot() {
             </button>
           ))}
         </div>
-        <div aria-labelledby={`research-tab-${activeTheme}`} className="research-detail" id={`research-detail-${activeTheme}`} role="tabpanel">
+        <div
+          aria-labelledby={`research-tab-${activeTheme}`}
+          className="research-detail"
+          id={`research-detail-${activeTheme}`}
+          role="tabpanel"
+        >
           <div className="research-detail-intro">
             <span className="detail-number">Focus / {selectedTheme.index}</span>
             <h3>{selectedTheme.title}</h3>
             <p className="detail-lead">{selectedTheme.lead}</p>
-            <p className="research-detail-context">{selectedTheme.context}</p>
+            <div className="research-detail-context">
+              <span className="context-indicator" aria-hidden="true" />
+              <p>{selectedTheme.context}</p>
+            </div>
           </div>
+
           <div className="research-detail-areas">
-            <span className="detail-label">Research directions</span>
-            <ul>
-              {selectedTheme.areas.map((area) => <li key={area}>{area}</li>)}
-            </ul>
-          </div>
-          <div className="research-detail-publications">
-            <span className="detail-label">Related publications (placeholders)</span>
-            <ul className="theme-pub-list">
-              {selectedTheme.publications?.map((pub, idx) => (
-                <li key={idx} className="theme-pub-item">
-                  <span className="theme-pub-index">[{idx + 1}]</span>
-                  <div className="theme-pub-info">
-                    {pub.link || pub.doi ? (
-                      <a
-                        href={pub.link || `https://doi.org/${pub.doi}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="theme-pub-title-link"
-                      >
-                        {pub.title} <span className="theme-pub-arrow" aria-hidden="true">↗</span>
-                      </a>
-                    ) : (
-                      <span className="theme-pub-title">{pub.title}</span>
-                    )}
-                    <span className="theme-pub-meta">
-                      <em>{pub.journal}</em> ({pub.year}) {pub.doi && <>· <span className="theme-pub-doi">DOI: {pub.doi}</span></>}
-                    </span>
-                  </div>
+            <div className="areas-heading-row">
+              <span className="detail-label">Key Research Directions</span>
+              <span className="areas-count-pill">{selectedTheme.areas.length} Thrusts</span>
+            </div>
+            <ul className="areas-list">
+              {selectedTheme.areas.map((area, idx) => (
+                <li key={area} className="area-item">
+                  <span className="area-num">0{idx + 1}</span>
+                  <span className="area-text">{area}</span>
+                  <span className="area-arrow" aria-hidden="true">↗</span>
                 </li>
               ))}
             </ul>
