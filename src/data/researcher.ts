@@ -1,7 +1,7 @@
-import theme01Bg from '../assets/themes/theme-01.svg'
-import theme02Bg from '../assets/themes/theme-02.svg'
-import theme03Bg from '../assets/themes/theme-03.svg'
-import theme04Bg from '../assets/themes/theme-04.svg'
+import theme01Bg from '../assets/themes/theme-01.png'
+import theme02Bg from '../assets/themes/theme-02.png'
+import theme03Bg from '../assets/themes/theme-03.png'
+import theme04Bg from '../assets/themes/theme-04.png'
 
 export interface HeroPillar {
   id: string

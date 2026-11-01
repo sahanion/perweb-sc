@@ -497,7 +497,6 @@ export async function reorderGalleryPosts(
   return { success: true }
 }
 
-
 /**
  * Ping Supabase to register inbound activity and prevent 7-day inactivity pause
  */
