@@ -4,6 +4,7 @@ import {
   MentorshipColleague,
 } from '../data/mentoring'
 import { fetchAllCollaborators } from '../lib/supabase'
+import { normalizeImageUrl } from '../lib/imageUtils'
 import { CrystalThrobber } from './CrystalThrobber'
 
 interface MentoringPageProps {
@@ -60,12 +61,16 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
           {/* Big Profile Photo: At least half length of card */}
           <div className="colleague-photo-wrap-large">
             <img
-              src={colleague.photo || DEFAULT_AVATAR}
+              src={normalizeImageUrl(colleague.photo) || DEFAULT_AVATAR}
               alt={colleague.name}
               className="colleague-photo-large"
+              referrerPolicy="no-referrer"
+              loading="lazy"
               onError={(e) => {
                 const target = e.currentTarget
-                target.src = DEFAULT_AVATAR
+                if (target.src !== DEFAULT_AVATAR) {
+                  target.src = DEFAULT_AVATAR
+                }
               }}
             />
           </div>

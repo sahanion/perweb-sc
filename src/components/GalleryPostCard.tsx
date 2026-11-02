@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { GalleryPost } from '../data/gallery'
+import { normalizeImageUrl } from '../lib/imageUtils'
 
 interface GalleryPostCardProps {
   post: GalleryPost
@@ -14,10 +15,10 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
 
   // Collect all valid photo entries with captions
   const photos = [
-    { url: post.photo1, caption: post.caption1 },
-    post.photo2 ? { url: post.photo2, caption: post.caption2 } : null,
-    post.photo3 ? { url: post.photo3, caption: post.caption3 } : null,
-    post.photo4 ? { url: post.photo4, caption: post.caption4 } : null,
+    { url: normalizeImageUrl(post.photo1), caption: post.caption1 },
+    post.photo2 ? { url: normalizeImageUrl(post.photo2), caption: post.caption2 } : null,
+    post.photo3 ? { url: normalizeImageUrl(post.photo3), caption: post.caption3 } : null,
+    post.photo4 ? { url: normalizeImageUrl(post.photo4), caption: post.caption4 } : null,
   ].filter(Boolean) as { url: string; caption?: string }[]
 
   const photoCount = photos.length
@@ -92,7 +93,7 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
       <div className={`gallery-photo-collage ${collageClass}`}>
         {photoCount === 1 && (
           <div className="collage-slot slot-single" onClick={() => openLightbox(0)}>
-            <img src={photos[0].url} alt={photos[0].caption || post.title} loading="lazy" />
+            <img src={photos[0].url} alt={photos[0].caption || post.title} loading="lazy" referrerPolicy="no-referrer" />
             {photos[0].caption && (
               <div className="collage-caption-overlay">
                 <span>{photos[0].caption}</span>
@@ -104,7 +105,7 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
         {photoCount === 2 && (
           <>
             <div className="collage-slot slot-half" onClick={() => openLightbox(0)}>
-              <img src={photos[0].url} alt={photos[0].caption || post.title} loading="lazy" />
+              <img src={photos[0].url} alt={photos[0].caption || post.title} loading="lazy" referrerPolicy="no-referrer" />
               {photos[0].caption && (
                 <div className="collage-caption-overlay">
                   <span>{photos[0].caption}</span>
@@ -112,7 +113,7 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
               )}
             </div>
             <div className="collage-slot slot-half" onClick={() => openLightbox(1)}>
-              <img src={photos[1].url} alt={photos[1].caption || post.title} loading="lazy" />
+              <img src={photos[1].url} alt={photos[1].caption || post.title} loading="lazy" referrerPolicy="no-referrer" />
               {photos[1].caption && (
                 <div className="collage-caption-overlay">
                   <span>{photos[1].caption}</span>
@@ -125,7 +126,7 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
         {photoCount === 3 && (
           <>
             <div className="collage-slot slot-primary" onClick={() => openLightbox(0)}>
-              <img src={photos[0].url} alt={photos[0].caption || post.title} loading="lazy" />
+              <img src={photos[0].url} alt={photos[0].caption || post.title} loading="lazy" referrerPolicy="no-referrer" />
               {photos[0].caption && (
                 <div className="collage-caption-overlay">
                   <span>{photos[0].caption}</span>
@@ -134,7 +135,7 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
             </div>
             <div className="collage-slot-stack">
               <div className="collage-slot slot-stacked" onClick={() => openLightbox(1)}>
-                <img src={photos[1].url} alt={photos[1].caption || post.title} loading="lazy" />
+                <img src={photos[1].url} alt={photos[1].caption || post.title} loading="lazy" referrerPolicy="no-referrer" />
                 {photos[1].caption && (
                   <div className="collage-caption-overlay">
                     <span>{photos[1].caption}</span>
@@ -142,7 +143,7 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
                 )}
               </div>
               <div className="collage-slot slot-stacked" onClick={() => openLightbox(2)}>
-                <img src={photos[2].url} alt={photos[2].caption || post.title} loading="lazy" />
+                <img src={photos[2].url} alt={photos[2].caption || post.title} loading="lazy" referrerPolicy="no-referrer" />
                 {photos[2].caption && (
                   <div className="collage-caption-overlay">
                     <span>{photos[2].caption}</span>
@@ -157,7 +158,7 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
           <div className="collage-grid-4">
             {photos.map((p, idx) => (
               <div key={idx} className="collage-slot slot-quad" onClick={() => openLightbox(idx)}>
-                <img src={p.url} alt={p.caption || `${post.title} photo ${idx + 1}`} loading="lazy" />
+                <img src={p.url} alt={p.caption || `${post.title} photo ${idx + 1}`} loading="lazy" referrerPolicy="no-referrer" />
                 {p.caption && (
                   <div className="collage-caption-overlay">
                     <span>{p.caption}</span>
@@ -219,7 +220,7 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
               {photos.map((item, idx) => (
                 <figure key={idx} className="story-photo-card" onClick={() => openLightbox(idx)}>
                   <div className="story-img-wrap">
-                    <img src={item.url} alt={item.caption || `Photo ${idx + 1}`} loading="lazy" />
+                    <img src={item.url} alt={item.caption || `Photo ${idx + 1}`} loading="lazy" referrerPolicy="no-referrer" />
                     <span className="story-zoom-hint">Click to enlarge</span>
                   </div>
                   {item.caption && (
@@ -284,6 +285,7 @@ export function GalleryPostCard({ post, isAdmin, onEdit, onDelete }: GalleryPost
               <img
                 src={photos[lightboxIndex].url}
                 alt={photos[lightboxIndex].caption || post.title}
+                referrerPolicy="no-referrer"
               />
               <div className="lightbox-footer-info">
                 <span className="lightbox-counter">

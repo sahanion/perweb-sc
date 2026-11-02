@@ -14,6 +14,7 @@ import {
 import { MentorshipColleague, mentorshipColleagues as fallbackColleagues } from '../data/mentoring'
 import { GalleryPost, defaultGalleryPosts } from '../data/gallery'
 import { GalleryPostForm } from './GalleryPostForm'
+import { normalizeImageUrl } from '../lib/imageUtils'
 import { CrystalThrobber } from './CrystalThrobber'
 
 interface AdminPortalProps {
@@ -318,7 +319,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
       yearTill: resolvedTill.trim(),
       projects,
       publications,
-      photo: photo.trim() || DEFAULT_AVATAR,
+      photo: normalizeImageUrl(photo) || DEFAULT_AVATAR,
       googleScholar: googleScholar.trim(),
       orderIndex,
     }
@@ -836,14 +837,23 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
                     type="url"
                     value={photo}
                     onChange={(e) => setPhoto(e.target.value)}
-                    placeholder="https://... (direct image link)"
+                    onBlur={(e) => {
+                      const normalized = normalizeImageUrl(e.target.value)
+                      if (normalized && normalized !== e.target.value) {
+                        setPhoto(normalized)
+                      }
+                    }}
+                    placeholder="https://... (direct link, ImgBB, or Imgur)"
                   />
                   <div className="photo-mini-thumb">
                     <img
-                      src={photo || DEFAULT_AVATAR}
+                      src={normalizeImageUrl(photo) || DEFAULT_AVATAR}
+                      referrerPolicy="no-referrer"
                       alt="Thumbnail preview"
                       onError={(e) => {
-                        e.currentTarget.src = DEFAULT_AVATAR
+                        if (e.currentTarget.src !== DEFAULT_AVATAR) {
+                          e.currentTarget.src = DEFAULT_AVATAR
+                        }
                       }}
                     />
                   </div>
@@ -969,10 +979,13 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
 
                       <div className="roster-item-photo">
                         <img
-                          src={c.photo || DEFAULT_AVATAR}
+                          src={normalizeImageUrl(c.photo) || DEFAULT_AVATAR}
+                          referrerPolicy="no-referrer"
                           alt={c.name}
                           onError={(e) => {
-                            e.currentTarget.src = DEFAULT_AVATAR
+                            if (e.currentTarget.src !== DEFAULT_AVATAR) {
+                          e.currentTarget.src = DEFAULT_AVATAR
+                        }
                           }}
                         />
                       </div>

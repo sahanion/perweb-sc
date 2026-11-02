@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { GalleryPost } from '../data/gallery'
 import { CrystalThrobber } from './CrystalThrobber'
 import { RichTextEditor } from './RichTextEditor'
+import { normalizeImageUrl } from '../lib/imageUtils'
 
 interface GalleryPostFormProps {
   initialPost?: GalleryPost | null
@@ -90,13 +91,13 @@ export function GalleryPostForm({ initialPost, onSave, onCancel, onSuccess }: Ga
       date: date.trim() || undefined,
       location: location.trim() || undefined,
       readTime: readTime.trim() || '3 min read',
-      photo1: photo1.trim(),
+      photo1: normalizeImageUrl(photo1),
       caption1: caption1.trim() || undefined,
-      photo2: photo2.trim() || undefined,
+      photo2: normalizeImageUrl(photo2) || undefined,
       caption2: caption2.trim() || undefined,
-      photo3: photo3.trim() || undefined,
+      photo3: normalizeImageUrl(photo3) || undefined,
       caption3: caption3.trim() || undefined,
-      photo4: photo4.trim() || undefined,
+      photo4: normalizeImageUrl(photo4) || undefined,
       caption4: caption4.trim() || undefined,
       orderIndex: initialPost?.orderIndex !== undefined ? initialPost.orderIndex : 0,
       createdAt: initialPost?.createdAt || new Date().toISOString(),
@@ -194,7 +195,8 @@ export function GalleryPostForm({ initialPost, onSave, onCancel, onSuccess }: Ga
         {photo1 && (
           <div className="photo-preview-strip">
             <img
-              src={photo1}
+              src={normalizeImageUrl(photo1)}
+              referrerPolicy="no-referrer"
               alt="Photo 1 preview"
               onError={(e) => {
                 e.currentTarget.src = DEFAULT_SAMPLE_PHOTO
@@ -235,7 +237,8 @@ export function GalleryPostForm({ initialPost, onSave, onCancel, onSuccess }: Ga
         {photo2 && (
           <div className="photo-preview-strip">
             <img
-              src={photo2}
+              src={normalizeImageUrl(photo2)}
+              referrerPolicy="no-referrer"
               alt="Photo 2 preview"
               onError={(e) => {
                 e.currentTarget.src = DEFAULT_SAMPLE_PHOTO
@@ -276,7 +279,8 @@ export function GalleryPostForm({ initialPost, onSave, onCancel, onSuccess }: Ga
         {photo3 && (
           <div className="photo-preview-strip">
             <img
-              src={photo3}
+              src={normalizeImageUrl(photo3)}
+              referrerPolicy="no-referrer"
               alt="Photo 3 preview"
               onError={(e) => {
                 e.currentTarget.src = DEFAULT_SAMPLE_PHOTO
@@ -317,7 +321,8 @@ export function GalleryPostForm({ initialPost, onSave, onCancel, onSuccess }: Ga
         {photo4 && (
           <div className="photo-preview-strip">
             <img
-              src={photo4}
+              src={normalizeImageUrl(photo4)}
+              referrerPolicy="no-referrer"
               alt="Photo 4 preview"
               onError={(e) => {
                 e.currentTarget.src = DEFAULT_SAMPLE_PHOTO

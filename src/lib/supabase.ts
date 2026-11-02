@@ -1,6 +1,7 @@
 import { createClient, SupabaseClient, User, Session } from '@supabase/supabase-js'
 import { MentorshipColleague, mentorshipColleagues as defaultColleagues } from '../data/mentoring'
 import { GalleryPost, defaultGalleryPosts } from '../data/gallery'
+import { normalizeImageUrl } from './imageUtils'
 export type { GalleryPost }
 
 function sanitizeSupabaseUrl(rawUrl: string): string {
@@ -72,7 +73,7 @@ export function recordToColleague(record: CollaboratorRecord): MentorshipColleag
     yearTill: record.year_till,
     projects,
     publications,
-    photo: record.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    photo: normalizeImageUrl(record.photo) || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
     googleScholar: record.google_scholar || '',
     orderIndex: typeof record.order_index === 'number' ? record.order_index : 0,
   }
@@ -92,7 +93,7 @@ export function colleagueToRecord(colleague: MentorshipColleague): Partial<Colla
     project_title_3: colleague.projects?.[2] || null,
     publication_link_1: colleague.publications?.[0] || null,
     publication_link_2: colleague.publications?.[1] || null,
-    photo: colleague.photo || null,
+    photo: normalizeImageUrl(colleague.photo) || null,
     google_scholar: colleague.googleScholar || null,
     order_index: typeof colleague.orderIndex === 'number' ? colleague.orderIndex : 0,
   }
@@ -299,13 +300,13 @@ export function recordToGalleryPost(record: GalleryPostRecord): GalleryPost {
     date: record.post_date || '',
     location: record.location || '',
     readTime: record.read_time || '3 min read',
-    photo1: record.photo_1,
+    photo1: normalizeImageUrl(record.photo_1),
     caption1: record.caption_1 || '',
-    photo2: record.photo_2 || '',
+    photo2: normalizeImageUrl(record.photo_2) || '',
     caption2: record.caption_2 || '',
-    photo3: record.photo_3 || '',
+    photo3: normalizeImageUrl(record.photo_3) || '',
     caption3: record.caption_3 || '',
-    photo4: record.photo_4 || '',
+    photo4: normalizeImageUrl(record.photo_4) || '',
     caption4: record.caption_4 || '',
     orderIndex: typeof record.order_index === 'number' ? record.order_index : 0,
     createdAt: record.created_at,
@@ -320,13 +321,13 @@ export function galleryPostToRecord(post: GalleryPost): Partial<GalleryPostRecor
     post_date: post.date || null,
     location: post.location || null,
     read_time: post.readTime || null,
-    photo_1: post.photo1,
+    photo_1: normalizeImageUrl(post.photo1),
     caption_1: post.caption1 || null,
-    photo_2: post.photo2 || null,
+    photo_2: normalizeImageUrl(post.photo2) || null,
     caption_2: post.caption2 || null,
-    photo_3: post.photo3 || null,
+    photo_3: normalizeImageUrl(post.photo3) || null,
     caption_3: post.caption3 || null,
-    photo_4: post.photo4 || null,
+    photo_4: normalizeImageUrl(post.photo4) || null,
     caption_4: post.caption4 || null,
     order_index: typeof post.orderIndex === 'number' ? post.orderIndex : 0,
   }
