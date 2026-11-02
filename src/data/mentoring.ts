@@ -1,5 +1,6 @@
 import { DEFAULT_AVATAR } from '../lib/imageUtils'
 
+
 export interface MentorshipColleague {
   id: string
   name: string

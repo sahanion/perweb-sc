@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600;1,700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
-  --paper: #f8f5ee;
-  --paper-deep: #eee7db;
+  --paper: #fafafa;
+  --paper-deep: #f2f3f5;
   --accent: #ba9c66;
   --accent-soft: #d8c5a2;
-  --accent-pale: #fbf7f0;
+  --accent-pale: #f5f6f8;
   --ink: #222d47;
   --muted: #64728f;
-  --line: rgba(34, 45, 71, 0.10);
+  --line: rgba(34, 45, 71, 0.08);
 
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
@@ -95,7 +95,7 @@ button {
 }
 
 .nav-wrap.is-compact {
-  background: rgba(248, 245, 238, 0.94);
+  background: rgba(250, 250, 250, 0.94);
   backdrop-filter: blur(14px);
   box-shadow: 0 1px 0 var(--line);
 }
@@ -558,7 +558,7 @@ button {
   min-width: 140px;
   max-width: 280px;
   padding: 8px 12px;
-  background: rgba(248, 245, 238, 0.96);
+  background: rgba(250, 250, 250, 0.96);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(34, 45, 71, 0.16);
@@ -669,7 +669,7 @@ button {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--muted);
-  background: rgba(248, 245, 238, 0.85);
+  background: rgba(250, 250, 250, 0.85);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
   padding: 5px 11px;
@@ -897,7 +897,7 @@ button {
   font-family: var(--font-sans);
   font-size: 13px;
   line-height: 1.5;
-  color: rgba(248, 245, 238, 0.92);
+  color: rgba(250, 250, 250, 0.92);
   opacity: 0;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
   transition: max-height .25s, margin .25s, opacity .2s;
@@ -2011,12 +2011,12 @@ button {
 }
 
 .current-tags span {
-  border: 1px solid rgba(248, 245, 238, 0.22);
+  border: 1px solid rgba(250, 250, 250, 0.22);
   padding: 6px 10px;
   font: 10px var(--font-mono);
   color: var(--accent-soft);
   letter-spacing: .05em;
-  background: rgba(248, 245, 238, 0.05);
+  background: rgba(250, 250, 250, 0.05);
 }
 
 .reaction {
@@ -2093,7 +2093,7 @@ button {
   padding: 16px 20px;
   border-radius: 14px;
   border: 1px solid rgba(186, 156, 102, 0.28);
-  background: linear-gradient(140deg, rgba(238, 231, 219, 0.42) 0%, rgba(248, 245, 238, 0.78) 100%);
+  background: linear-gradient(140deg, rgba(242, 243, 245, 0.42) 0%, rgba(250, 250, 250, 0.78) 100%);
   box-shadow: 0 4px 20px -6px rgba(34, 45, 71, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.7);
   overflow: hidden;
   justify-self: end;
@@ -2288,7 +2288,7 @@ button {
   font-size: 10px;
   letter-spacing: 0.03em;
   color: var(--muted);
-  background: rgba(248, 245, 238, 0.85);
+  background: rgba(250, 250, 250, 0.85);
 }
 
 .wa-chip-outline {
@@ -5217,7 +5217,7 @@ button {
 .joint-outcomes-box {
   margin-top: auto;
   padding: 14px 16px;
-  background: rgba(248, 245, 238, 0.7);
+  background: rgba(250, 250, 250, 0.7);
   border: 1px solid rgba(34, 45, 71, 0.08);
   border-radius: 12px;
 }
@@ -5276,7 +5276,7 @@ button {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: rgba(248, 245, 238, 0.98);
+    background: rgba(250, 250, 250, 0.98);
     backdrop-filter: blur(18px);
     z-index: 101;
     opacity: 0;

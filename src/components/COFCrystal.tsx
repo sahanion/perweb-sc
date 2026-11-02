@@ -19,7 +19,7 @@ export interface ComponentMetadata {
 
 // ============================================================================
 // THEME MATERIALS DEFINITIONS (Matched to Website Palette)
-// --paper: #f8f5ee, --ink: #222d47, --accent: #ba9c66, --accent-soft: #d8c5a2
+// --paper: #fafafa, --ink: #222d47, --accent: #ba9c66, --accent-soft: #d8c5a2
 // ============================================================================
 
 export const themeMaterials: Record<

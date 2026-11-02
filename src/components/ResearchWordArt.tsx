@@ -94,22 +94,22 @@ export function ResearchWordArt() {
         {/* Metal-Node Vertices with coordination halos */}
         <g className="pore-nodes">
           <circle cx="255" cy="42" r="3" fill="#ba9c66" filter="url(#node-glow)" />
-          <circle cx="255" cy="42" r="1.5" fill="#f8f5ee" />
+          <circle cx="255" cy="42" r="1.5" fill="var(--paper)" />
 
           <circle cx="300" cy="68" r="3" fill="#ba9c66" />
-          <circle cx="300" cy="68" r="1.5" fill="#f8f5ee" />
+          <circle cx="300" cy="68" r="1.5" fill="var(--paper)" />
 
           <circle cx="300" cy="120" r="3" fill="#ba9c66" />
-          <circle cx="300" cy="120" r="1.5" fill="#f8f5ee" />
+          <circle cx="300" cy="120" r="1.5" fill="var(--paper)" />
 
           <circle cx="255" cy="146" r="3" fill="#ba9c66" filter="url(#node-glow)" />
-          <circle cx="255" cy="146" r="1.5" fill="#f8f5ee" />
+          <circle cx="255" cy="146" r="1.5" fill="var(--paper)" />
 
           <circle cx="210" cy="120" r="3" fill="#ba9c66" />
-          <circle cx="210" cy="120" r="1.5" fill="#f8f5ee" />
+          <circle cx="210" cy="120" r="1.5" fill="var(--paper)" />
 
           <circle cx="210" cy="68" r="3" fill="#ba9c66" />
-          <circle cx="210" cy="68" r="1.5" fill="#f8f5ee" />
+          <circle cx="210" cy="68" r="1.5" fill="var(--paper)" />
 
           {/* Secondary vertex nodes */}
           <circle cx="345" cy="42" r="2" fill="#222d47" opacity="0.4" />
