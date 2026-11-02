@@ -35,7 +35,7 @@ export function AcademicCV() {
                 <span className="subhead-sep">•</span>
                 <span>≈ 150 citations</span>
                 <span className="subhead-sep">•</span>
-                <span>h-index: 8</span>
+                <span>h-index: 11</span>
               </div>
             </div>
             <div className="publications-legend">
@@ -98,21 +98,7 @@ export function AcademicCV() {
                       )
                     )}
                   </p>
-                  <div className="pub-citation-row">
-                    <p className="publication-citation">{publication.citation}</p>
-                    {(publication.url || publication.doi) && (
-                      <a
-                        href={publication.url || `https://doi.org/${publication.doi}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="pub-article-link-pill"
-                        title="Read publication in original journal / publisher"
-                      >
-                        <span>Article Link</span>
-                        <span aria-hidden="true">↗</span>
-                      </a>
-                    )}
-                  </div>
+                  <p className="publication-citation">{publication.citation}</p>
                 </div>
               </li>
             ))}
