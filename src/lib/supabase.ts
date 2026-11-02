@@ -1,7 +1,7 @@
 import { createClient, SupabaseClient, User, Session } from '@supabase/supabase-js'
 import { MentorshipColleague, mentorshipColleagues as defaultColleagues } from '../data/mentoring'
 import { GalleryPost, defaultGalleryPosts } from '../data/gallery'
-import { normalizeImageUrl } from './imageUtils'
+import { normalizeImageUrl, DEFAULT_AVATAR, hasCustomPhoto } from './imageUtils'
 export type { GalleryPost }
 
 function sanitizeSupabaseUrl(rawUrl: string): string {
@@ -73,7 +73,7 @@ export function recordToColleague(record: CollaboratorRecord): MentorshipColleag
     yearTill: record.year_till,
     projects,
     publications,
-    photo: normalizeImageUrl(record.photo) || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
+    photo: hasCustomPhoto(record.photo) ? normalizeImageUrl(record.photo) : DEFAULT_AVATAR,
     googleScholar: record.google_scholar || '',
     orderIndex: typeof record.order_index === 'number' ? record.order_index : 0,
   }
@@ -93,7 +93,7 @@ export function colleagueToRecord(colleague: MentorshipColleague): Partial<Colla
     project_title_3: colleague.projects?.[2] || null,
     publication_link_1: colleague.publications?.[0] || null,
     publication_link_2: colleague.publications?.[1] || null,
-    photo: normalizeImageUrl(colleague.photo) || null,
+    photo: hasCustomPhoto(colleague.photo) ? normalizeImageUrl(colleague.photo) : null,
     google_scholar: colleague.googleScholar || null,
     order_index: typeof colleague.orderIndex === 'number' ? colleague.orderIndex : 0,
   }

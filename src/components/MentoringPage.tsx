@@ -4,14 +4,14 @@ import {
   MentorshipColleague,
 } from '../data/mentoring'
 import { fetchAllCollaborators } from '../lib/supabase'
-import { normalizeImageUrl } from '../lib/imageUtils'
+import { normalizeImageUrl, DEFAULT_AVATAR, hasCustomPhoto } from '../lib/imageUtils'
 import { CrystalThrobber } from './CrystalThrobber'
 
 interface MentoringPageProps {
   onBackToHome: (target?: string) => void
 }
 
-const DEFAULT_AVATAR = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
+
 
 function formatPeriod(from?: string, till?: string): string {
   if (!from && !till) return ''
@@ -48,6 +48,11 @@ function getPublisherLabel(url: string, index: number): string {
  */
 function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
   const [isFlipped, setIsFlipped] = useState(false)
+  const [isCustomLoaded, setIsCustomLoaded] = useState(false)
+  const [hasCustomError, setHasCustomError] = useState(false)
+
+  const isCustom = hasCustomPhoto(colleague.photo)
+  const photoUrl = isCustom ? normalizeImageUrl(colleague.photo) : null
   const period = formatPeriod(colleague.yearFrom, colleague.yearTill)
   const hasProjects = Boolean(colleague.projects && colleague.projects.length > 0)
   const hasPubs = Boolean(colleague.publications && colleague.publications.length > 0)
@@ -59,20 +64,27 @@ function ColleagueCard({ colleague }: { colleague: MentorshipColleague }) {
         {/* ================= FRONT FACE ================= */}
         <div className="mentoring-card-front">
           {/* Big Profile Photo: At least half length of card */}
-          <div className="colleague-photo-wrap-large">
+                    <div className="colleague-photo-wrap-large">
+            {/* 1. Base / Loading / Fallback Avatar */}
             <img
-              src={normalizeImageUrl(colleague.photo) || DEFAULT_AVATAR}
-              alt={colleague.name}
-              className="colleague-photo-large"
-              referrerPolicy="no-referrer"
-              loading="lazy"
-              onError={(e) => {
-                const target = e.currentTarget
-                if (target.src !== DEFAULT_AVATAR) {
-                  target.src = DEFAULT_AVATAR
-                }
-              }}
+              src={DEFAULT_AVATAR}
+              alt=""
+              aria-hidden="true"
+              className="colleague-photo-large colleague-photo-default-bg"
             />
+
+            {/* Custom Photo (Overlaid once loaded) */}
+            {photoUrl && !hasCustomError && (
+              <img
+                src={photoUrl}
+                alt={colleague.name}
+                className={`colleague-photo-large colleague-photo-custom ${isCustomLoaded ? 'is-loaded' : 'is-loading'}`}
+                referrerPolicy="no-referrer"
+                loading="lazy"
+                onLoad={() => setIsCustomLoaded(true)}
+                onError={() => setHasCustomError(true)}
+              />
+            )}
           </div>
 
           {/* Primary Profile Details: Name, Position, Department, Institution */}

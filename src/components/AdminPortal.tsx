@@ -14,7 +14,7 @@ import {
 import { MentorshipColleague, mentorshipColleagues as fallbackColleagues } from '../data/mentoring'
 import { GalleryPost, defaultGalleryPosts } from '../data/gallery'
 import { GalleryPostForm } from './GalleryPostForm'
-import { normalizeImageUrl } from '../lib/imageUtils'
+import { normalizeImageUrl, DEFAULT_AVATAR, hasCustomPhoto } from '../lib/imageUtils'
 import { CrystalThrobber } from './CrystalThrobber'
 
 interface AdminPortalProps {
@@ -22,7 +22,7 @@ interface AdminPortalProps {
   onDataUpdated?: () => void
 }
 
-const DEFAULT_AVATAR = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
+
 
 // Generate year options from 2000 to 2035
 const YEARS = Array.from({ length: 36 }, (_, i) => String(2000 + i)).reverse()
@@ -319,7 +319,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
       yearTill: resolvedTill.trim(),
       projects,
       publications,
-      photo: normalizeImageUrl(photo) || DEFAULT_AVATAR,
+      photo: hasCustomPhoto(photo) ? normalizeImageUrl(photo) : DEFAULT_AVATAR,
       googleScholar: googleScholar.trim(),
       orderIndex,
     }
@@ -847,7 +847,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
                   />
                   <div className="photo-mini-thumb">
                     <img
-                      src={normalizeImageUrl(photo) || DEFAULT_AVATAR}
+                      src={hasCustomPhoto(photo) ? normalizeImageUrl(photo) : DEFAULT_AVATAR}
                       referrerPolicy="no-referrer"
                       alt="Thumbnail preview"
                       onError={(e) => {
@@ -979,7 +979,7 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
 
                       <div className="roster-item-photo">
                         <img
-                          src={normalizeImageUrl(c.photo) || DEFAULT_AVATAR}
+                          src={hasCustomPhoto(c.photo) ? normalizeImageUrl(c.photo) : DEFAULT_AVATAR}
                           referrerPolicy="no-referrer"
                           alt={c.name}
                           onError={(e) => {

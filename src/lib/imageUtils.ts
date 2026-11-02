@@ -2,6 +2,24 @@
  * Utility functions for normalizing, cleaning, and resolving image URLs
  * from various external hosting services (ImgBB, Imgur, Google Drive, Dropbox, Postimages, etc.)
  */
+import defaultAvatarImg from '../assets/default-avatar.jpg'
+
+export const DEFAULT_AVATAR: string = defaultAvatarImg
+
+/**
+ * Checks whether a photo URL represents an explicit, custom-uploaded profile picture,
+ * rather than an empty value, default avatar, or legacy stock Unsplash placeholder.
+ */
+export function hasCustomPhoto(url: string | null | undefined): boolean {
+  if (!url) return false
+  const trimmed = url.trim()
+  if (!trimmed) return false
+  if (trimmed === DEFAULT_AVATAR) return false
+  if (trimmed.includes('default-avatar')) return false
+  // Filter out legacy unsplash placeholder portraits
+  if (trimmed.includes('images.unsplash.com/photo-')) return false
+  return true
+}
 
 /**
  * Normalizes user-pasted image URLs and embed snippets.

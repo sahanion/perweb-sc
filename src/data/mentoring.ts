@@ -1,3 +1,5 @@
+import { DEFAULT_AVATAR } from '../lib/imageUtils'
+
 export interface MentorshipColleague {
   id: string
   name: string
@@ -59,7 +61,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
       'Sustainable Green Hydrogen Production from Glycerol using Continuous Flow Photoreforming: Process and Catalyst Development',
     ],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: 'https://i.ibb.co/3mxhHXBB/a4247e-2b9c40e9b7df4a15a084eb4d65282892-mv2.jpg', // Placeholder — replace with image URL
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -72,7 +74,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: '',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -88,7 +90,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
       'https://www.sciencedirect.com/science/article/abs/pii/S2213343722005474?via%3Dihub',
       'https://pubs.acs.org/aaemcq/article-abstract/5/11/13480/412252/Graphene-Supported-Palladium-Nanostructures-as?redirectedFrom=fulltext',
     ],
-    photo: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -105,7 +107,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     publications: [
       'https://www.sciencedirect.com/science/article/abs/pii/S0021979724005617',
     ],
-    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -120,7 +122,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
       'POWER-CO2 [COF and MOF based molecular materials for solar driven photocatalytic carbon dioxide reduction]',
     ],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -133,7 +135,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: '2027',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -151,7 +153,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
       'https://pubs.acs.org/inocaj/article-abstract/62/9/3875/323128/Systematic-Thiol-Decoration-in-a-Redox-Active-UiO?redirectedFrom=fulltext',
       'https://pubs.rsc.org/ma/article/5/1/136/812525/Pore-interface-engineering-improves-doxorubicin',
     ],
-    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -164,7 +166,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: 'Ongoing',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -177,7 +179,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: 'Ongoing',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -190,7 +192,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: 'Ongoing',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -203,7 +205,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: 'Ongoing',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -216,7 +218,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: 'Ongoing',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: 'https://i.imgur.com/hPlvo4H.jpeg', // Placeholder — replace with image URL
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -229,7 +231,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: 'Ongoing',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -242,7 +244,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: 'Ongoing',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -255,7 +257,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: 'Ongoing',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -268,7 +270,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: 'Ongoing',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -281,7 +283,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: '2029',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
   {
@@ -294,7 +296,7 @@ export const mentorshipColleagues: MentorshipColleague[] = [
     yearTill: '2029',
     projects: [],
     publications: [],
-    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80', // Placeholder — replace with image URL
+    photo: DEFAULT_AVATAR,
     googleScholar: '', // Add Google Scholar link here
   },
 ]
