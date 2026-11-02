@@ -12,9 +12,13 @@ function sanitizeSupabaseUrl(rawUrl: string): string {
   return url
 }
 
-const rawUrl = (import.meta.env.VITE_SUPABASE_URL || '').trim()
+const DEFAULT_SUPABASE_URL = 'https://rkfoduchimoydfqvqofw.supabase.co'
+const DEFAULT_SUPABASE_ANON_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrZm9kdWNoaW1veWRmcXZxb2Z3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMTM3MDAsImV4cCI6MjEwODY4OTcwMH0.UdVg9MAzFTY1rXjV1t1z3-bALWpJGix5tDtntXwAfwg'
+
+const rawUrl = (import.meta.env.VITE_SUPABASE_URL || DEFAULT_SUPABASE_URL).trim()
 const supabaseUrl = sanitizeSupabaseUrl(rawUrl)
-const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || '').trim()
+const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY).trim()
 
 export const isSupabaseConfigured = Boolean(
   supabaseUrl &&

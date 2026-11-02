@@ -31,6 +31,9 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://rkfoduchimoydfqvqofw.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJrZm9kdWNoaW1veWRmcXZxb2Z3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMTM3MDAsImV4cCI6MjEwODY4OTcwMH0.UdVg9MAzFTY1rXjV1t1z3-bALWpJGix5tDtntXwAfwg' }}
         run: npm run build
 
       - name: Upload artifact
