@@ -98,7 +98,21 @@ export function AcademicCV() {
                       )
                     )}
                   </p>
-                  <p className="publication-citation">{publication.citation}</p>
+                  <div className="pub-citation-row">
+                    <p className="publication-citation">{publication.citation}</p>
+                    {(publication.url || publication.doi) && (
+                      <a
+                        href={publication.url || `https://doi.org/${publication.doi}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="pub-article-link-pill"
+                        title="Read publication in original journal / publisher"
+                      >
+                        <span>Article Link</span>
+                        <span aria-hidden="true">↗</span>
+                      </a>
+                    )}
+                  </div>
                 </div>
               </li>
             ))}
