@@ -432,13 +432,13 @@ export const contactData = {
     {
       name: 'LinkedIn',
       handle: 'Sumanta Chowdhury, Ph.D.',
-      url: 'https://www.linkedin.com/search/results/all/?keywords=Sumanta%20Chowdhury%20CEISAM',
+      url: 'https://www.linkedin.com/in/sumanta-chowdhury-2b98a2218/',
       category: 'Professional Network',
     },
     {
       name: 'Google Scholar',
       handle: 'Sumanta Chowdhury',
-      url: 'https://scholar.google.com/citations?view_op=search_authors&mauthors=Sumanta+Chowdhury+CEISAM',
+      url: 'https://scholar.google.com/citations?user=KWxvCz0AAAAJ&hl=en',
       category: 'Citations & Papers',
     },
     {
@@ -449,8 +449,8 @@ export const contactData = {
     },
     {
       name: 'X (Twitter)',
-      handle: '@SumantaChowdhury',
-      url: 'https://x.com/search?q=Sumanta%20Chowdhury',
+      handle: '@Poretray',
+      url: 'https://x.com/Poretray',
       category: 'Scientific Discussion',
     },
   ],

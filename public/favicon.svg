@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <!-- Background Gradient -->
+    <radialGradient id="bgGrad" cx="50%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#1f3b2f" />
+      <stop offset="60%" stop-color="#13241d" />
+      <stop offset="100%" stop-color="#0b1410" />
+    </radialGradient>
+
+    <!-- Ambient Core Glow -->
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ba9c66" stop-opacity="0.65" />
+      <stop offset="40%" stop-color="#ba9c66" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#ba9c66" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Gold Metallic Strut Gradient -->
+    <linearGradient id="goldStrut" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff0d0" />
+      <stop offset="35%" stop-color="#ba9c66" />
+      <stop offset="70%" stop-color="#91733e" />
+      <stop offset="100%" stop-color="#d8c5a2" />
+    </linearGradient>
+
+    <!-- Node Specular Spheres -->
+    <radialGradient id="nodeGrad" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="30%" stop-color="#fdf4df" />
+      <stop offset="70%" stop-color="#ba9c66" />
+      <stop offset="100%" stop-color="#644e26" />
+    </radialGradient>
+
+    <!-- Center Core Glow -->
+    <radialGradient id="centerCore" cx="35%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="50%" stop-color="#e8d7b8" />
+      <stop offset="100%" stop-color="#ba9c66" />
+    </radialGradient>
+
+    <!-- Filter for subtle drop-shadow -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="1.5" stdDeviation="1.5" flood-color="#000000" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <style>
+    @media (prefers-reduced-motion: no-preference) {
+      .crystal-pivot {
+        transform-origin: 32px 32px;
+        animation: spin-pulse 8s ease-in-out infinite alternate;
+      }
+      .glow-pulse {
+        animation: ambient 3s ease-in-out infinite alternate;
+      }
+    }
+    @keyframes spin-pulse {
+      0% { transform: rotate(0deg) scale(0.98); }
+      50% { transform: rotate(8deg) scale(1.02); }
+      100% { transform: rotate(-8deg) scale(0.98); }
+    }
+    @keyframes ambient {
+      0% { opacity: 0.45; transform: scale(0.9); }
+      100% { opacity: 0.85; transform: scale(1.15); }
+    }
+  </style>
+
+  <!-- Outer Rounded Squircle Base with Gold Accent Border -->
+  <rect x="2" y="2" width="60" height="60" rx="15" fill="url(#bgGrad)" stroke="#ba9c66" stroke-width="1.5" stroke-opacity="0.5" />
+
+  <!-- Ambient Glow -->
+  <circle class="glow-pulse" cx="32" cy="32" r="22" fill="url(#coreGlow)" />
+
+  <!-- 3D Reticular Crystal Framework -->
+  <g class="crystal-pivot" filter="url(#shadow)">
+    <!-- Back Equatorial Struts -->
+    <path d="M14 32 L32 23 L50 32" fill="none" stroke="#688073" stroke-width="1.3" stroke-opacity="0.55" stroke-dasharray="2,2"/>
+    <path d="M32 23 L32 10" fill="none" stroke="#688073" stroke-width="1.3" stroke-opacity="0.55" />
+
+    <!-- Equatorial Octahedron Ring (Conjugated Struts) -->
+    <polygon points="14,32 32,41 50,32 32,23" fill="none" stroke="url(#goldStrut)" stroke-width="2" stroke-linejoin="round" />
+
+    <!-- Vertical Octahedral Ribs -->
+    <!-- Top Apex to Equatorial Nodes -->
+    <line x1="32" y1="10" x2="14" y2="32" stroke="url(#goldStrut)" stroke-width="2" stroke-linecap="round" />
+    <line x1="32" y1="10" x2="50" y2="32" stroke="url(#goldStrut)" stroke-width="2" stroke-linecap="round" />
+    <line x1="32" y1="10" x2="32" y2="41" stroke="url(#goldStrut)" stroke-width="2.2" stroke-linecap="round" />
+
+    <!-- Bottom Apex to Equatorial Nodes -->
+    <line x1="32" y1="54" x2="14" y2="32" stroke="url(#goldStrut)" stroke-width="1.8" stroke-linecap="round" />
+    <line x1="32" y1="54" x2="50" y2="32" stroke="url(#goldStrut)" stroke-width="1.8" stroke-linecap="round" />
+    <line x1="32" y1="54" x2="32" y2="41" stroke="url(#goldStrut)" stroke-width="2.2" stroke-linecap="round" />
+
+    <!-- Inner Diagonal Braces -->
+    <line x1="14" y1="32" x2="50" y2="32" stroke="#ba9c66" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="1.5,1.5" />
+    <line x1="32" y1="10" x2="32" y2="54" stroke="#ba9c66" stroke-width="1" stroke-opacity="0.4" stroke-dasharray="1.5,1.5" />
+
+    <!-- Coordinated Metal Nodes (6 octahedral vertices + center) -->
+    <!-- Back Node -->
+    <circle cx="32" cy="23" r="2.8" fill="url(#nodeGrad)" opacity="0.8" />
+
+    <!-- Equatorial Nodes: Left, Right, Front -->
+    <circle cx="14" cy="32" r="3.6" fill="url(#nodeGrad)" />
+    <circle cx="50" cy="32" r="3.6" fill="url(#nodeGrad)" />
+    <circle cx="32" cy="41" r="4.2" fill="url(#nodeGrad)" />
+
+    <!-- Top & Bottom Apex Nodes -->
+    <circle cx="32" cy="10" r="4.0" fill="url(#nodeGrad)" />
+    <circle cx="32" cy="54" r="3.6" fill="url(#nodeGrad)" />
+
+    <!-- Center Luminescent Core Node -->
+    <circle cx="32" cy="32" r="3.2" fill="url(#centerCore)" />
+  </g>
+</svg>
