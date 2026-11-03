@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import {
   supabase,
   isSupabaseConfigured,
@@ -27,6 +27,11 @@ interface AdminPortalProps {
 // Generate year options from 2000 to 2035
 const YEARS = Array.from({ length: 36 }, (_, i) => String(2000 + i)).reverse()
 
+// Inactivity session timeout settings
+const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000 // 30 minutes
+const INACTIVITY_WARNING_MS = 28 * 60 * 1000 // 28 minutes (2-minute warning)
+const CMS_LAST_ACTIVE_KEY = 'sc_cms_last_active'
+
 export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
   // Auth state
   const [sessionUser, setSessionUser] = useState<string | null>(null)
@@ -35,6 +40,13 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
   const [password, setPassword] = useState('')
   const [authError, setAuthError] = useState<string | null>(null)
   const [isSubmittingAuth, setIsSubmittingAuth] = useState(false)
+
+  // Inactivity & Session Expiry State
+  const [inactivityNotice, setInactivityNotice] = useState<string | null>(null)
+  const [showInactivityWarning, setShowInactivityWarning] = useState(false)
+  const [warningCountdownSec, setWarningCountdownSec] = useState(120)
+  const lastActiveRef = useRef<number>(Date.now())
+  const lastPersistedRef = useRef<number>(0)
 
   // Collaborators management state
   const [collaborators, setCollaborators] = useState<MentorshipColleague[]>([])
@@ -69,6 +81,36 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
   const [googleScholar, setGoogleScholar] = useState('')
   const [isSaving, setIsSaving] = useState(false)
 
+  // Refresh active timestamp on user interaction
+  const recordActivity = useCallback(() => {
+    const now = Date.now()
+    lastActiveRef.current = now
+    setShowInactivityWarning(false)
+
+    // Throttled persistence to sessionStorage (every 5 seconds)
+    if (now - lastPersistedRef.current > 5000) {
+      lastPersistedRef.current = now
+      try {
+        sessionStorage.setItem(CMS_LAST_ACTIVE_KEY, String(now))
+      } catch (_) {}
+    }
+  }, [])
+
+  // Terminate session and show notice
+  const handleAutoLogout = useCallback(async (reason: string) => {
+    try {
+      sessionStorage.removeItem(CMS_LAST_ACTIVE_KEY)
+    } catch (_) {}
+    if (supabase) {
+      try {
+        await supabase.auth.signOut()
+      } catch (_) {}
+    }
+    setSessionUser(null)
+    setShowInactivityWarning(false)
+    setInactivityNotice(reason)
+  }, [])
+
   // Check initial auth session
   useEffect(() => {
     async function checkAuth() {
@@ -76,7 +118,33 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
         try {
           const { data } = await supabase.auth.getSession()
           if (data?.session?.user) {
-            setSessionUser(data.session.user.email || 'Admin')
+            let isExpired = false
+            try {
+              const storedLastActive = sessionStorage.getItem(CMS_LAST_ACTIVE_KEY)
+              if (storedLastActive) {
+                const lastTime = parseInt(storedLastActive, 10)
+                if (!isNaN(lastTime) && Date.now() - lastTime >= INACTIVITY_TIMEOUT_MS) {
+                  isExpired = true
+                }
+              }
+            } catch (_) {}
+
+            if (isExpired) {
+              await supabase.auth.signOut()
+              try {
+                sessionStorage.removeItem(CMS_LAST_ACTIVE_KEY)
+              } catch (_) {}
+              setSessionUser(null)
+              setInactivityNotice('Your previous session timed out after 30 minutes of inactivity.')
+            } else {
+              setSessionUser(data.session.user.email || 'Admin')
+              const now = Date.now()
+              lastActiveRef.current = now
+              lastPersistedRef.current = now
+              try {
+                sessionStorage.setItem(CMS_LAST_ACTIVE_KEY, String(now))
+              } catch (_) {}
+            }
           }
         } catch (err) {
           console.error('Auth session error:', err)
@@ -100,6 +168,97 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
       }
     }
   }, [])
+
+  // Inactivity tracking: monitor mouse, keyboard, touch, scroll, and tab focus/visibility
+  useEffect(() => {
+    if (!sessionUser) return
+
+    const now = Date.now()
+    lastActiveRef.current = now
+    try {
+      sessionStorage.setItem(CMS_LAST_ACTIVE_KEY, String(now))
+    } catch (_) {}
+
+    const activityEvents: (keyof WindowEventMap)[] = [
+      'mousemove',
+      'mousedown',
+      'keydown',
+      'touchstart',
+      'scroll',
+      'wheel',
+      'click',
+    ]
+
+    const onUserActivity = () => {
+      recordActivity()
+    }
+
+    activityEvents.forEach((evt) => {
+      window.addEventListener(evt, onUserActivity, { passive: true })
+    })
+
+    // Check inactivity every 2 seconds
+    const intervalId = setInterval(() => {
+      const currentTime = Date.now()
+      let lastActive = lastActiveRef.current
+
+      try {
+        const stored = sessionStorage.getItem(CMS_LAST_ACTIVE_KEY)
+        if (stored) {
+          const parsed = parseInt(stored, 10)
+          if (!isNaN(parsed) && parsed > lastActive) {
+            lastActive = parsed
+            lastActiveRef.current = parsed
+          }
+        }
+      } catch (_) {}
+
+      const elapsed = currentTime - lastActive
+
+      if (elapsed >= INACTIVITY_TIMEOUT_MS) {
+        handleAutoLogout('Your session was automatically closed after 30 minutes of inactivity.')
+      } else if (elapsed >= INACTIVITY_WARNING_MS) {
+        const remainingSec = Math.max(0, Math.ceil((INACTIVITY_TIMEOUT_MS - elapsed) / 1000))
+        setWarningCountdownSec(remainingSec)
+        setShowInactivityWarning(true)
+      } else {
+        setShowInactivityWarning(false)
+      }
+    }, 2000)
+
+    // Handle system sleep wake-up or tab becoming visible after being idle/backgrounded
+    const handleVisibilityOrFocus = () => {
+      const currentTime = Date.now()
+      let lastActive = lastActiveRef.current
+      try {
+        const stored = sessionStorage.getItem(CMS_LAST_ACTIVE_KEY)
+        if (stored) {
+          const parsed = parseInt(stored, 10)
+          if (!isNaN(parsed)) {
+            lastActive = Math.max(lastActive, parsed)
+          }
+        }
+      } catch (_) {}
+
+      if (currentTime - lastActive >= INACTIVITY_TIMEOUT_MS) {
+        handleAutoLogout('Your session was automatically closed after 30 minutes of inactivity.')
+      } else {
+        recordActivity()
+      }
+    }
+
+    window.addEventListener('visibilitychange', handleVisibilityOrFocus)
+    window.addEventListener('focus', handleVisibilityOrFocus)
+
+    return () => {
+      activityEvents.forEach((evt) => {
+        window.removeEventListener(evt, onUserActivity)
+      })
+      clearInterval(intervalId)
+      window.removeEventListener('visibilitychange', handleVisibilityOrFocus)
+      window.removeEventListener('focus', handleVisibilityOrFocus)
+    }
+  }, [sessionUser, recordActivity, handleAutoLogout])
 
   // Load data when logged in
   useEffect(() => {
@@ -198,6 +357,13 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
         setAuthError(error.message)
       } else if (data.user) {
         setSessionUser(data.user.email || 'Admin')
+        setInactivityNotice(null)
+        const now = Date.now()
+        lastActiveRef.current = now
+        lastPersistedRef.current = now
+        try {
+          sessionStorage.setItem(CMS_LAST_ACTIVE_KEY, String(now))
+        } catch (_) {}
       }
     } catch (err: any) {
       setAuthError(err.message || 'Login failed')
@@ -208,6 +374,10 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
 
   // Handle Logout
   async function handleLogout() {
+    try {
+      sessionStorage.removeItem(CMS_LAST_ACTIVE_KEY)
+    } catch (_) {}
+    setShowInactivityWarning(false)
     if (supabase) {
       await supabase.auth.signOut()
     }
@@ -498,6 +668,13 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
             </div>
           )}
 
+          {inactivityNotice && (
+            <div className="admin-notice-box is-session-expired">
+              <strong>Session Notice:</strong>
+              <p>{inactivityNotice}</p>
+            </div>
+          )}
+
           {authError && <div className="admin-error-box">{authError}</div>}
 
           <form onSubmit={handleLogin} className="admin-auth-form">
@@ -563,6 +740,13 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
           </div>
 
           <div className="admin-topbar-actions">
+            <div
+              className="admin-timeout-pill"
+              title="Sessions automatically end after 30 minutes of inactivity or when the tab/browser is closed."
+            >
+              <span className="admin-timeout-dot" />
+              <span>Auto-logout: 30m idle</span>
+            </div>
             <button
               type="button"
               className="admin-action-btn"
@@ -1154,6 +1338,22 @@ export function AdminPortal({ onBackToSite, onDataUpdated }: AdminPortalProps) {
         </div>
         )}
       </main>
+
+      {showInactivityWarning && (
+        <div className="admin-inactivity-toast" role="alert">
+          <div className="admin-inactivity-toast-text">
+            <strong>Inactivity Warning</strong>
+            Your session will expire in {Math.floor(warningCountdownSec / 60)}:{(warningCountdownSec % 60).toString().padStart(2, '0')} due to inactivity.
+          </div>
+          <button
+            type="button"
+            className="admin-inactivity-stay-btn"
+            onClick={recordActivity}
+          >
+            Stay Signed In
+          </button>
+        </div>
+      )}
     </div>
   )
 }

@@ -21,6 +21,18 @@ const rawUrl = (import.meta.env.VITE_SUPABASE_URL || DEFAULT_SUPABASE_URL).trim(
 const supabaseUrl = sanitizeSupabaseUrl(rawUrl)
 const supabaseAnonKey = (import.meta.env.VITE_SUPABASE_ANON_KEY || DEFAULT_SUPABASE_ANON_KEY).trim()
 
+// Clear legacy permanent localStorage tokens from older sessions so tab/browser close is respected
+if (typeof window !== 'undefined') {
+  try {
+    for (let i = window.localStorage.length - 1; i >= 0; i--) {
+      const key = window.localStorage.key(i)
+      if (key && (key.startsWith('sb-') || key.includes('supabase.auth.token'))) {
+        window.localStorage.removeItem(key)
+      }
+    }
+  } catch (_) {}
+}
+
 export const isSupabaseConfigured = Boolean(
   supabaseUrl &&
   supabaseAnonKey &&
@@ -30,7 +42,13 @@ export const isSupabaseConfigured = Boolean(
 
 export const supabase: SupabaseClient | null = isSupabaseConfigured
   ? ((globalThis as any).__supabaseInstance ||
-      ((globalThis as any).__supabaseInstance = createClient(supabaseUrl, supabaseAnonKey)))
+      ((globalThis as any).__supabaseInstance = createClient(supabaseUrl, supabaseAnonKey, {
+        auth: {
+          storage: typeof window !== 'undefined' ? window.sessionStorage : undefined,
+          persistSession: true,
+          autoRefreshToken: true,
+        },
+      })))
   : null
 
 export interface CollaboratorRecord {

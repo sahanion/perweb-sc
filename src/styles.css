@@ -7435,3 +7435,87 @@ button {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(31, 79, 60, 0.18);
 }
+
+
+/* ==============================================================================
+   CMS AUTO-LOGOUT & INACTIVITY NOTIFICATIONS
+   ============================================================================== */
+.admin-inactivity-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99999;
+  background: #ffffff;
+  border: 1px solid rgba(217, 119, 6, 0.45);
+  box-shadow: 0 12px 36px -4px rgba(34, 45, 71, 0.18), 0 0 0 1px rgba(217, 119, 6, 0.2);
+  border-radius: 12px;
+  padding: 14px 18px;
+  max-width: 380px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  animation: slide-up 0.25s ease-out;
+}
+
+.admin-inactivity-toast-text {
+  font-size: 13px;
+  color: var(--ink);
+  line-height: 1.4;
+}
+
+.admin-inactivity-toast-text strong {
+  display: block;
+  color: #b45309;
+  font-size: 13.5px;
+  margin-bottom: 2px;
+}
+
+.admin-inactivity-stay-btn {
+  background: var(--ink);
+  color: #ffffff;
+  border: none;
+  border-radius: 7px;
+  padding: 7px 13px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+  font-family: var(--font-sans);
+}
+
+.admin-inactivity-stay-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.admin-timeout-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+  background: rgba(34, 45, 71, 0.05);
+  border: 1px solid var(--line);
+  padding: 4px 9px;
+  border-radius: 6px;
+}
+
+.admin-timeout-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+.admin-notice-box.is-session-expired {
+  background: #fffbeb;
+  border-color: #fcd34d;
+  color: #92400e;
+}
+
+.admin-notice-box.is-session-expired strong {
+  color: #b45309;
+}
