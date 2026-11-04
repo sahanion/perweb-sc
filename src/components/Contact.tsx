@@ -1,5 +1,6 @@
 import { contactData } from '../data/researcher'
 import profilePhoto from '../assets/profile.jpg'
+import { DEFAULT_AVATAR } from '../lib/imageUtils'
 
 export function Contact() {
   return (
@@ -26,8 +27,8 @@ export function Contact() {
                   onError={(e) => {
                     // Fallback to web URL if local image cannot be found
                     const target = e.currentTarget
-                    if (target.src !== 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80') {
-                      target.src = 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80'
+                    if (target.src !== DEFAULT_AVATAR) {
+                      target.src = DEFAULT_AVATAR
                     }
                   }}
                 />
