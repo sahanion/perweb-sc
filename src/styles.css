@@ -2344,7 +2344,7 @@ button {
 
 .cv-block-heading-with-note {
   grid-template-columns: 54px 1fr auto;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .cv-block-heading-with-note p {
@@ -2360,23 +2360,85 @@ button {
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
-  margin-top: 6px;
-  font: 500 11px var(--font-mono);
-  color: var(--muted);
-  letter-spacing: .04em;
+  margin-top: 14px;
 }
 
-.subhead-sep {
+.pub-stat-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(34, 45, 71, 0.035);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(34, 45, 71, 0.03);
+  transition: all 0.2s ease;
+  line-height: 1.2;
+}
+
+.pub-stat-chip:hover {
+  background: #ffffff;
+  border-color: rgba(186, 156, 102, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(34, 45, 71, 0.08);
+}
+
+.pub-stat-icon {
+  flex-shrink: 0;
   color: var(--accent);
-  opacity: 0.6;
+}
+
+.pub-stat-value {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.pub-stat-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+.pub-stat-chip:hover .pub-stat-label {
+  color: var(--ink);
+}
+
+.pub-stat-chip.is-scholar-link {
+  text-decoration: none;
+  background: rgba(186, 156, 102, 0.08);
+  border-color: rgba(186, 156, 102, 0.35);
+  color: var(--ink);
+}
+
+.pub-stat-chip.is-scholar-link:hover {
+  background: rgba(186, 156, 102, 0.16);
+  border-color: var(--accent);
+  color: var(--accent-deep, #8f7034);
+}
+
+.pub-stat-arrow {
+  margin-left: -2px;
+  color: var(--accent);
+  transition: transform 0.15s ease;
+}
+
+.pub-stat-chip.is-scholar-link:hover .pub-stat-arrow {
+  transform: translate(1px, -1px);
 }
 
 .publications-legend {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 4px;
-  font: 500 10.5px var(--font-mono);
+  gap: 6px;
+  margin-top: 4px;
+  font: 500 11.5px var(--font-mono);
   color: var(--muted);
   letter-spacing: .03em;
 }
@@ -2384,13 +2446,13 @@ button {
 .legend-item {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 6px;
   white-space: nowrap;
 }
 
 .legend-mark {
   color: var(--accent);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1;
 }
 
@@ -2702,6 +2764,18 @@ button {
 @media (max-width: 500px) {
   .cv-heading h2 {
     font-size: 2.8rem;
+  }
+
+  .pub-stat-chip {
+    padding: 5px 11px;
+  }
+
+  .pub-stat-value {
+    font-size: 13.5px;
+  }
+
+  .pub-stat-label {
+    font-size: 12px;
   }
 
   .cv-block-heading,
